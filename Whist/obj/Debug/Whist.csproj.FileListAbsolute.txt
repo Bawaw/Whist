@@ -4,3 +4,9 @@ E:\Projects\Whist\Whist\bin\Debug\Whist.exe
 E:\Projects\Whist\Whist\bin\Debug\Whist.pdb
 E:\Projects\Whist\Whist\obj\Debug\Whist.exe
 E:\Projects\Whist\Whist\obj\Debug\Whist.pdb
+C:\Users\Luc Reintjens\Source\Repos\Whist\Whist\bin\Debug\Whist.exe.config
+C:\Users\Luc Reintjens\Source\Repos\Whist\Whist\obj\Debug\Whist.exe
+C:\Users\Luc Reintjens\Source\Repos\Whist\Whist\obj\Debug\Whist.pdb
+C:\Users\Luc Reintjens\Source\Repos\Whist\Whist\bin\Debug\Whist.exe
+C:\Users\Luc Reintjens\Source\Repos\Whist\Whist\bin\Debug\Whist.pdb
+C:\Users\Luc Reintjens\Source\Repos\Whist\Whist\obj\Debug\Whist.csprojResolveAssemblyReference.cache

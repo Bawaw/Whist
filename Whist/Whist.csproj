@@ -43,10 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameLogic\ControlEntities\DealAndBidNormal.cs" />
     <Compile Include="GameLogic\ControlEntities\Dealer.cs" />
     <Compile Include="GameLogic\ControlEntities\GameController.cs" />
     <Compile Include="GameLogic\ControlEntities\Player.cs" />
     <Compile Include="GameLogic\ControlEntities\Referee.cs" />
+    <Compile Include="GameLogic\ControlEntities\Round.cs" />
     <Compile Include="GameLogic\ControlEntities\ScoreDistributor.cs" />
     <Compile Include="GameLogic\GameEntities\Card.cs" />
     <Compile Include="GameLogic\GameEntities\CardCollection.cs" />
