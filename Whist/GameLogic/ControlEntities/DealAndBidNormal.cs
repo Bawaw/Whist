@@ -130,7 +130,7 @@ namespace Whist.GameLogic.ControlEntities
         //Let each player in turn make a decision
 
         Player playerA; //PlayerA is, when no special: asking/alone player, or when special miserie: (possibly) one of miserie players
-        Player playerB; //PlayerA is, when no special: joining/alone player, or when special miserie: (possibly) one of miserie players
+        Player playerB; //PlayerB is, when no special: joining/alone player, or when special miserie: (possibly) one of miserie players
         Player HighestSpecialPlayer;
         Action currentSpecial = 0;
         Dictionary<Player, bool> passedPlayers;
@@ -329,6 +329,11 @@ namespace Whist.GameLogic.ControlEntities
                         teams = new Team[] { teamA, teamB };
                         break;
                     }
+                //case Case.FFA:
+                //    {
+                //        Team teamA = new Team(new Player[] { playerA }, 4);
+
+                //    }
                 default: return null;
             }
 
