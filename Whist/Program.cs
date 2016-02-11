@@ -26,11 +26,11 @@ namespace Whist
                 {
                     do
                     {
-                        if (whistController.Pile.Count > 0)
-                            Console.Out.WriteLine("pile: {" + PrintList<Card>(whistController.Pile, ",") + "}");
                         int card = -1;
                         do
                         {
+                            if (whistController.Pile.Count > 0)
+                                Console.Out.WriteLine("pile: {" + PrintList<Card>(whistController.Pile, ",") + "}");
                             Console.Out.WriteLine("Trump: " + whistController.Trump);
                             Console.Out.WriteLine("turn: " + whistController.CurrentPlayer);
                             whistController.CurrentPlayer.hand.sort();
