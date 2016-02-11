@@ -57,7 +57,7 @@ namespace Whist.GameLogic.ControlEntities
         {
             get { return CurrentPlayer != null; }
         }
-        
+
         //Bidding
         //Let each player in turn make a decision
 
@@ -141,7 +141,7 @@ namespace Whist.GameLogic.ControlEntities
                     }
                 case Action.ALONE:
                     {
-                        playerB = CurrentPlayer; //(intended) result = askplayer == joinplayer 
+                        playerB = CurrentPlayer; //(intended) result: askplayer == joinplayer 
                         return true;
                     }
                 case Action.ABONDANCE:
@@ -158,7 +158,8 @@ namespace Whist.GameLogic.ControlEntities
                                 playerA = HighestSpecialPlayer;
                             else
                                 playerB = HighestSpecialPlayer;
-                        } else
+                        }
+                        else
                         {
                             playerA = null;
                             playerB = null;
@@ -200,7 +201,7 @@ namespace Whist.GameLogic.ControlEntities
                     nIndex = 0;
                 CurrentPlayer = round.players[nIndex];
             } while (passedPlayers[CurrentPlayer]);
-            
+
         }
 
         private int getCurrentIndex()
@@ -216,7 +217,67 @@ namespace Whist.GameLogic.ControlEntities
         {
             //TODO
             //Determine which of the 8 cases it is.
-            //gseg
+            if (currentSpecial == 0)
+            {
+                if (passedPlayers.ContainsValue(true) && passedPlayers.ContainsValue(false))
+                {
+                    if (playerA != null)
+                    {
+                        if (playerB != playerA)
+                        {
+                            round.gameCase = Case.TEAM;//Someone passed and player A & B are different => team
+                             //Team = PlayerA + PlayerB
+                        }
+                        else
+                        {
+                            round.gameCase = Case.ALONE;//Someone passed and player A & B are the same => alone
+                            //Team = PlayerA
+                        }
+                    }
+                }
+                else if (!passedPlayers.ContainsValue(true))//Everyone passed => FFA
+                {
+                    round.gameCase = Case.FFA;
+                    //Team
+                }
+                else if (!passedPlayers.ContainsValue(false))//No one passed and no special => troel.
+                {
+                    round.gameCase = Case.TROEL;
+                    //Team = PlayerA + PlayerB
+                }
+            }
+            else
+            {
+                switch (currentSpecial)
+                {
+                    case Action.ABONDANCE:
+                        {
+                            round.gameCase = Case.ABONDANCE;
+                            //team = HighestSpecialPlayer
+                            break;
+                        }
+                    case Action.MISERIE:
+                        {
+                            round.gameCase = Case.MISERIE;
+                            //team = not miseries vs (seperate team) miseries
+                            break;
+                        }
+                    case Action.SOLO:
+                        {
+                            round.gameCase = Case.SOLO;
+                            //team = HighestSpecialPlayer
+                            break;
+                        }
+                    case Action.SOLOSLIM:
+                        {
+                            round.gameCase = Case.SOLOSLIM;
+                            //team = HighestSpecialPlayer
+                            break;
+                        }
+                    default:
+                        break;
+                }
+            }
         }
     }
 

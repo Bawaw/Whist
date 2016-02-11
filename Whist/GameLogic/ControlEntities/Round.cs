@@ -13,6 +13,7 @@ namespace Whist.GameLogic.ControlEntities
         internal Player[] players;
         protected List<Card> pile;
 
+        internal Case gameCase;
         private DealAndBidNormal phase1;
         public Suits Trump
         {
