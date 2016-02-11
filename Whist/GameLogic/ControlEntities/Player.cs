@@ -8,10 +8,11 @@ namespace Whist.GameLogic.ControlEntities
 {
     public class Player
     {
-        public String name;
+        public string name;
         private int tricks;
         public int Tricks { get { return tricks; } }
         public HandCollection hand;
+        public int score;
 
         public Player(String name)
         {
@@ -39,11 +40,11 @@ namespace Whist.GameLogic.ControlEntities
     {
         private Player[] players;
         public Player[] Players { get { return players; }  }
-        public int score;
         public int Tricks { get { return players.Sum(player => player.Tricks); } }
-        public string TeamName;
-        public Team(Player[] players, String teamname) {
+        public Team(Player[] players, int objective) {
             this.players = players;
+            this.objective = objective;
         }
+        public int objective;
     }
 }
