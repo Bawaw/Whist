@@ -275,7 +275,7 @@ namespace Whist.GameLogic.ControlEntities
         //Skip passed players.
         private void SetNextPlayer()
         {
-            if (!passedPlayers.ContainsValue(true))//everyone passed
+            if (!passedPlayers.ContainsValue(false))//everyone passed
             {
                 CurrentPlayer = null;
             }
@@ -305,7 +305,7 @@ namespace Whist.GameLogic.ControlEntities
             //Determine which of the 8 cases it is.
             if (GameCase == 0)
             {
-                if (!passedPlayers.ContainsValue(true))//Everyone passed => FFA
+                if (!passedPlayers.ContainsValue(false))//Everyone passed => FFA
                 {
                     GameCase = Case.FFA;
                 }
@@ -329,11 +329,23 @@ namespace Whist.GameLogic.ControlEntities
                         teams = new Team[] { teamA, teamB };
                         break;
                     }
-                //case Case.FFA:
-                //    {
-                //        Team teamA = new Team(new Player[] { playerA }, 4);
-
-                //    }
+                case Case.FFA:
+                    {
+                        Team teamA = new Team(new Player[] { playerA }, 4);
+                        Team teamB = new Team(new Player[] { playerB }, 4);
+                        Player[] others = (Player[]) players.Except(teamA.Players);
+                        Team teamC = new Team(new Player[] { others.First() }, 4);
+                        Team teamD = new Team(new Player[] { others.Last() }, 4);
+                        break;
+                    }
+                case Case.TROEL:
+                    {
+                        Team teamA = new Team(new Player[] { playerA, playerB }, 9);
+                        Player[] others = (Player[])players.Except(teamA.Players);
+                        Team teamB = new Team(others, 5);
+                        break;
+                    }
+                    case Case.ABONDANCE
                 default: return null;
             }
 
