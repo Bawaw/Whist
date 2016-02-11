@@ -131,8 +131,8 @@ namespace Whist.GameLogic.ControlEntities
         //Bidding
         //Let each player in turn make a decision
 
-        Player playerA; //PlayerA is, when no special: asking/alone player, or when special miserie: (possibly) one of miserie players
-        Player playerB; //PlayerB is, when no special: joining/alone player, or when special miserie: (possibly) one of miserie players
+        Player playerA; //PlayerA is, when no special: asking/alone player, or when special miserie: (possibly) one of miserie players, or when special troel: player with most aces 
+        Player playerB; //PlayerB is, when no special: joining/alone player, or when special miserie: (possibly) one of miserie players, or when special troel: other teammember
         Player HighestSpecialPlayer;
         Action currentSpecial = 0;
         Dictionary<Player, bool> passedPlayers;
@@ -224,7 +224,7 @@ namespace Whist.GameLogic.ControlEntities
                     }
                 case Action.ALONE:
                     {
-                        playerB = CurrentPlayer; //(intended) result: askplayer == joinplayer 
+                        playerB = CurrentPlayer; //(intended) result: PlayerB == PlayerA || perhaps unnecessary with changes. 
                         GameCase = Case.ALONE;
                         return true;
                     }
@@ -303,15 +303,14 @@ namespace Whist.GameLogic.ControlEntities
         //Set Game Case and teams
         public CaseAndTeam FinalizeBidding()
         {
-            //TODO
-            //Determine which of the 8 cases it is.
-            if (GameCase == 0)
+            if (GameCase == 0)//GameCase 0 is FFA, perhaps unnecessary.
             {
                 if (!passedPlayers.ContainsValue(false))//Everyone passed => FFA
                 {
                     GameCase = Case.FFA;
                 }
             }
+
             Team[] teams;
             switch (GameCase)
             {
@@ -333,11 +332,10 @@ namespace Whist.GameLogic.ControlEntities
                     }
                 case Case.FFA:
                     {
-                        Team teamA = new Team(new Player[] { playerA }, 4);
-                        Team teamB = new Team(new Player[] { playerB }, 4);
-                        Player[] others = (Player[]) players.Except(teamA.Players);
-                        Team teamC = new Team(new Player[] { others.First() }, 4);
-                        Team teamD = new Team(new Player[] { others.Last() }, 4);
+                        Team teamA = new Team(new Player[] { players[0] }, 4);
+                        Team teamB = new Team(new Player[] { players[1] }, 4);
+                        Team teamC = new Team(new Player[] { players[2] }, 4);
+                        Team teamD = new Team(new Player[] { players[3] }, 4);
                         teams = new Team[] { teamA, teamB, teamC, teamD };
                         break;
                     }
@@ -357,21 +355,38 @@ namespace Whist.GameLogic.ControlEntities
                         teams = new Team[] { teamA, teamB };
                         break;
                     }
-                //case Case.MISERIE:
-                //    {
-                //        //TODO
-                //        break;
-                //    }
-                //case Case.SOLO:
-                //    {
-                //        //TODO
-                //        break;
-                //    }
-                //case Case.SOLOSLIM:
-                //    {
-                //        //TODO
-                //        break;
-                //    }
+                case Case.MISERIE:
+                    {
+                        var teammmsss = new List<Team>();
+                        var miserieplayers = new List<Player>();
+                        miserieplayers.Add(HighestSpecialPlayer);
+                        if (playerA != null)
+                            miserieplayers.Add(playerA);
+                        if (playerB != null)
+                            miserieplayers.Add(playerB);
+
+                        foreach (var mplayer in miserieplayers)
+                            teammmsss.Add(new Team(new Player[] { mplayer }, 0));
+                        teammmsss.Add(new Team((Player[]) players.Except(miserieplayers),1));
+                        teams = teammmsss.ToArray();
+                        break;
+                    }
+                case Case.SOLO:
+                    {
+                        Team teamA = new Team(new Player[] { HighestSpecialPlayer }, 13);
+                        Player[] others = (Player[])players.Except(teamA.Players);
+                        Team teamB = new Team(others, 1);
+                        teams = new Team[] { teamA, teamB };
+                        break;
+                    }
+                case Case.SOLOSLIM:
+                    {
+                        Team teamA = new Team(new Player[] { HighestSpecialPlayer }, 13);
+                        Player[] others = (Player[])players.Except(teamA.Players);
+                        Team teamB = new Team(others, 1);
+                        teams = new Team[] { teamA, teamB };
+                        break;
+                    }
                 default: return null;
             }
 
