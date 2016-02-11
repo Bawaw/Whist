@@ -43,14 +43,79 @@ namespace Whist.GameLogic.ControlEntities
         */
         private bool CheckForTroel()
         {
-            //TODO
-
-            if (false)//No Troel
+            var troel = false;
+            List<Player> troelPlayers = new List<Player>();
+            for (int i = 0; i < players.Count(); i++)
+            {
+                int aces = 0;
+                foreach (Card card in players[i].hand.Cards)
+                {
+                    if (card.Number == Numbers.ACE)
+                    {
+                        aces++;
+                    }
+                }
+                if (aces == 3 || aces == 4)
+                {
+                    if (aces == 3)
+                    {
+                        troelPlayers.Add(players[i]);
+                        bool teamPlayerFound = false;
+                        for (int j = 0; j < players.Count(); j++)
+                        {
+                            //if it is another player than current player
+                            if (j != i)
+                            {
+                                foreach (Card card in players[j].hand.Cards)
+                                {
+                                    if (card.Number == Numbers.ACE)
+                                    {
+                                        teamPlayerFound = true;
+                                        troelPlayers.Add(players[j]);
+                                        //set trump and currentPlayer
+                                        trump = card.Suit;
+                                        CurrentPlayer = players[j];
+                                        //card found, break out of loop of cards
+                                        break;
+                                    }
+                                }
+                                if (teamPlayerFound)
+                                {
+                                    //player found, break out of loop of players
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else if (aces == 4)
+                    {
+                        troelPlayers.Add(players[i]);
+                        //search for player with king of hearts, or if player with 4 aces also contains king of hearts, search for player with queen of hearts and so on
+                        Card highestHeart = new Card(Suits.HEARTS, Numbers.KING);
+                        while (players[i].hand.Cards.Contains(highestHeart))
+                        {
+                            //highestHeart--;
+                            int number = (int)highestHeart.Number;
+                            highestHeart = new Card(1, number--);
+                        }
+                        //teamplayer is player with highestHeart
+                        Player teamPlayer = players.Where(p => p.hand.Cards.Contains(highestHeart)).First();
+                        troelPlayers.Add(teamPlayer);
+                        //set trump and currentPlayer
+                        trump = Suits.HEARTS;
+                        CurrentPlayer = teamPlayer;
+                    }
+                    //teams[0] = new Team(troelPlayers.ToArray(), teams[0].TeamName);
+                    //teams[1] = new Team((players.Except(troelPlayers)).ToArray(), teams[1].TeamName);
+                    troel = true;
+                }
+            }
+            if (!troel)//No Troel
                 return false;
             else//Troel
             {
-                playerA = null;//Player with most aces
-                playerB = null;//Team member;
+                playerA = troelPlayers.First();//Player with most aces
+                playerB = troelPlayers.Last();//Team member;
                 GameCase = Case.TROEL;
                 return true;
             }
