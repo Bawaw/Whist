@@ -6,43 +6,25 @@ using System.Threading.Tasks;
 
 namespace Whist.GameLogic.ControlEntities
 {
-    public enum GameMode { SIMPLE, ABONDANCE, MISERIE, TROEL, SOLO, SOLOSLIM };
-    public abstract class GameController
+    public abstract class GameController 
     {
-        public static Random rng;
-
         protected IDealer dealer;
-        private IScoreMechanisme scoreMechanism;
         protected IReferee referee;
 
-        protected Team[] teams;
         protected DeckCollection deck;
         protected Player[] players;
         protected List<Card> pile;
 
         protected int currentPlayer;
 
-        protected GameMode gameMode;
-
         public Player CurrentPlayer { get { return players[currentPlayer]; } }
         public List<Card> Pile { get {return pile; } }
 
-        public GameController(Player[] players, Team[] teams , IDealer dealer, IScoreMechanisme scoreMechanism, IReferee referee, DeckCollection deck)
+        public GameController(Player[] players, IReferee referee)
         {
             this.players = players;
-            this.teams = teams;
-            this.dealer = dealer;
-            this.scoreMechanism = scoreMechanism;
             this.referee = referee;
-            this.deck = deck;
-            rng = new Random();
             pile = new List<Card>();
-        }
-
-        public void start()
-        {
-            dealer.Deal(players, deck);
-            currentPlayer = rng.Next(0, 4);
         }
 
         public IList<Card> GetPlayerCards()
@@ -70,14 +52,9 @@ namespace Whist.GameLogic.ControlEntities
                 return true;
             return false;
         }
-
-        //reset player tricks and returns winning team
-        public Team EndGame() {
-            return scoreMechanism.distributeScore(teams, gameMode);
-        }
     }
 
-    public class WhistController : GameController
+    public class WhistController : GameController, IPlayTricks
     {
         private Card lead;
         private Suits trump;
@@ -88,14 +65,30 @@ namespace Whist.GameLogic.ControlEntities
         private int pileOwner;
         public Player PileOwner { get { return players[pileOwner]; } }
 
-        public WhistController(Player[] players, Team[] teams, IDealer dealer, IScoreMechanisme scoreMechanisme, IReferee referee, DeckCollection deck) 
-            : base(players, teams, dealer, scoreMechanisme, referee, deck) { }
-
-        public new void start() {
-            trump = dealer.Deal(players, deck).Suit;
-            currentPlayer = rng.Next(0, 4);
-            troel = checkForTroel();
+        public bool HasTrickEnded
+        {
+            get
+            {
+                if (pile.Count >= players.Length)
+                    return true;
+                return false;
+            }
         }
+
+        public bool InTrickPhase
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public WhistController(Player[] players, Suits trump ,IReferee referee) 
+            : base(players, referee)
+        {
+            this.trump = trump;
+        }
+
 
         //play a card for current player, returns true if valid play
         public override bool PlayCard(Card card)
@@ -136,14 +129,6 @@ namespace Whist.GameLogic.ControlEntities
             //else ignore card
             nextPlayer();
             return true;
-        }
-
-        //have all players played their card?
-        public bool isEndTrick()
-        {
-            if (pile.Count >= players.Length)
-                return true;
-            return false;
         }
 
         //Call if turn ends to clean up, returns trick winner

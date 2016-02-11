@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Whist.GameLogic.ControlEntities
 {
-    class Round
+    public class Round
     {
         private IDealingAndBidding phase1;
         private IPlayTricks phase2;
@@ -37,8 +37,13 @@ namespace Whist.GameLogic.ControlEntities
                 var possibleActions = phase1.GetPossibleActions();
                 phase1.DoAction(possibleActions.First());
             }
-            //Biding ronde voorbij
+
+            //play game testing phase
             phase2 = new WhistController(Players, Trump, new StandardReferee());
+
+
+            /*
+            //Biding ronde voorbij
             while (phase2.InTrickPhase)
             {
                 while (!phase2.HasTrickEnded)
@@ -46,7 +51,7 @@ namespace Whist.GameLogic.ControlEntities
                     phase2.PlayCard(null);
                 }
                 phase2.EndTrick();
-            }
+            }*/
         }
 
         public bool BiddingDoAction(Action action)
@@ -60,15 +65,15 @@ namespace Whist.GameLogic.ControlEntities
 
 
         public bool HasTrickEnded { get { return phase2.HasTrickEnded; } }
-        Player PileOwner { get { return phase2.PileOwner; } }
-        Player CurrentPlayer { get { return phase2.CurrentPlayer; } }
-        List<Card> Pile { get { return phase2.Pile; } }
-        bool InTrickPhase { get { return phase2.InTrickPhase; } }
+        public Player PileOwner { get { return phase2.PileOwner; } }
+        public Player CurrentPlayer { get { return phase2.CurrentPlayer; } }
+        public IList<Card> Pile { get { return phase2.Pile; } }
+        public bool InTrickPhase { get { return phase2.InTrickPhase; } }
 
-        Player EndTrick() { return phase2.EndTrick(); }
-        bool PlayCard(Card card) { return phase2.PlayCard(card); }
-        IList<Card> GetPlayerCards(Player player) { return phase2.GetPlayerCards(player); }
-        IList<Card> GetPlayerCards() { return phase2.GetPlayerCards(); }
+        public Player EndTrick() { return phase2.EndTrick(); }
+        public bool PlayCard(Card card) { return phase2.PlayCard(card); }
+        public IList<Card> GetPlayerCards(Player player) { return phase2.GetPlayerCards(player); }
+        public IList<Card> GetPlayerCards() { return phase2.GetPlayerCards(); }
 
     }
 

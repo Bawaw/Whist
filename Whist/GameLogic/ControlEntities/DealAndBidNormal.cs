@@ -310,7 +310,7 @@ namespace Whist.GameLogic.ControlEntities
                     GameCase = Case.FFA;
                 }
             }
-            Team[] teams;
+            Team[] teams = null;
             switch (GameCase)
             {
                 case Case.TEAM:
@@ -345,7 +345,10 @@ namespace Whist.GameLogic.ControlEntities
                         Team teamB = new Team(others, 5);
                         break;
                     }
-                    case Case.ABONDANCE
+                case Case.ABONDANCE:
+                    {
+                        break;
+                    }
                 default: return null;
             }
 

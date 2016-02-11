@@ -9,7 +9,7 @@ using Whist.GameLogic;
 
 namespace Whist_GUI
 {
-    class CardImageConverter : IValueConverter
+    public class CardImageConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
