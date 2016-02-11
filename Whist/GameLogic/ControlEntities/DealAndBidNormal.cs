@@ -9,7 +9,11 @@ namespace Whist.GameLogic.ControlEntities
     class DealAndBidNormal : IDealingAndBidding
     {
         private Player[] players;
-        private Suits trump;
+        public Suits Trump
+        {
+            get;
+            private set;
+        }
 
         public DealAndBidNormal(Player[] players)
         {
@@ -31,7 +35,7 @@ namespace Whist.GameLogic.ControlEntities
             int nCards = cardCollection.Count / players.Length;
             foreach (var player in players)
                 player.hand.AddCards(cardCollection.Draw(nCards));
-            trump = firstCard.Suit;
+            Trump = firstCard.Suit;
 
             if (CheckForTroel())
                 CurrentPlayer = null;
@@ -73,7 +77,7 @@ namespace Whist.GameLogic.ControlEntities
                                         teamPlayerFound = true;
                                         troelPlayers.Add(players[j]);
                                         //set trump
-                                        trump = card.Suit;
+                                        Trump = card.Suit;
                                         //card found, break out of loop of cards
                                         break;
                                     }
@@ -101,7 +105,7 @@ namespace Whist.GameLogic.ControlEntities
                         Player teamPlayer = players.Where(p => p.hand.Cards.Contains(highestHeart)).First();
                         troelPlayers.Add(teamPlayer);
                         //set trump
-                        trump = Suits.HEARTS;
+                        Trump = Suits.HEARTS;
                     }
                     troel = true;
                 }
@@ -204,7 +208,7 @@ namespace Whist.GameLogic.ControlEntities
             {
                 case Action.PASS:
                     {
-                        passedPlayers.Add(CurrentPlayer, true);
+                        passedPlayers[CurrentPlayer] = true;
                         return true;
                     }
                 case Action.ASK:

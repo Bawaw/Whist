@@ -29,9 +29,11 @@ namespace Whist.GameLogic.ControlEntities
             get; internal set;
         }
 
-        public Round()
+        public Round(Player[] players)
         {
+            Players = players;
             phase1 = new DealAndBidNormal(Players);
+            Trump = phase1.Trump;
             while (phase1.InBiddingPhase)
             {
                 var possibleActions = phase1.GetPossibleActions();

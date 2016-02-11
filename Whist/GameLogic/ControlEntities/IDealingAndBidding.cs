@@ -7,6 +7,7 @@ namespace Whist.GameLogic.ControlEntities
         Player CurrentPlayer { get; }
         Case GameCase { get; }
         bool InBiddingPhase { get; }
+        Suits Trump { get; }
 
         bool DoAction(Action action);
         IEnumerable<Action> GetPossibleActions();
