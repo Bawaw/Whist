@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 
 namespace Whist.GameLogic.ControlEntities
 {
-    class DealAndBidNormal
+    class DealAndBidNormal : IDealingAndBidding
     {
-        public Round round;
+        private Player[] players;
+        private Suits trump;
 
-        public DealAndBidNormal(Round round)
+        public DealAndBidNormal(Player[] players)
         {
-            this.round = round;
-            CurrentPlayer = round.players[0];
+            this.players = players;
+            CurrentPlayer = players[0];
             passedPlayers = new Dictionary<Player, bool>();
-            foreach (var player in round.players)
+            foreach (var player in players)
                 passedPlayers.Add(player, false);
+            DealCards();
         }
 
         //Deal Cards and set initial Trump, also check for Troel
@@ -26,10 +28,10 @@ namespace Whist.GameLogic.ControlEntities
             cardCollection.initialise();
             cardCollection.shuffle();
             Card firstCard = cardCollection.peep();
-            int nCards = cardCollection.Count / round.players.Length;
-            foreach (var player in round.players)
+            int nCards = cardCollection.Count / players.Length;
+            foreach (var player in players)
                 player.hand.AddCards(cardCollection.Draw(nCards));
-            round.Trump = firstCard.Suit;
+            trump = firstCard.Suit;
 
             if (CheckForTroel())
                 CurrentPlayer = null;
@@ -49,6 +51,7 @@ namespace Whist.GameLogic.ControlEntities
             {
                 playerA = null;//Player with most aces
                 playerB = null;//Team member;
+                GameCase = Case.TROEL;
                 return true;
             }
         }
@@ -67,6 +70,10 @@ namespace Whist.GameLogic.ControlEntities
         Action currentSpecial = 0;
         Dictionary<Player, bool> passedPlayers;
         public const int lowestSpecial = 4;
+        public Case GameCase
+        {
+            get; private set;
+        }
 
         public Player CurrentPlayer
         {
@@ -78,7 +85,7 @@ namespace Whist.GameLogic.ControlEntities
         {
             var possibleActions = new HashSet<Action>();
             possibleActions.Add(Action.PASS);
-            if (currentSpecial == 0)
+            if (currentSpecial == 0 && GameCase != Case.TROEL)
             {
                 if (playerA == null)
                 {
@@ -105,12 +112,20 @@ namespace Whist.GameLogic.ControlEntities
             }
             else
             {
-                for (int i = (int)currentSpecial + 1; i < Enum.GetValues(typeof(Action)).Length; i++)
+                if (GameCase == Case.TROEL)
                 {
-                    possibleActions.Add((Action)i);
+                    possibleActions.Add(Action.SOLO);
+                    possibleActions.Add(Action.SOLOSLIM);
                 }
-                if (currentSpecial == Action.MISERIE && playerB == null)
-                    possibleActions.Add(Action.MISERIE);
+                else
+                {
+                    for (int i = (int)currentSpecial + 1; i < Enum.GetValues(typeof(Action)).Length; i++)
+                    {
+                        possibleActions.Add((Action)i);
+                    }
+                    if (currentSpecial == Action.MISERIE && playerB == null)
+                        possibleActions.Add(Action.MISERIE);
+                }
             }
 
             return possibleActions;
@@ -137,16 +152,19 @@ namespace Whist.GameLogic.ControlEntities
                 case Action.JOIN:
                     {
                         playerB = CurrentPlayer;
+                        GameCase = Case.TEAM;
                         return true;
                     }
                 case Action.ALONE:
                     {
                         playerB = CurrentPlayer; //(intended) result: askplayer == joinplayer 
+                        GameCase = Case.ALONE;
                         return true;
                     }
                 case Action.ABONDANCE:
                     {
                         currentSpecial = Action.ABONDANCE;
+                        GameCase = Case.ABONDANCE;
                         HighestSpecialPlayer = CurrentPlayer;
                         return true;
                     }
@@ -164,6 +182,7 @@ namespace Whist.GameLogic.ControlEntities
                             playerA = null;
                             playerB = null;
                             currentSpecial = Action.MISERIE;
+                            GameCase = Case.MISERIE;
                         }
                         HighestSpecialPlayer = CurrentPlayer;
                         return true;
@@ -171,12 +190,14 @@ namespace Whist.GameLogic.ControlEntities
                 case Action.SOLO:
                     {
                         currentSpecial = Action.SOLO;
+                        GameCase = Case.SOLO;
                         HighestSpecialPlayer = CurrentPlayer;
                         return true;
                     }
                 case Action.SOLOSLIM:
                     {
                         currentSpecial = Action.SOLOSLIM;
+                        GameCase = Case.SOLOSLIM;
                         HighestSpecialPlayer = CurrentPlayer;
                         return true;
                     }
@@ -197,87 +218,69 @@ namespace Whist.GameLogic.ControlEntities
             do
             {
                 int nIndex = getCurrentIndex() + 1;
-                if (nIndex == round.players.Length)
+                if (nIndex == players.Length)
                     nIndex = 0;
-                CurrentPlayer = round.players[nIndex];
+                CurrentPlayer = players[nIndex];
             } while (passedPlayers[CurrentPlayer]);
 
         }
 
         private int getCurrentIndex()
         {
-            for (int i = 0; i < round.players.Length; i++)
-                if (round.players[i] == CurrentPlayer)
+            for (int i = 0; i < players.Length; i++)
+                if (players[i] == CurrentPlayer)
                     return i;
             return -1;
         }
 
         //Set Game Case and teams
-        private void FinalizeBidding()
+        public CaseAndTeam FinalizeBidding()
         {
             //TODO
             //Determine which of the 8 cases it is.
-            if (currentSpecial == 0)
+            if (GameCase == 0)
             {
-                if (passedPlayers.ContainsValue(true) && passedPlayers.ContainsValue(false))
+                if (!passedPlayers.ContainsValue(true))//Everyone passed => FFA
                 {
-                    if (playerA != null)
+                    GameCase = Case.FFA;
+                }
+            }
+            Team[] teams;
+            switch (GameCase)
+            {
+                case Case.TEAM:
                     {
-                        if (playerB != playerA)
-                        {
-                            round.gameCase = Case.TEAM;//Someone passed and player A & B are different => team
-                             //Team = PlayerA + PlayerB
-                        }
-                        else
-                        {
-                            round.gameCase = Case.ALONE;//Someone passed and player A & B are the same => alone
-                            //Team = PlayerA
-                        }
-                    }
-                }
-                else if (!passedPlayers.ContainsValue(true))//Everyone passed => FFA
-                {
-                    round.gameCase = Case.FFA;
-                    //Team
-                }
-                else if (!passedPlayers.ContainsValue(false))//No one passed and no special => troel.
-                {
-                    round.gameCase = Case.TROEL;
-                    //Team = PlayerA + PlayerB
-                }
-            }
-            else
-            {
-                switch (currentSpecial)
-                {
-                    case Action.ABONDANCE:
-                        {
-                            round.gameCase = Case.ABONDANCE;
-                            //team = HighestSpecialPlayer
-                            break;
-                        }
-                    case Action.MISERIE:
-                        {
-                            round.gameCase = Case.MISERIE;
-                            //team = not miseries vs (seperate team) miseries
-                            break;
-                        }
-                    case Action.SOLO:
-                        {
-                            round.gameCase = Case.SOLO;
-                            //team = HighestSpecialPlayer
-                            break;
-                        }
-                    case Action.SOLOSLIM:
-                        {
-                            round.gameCase = Case.SOLOSLIM;
-                            //team = HighestSpecialPlayer
-                            break;
-                        }
-                    default:
+                        Team teamA = new Team(new Player[] { playerA, playerB }, 8);
+                        Player[] others = (Player[]) players.Except(teamA.Players);
+                        Team teamB = new Team(others, 6);
+                        teams = new Team[] { teamA, teamB };
                         break;
-                }
+                    }
+                case Case.ALONE:
+                    {
+                        Team teamA = new Team(new Player[] { playerA }, 5);
+                        Player[] others = (Player[])players.Except(teamA.Players);
+                        Team teamB = new Team(others, 9);
+                        teams = new Team[] { teamA, teamB };
+                        break;
+                    }
+                default: return null;
             }
+
+
+            return new CaseAndTeam(teams, GameCase);
+        }
+    }
+
+    internal class CaseAndTeam
+    {
+        public Team[] teams;
+        public Case gameCase;
+
+        public CaseAndTeam(Team[] teams, Case gameCase)
+        {
+            this.teams = teams;
+            this.gameCase = gameCase;
         }
     }
 
@@ -288,6 +291,19 @@ namespace Whist.GameLogic.ControlEntities
         JOIN,
         ALONE,
         ABONDANCE = DealAndBidNormal.lowestSpecial,
+        MISERIE,
+        SOLO,
+        SOLOSLIM
+    }
+
+
+    public enum Case
+    {
+        FFA,
+        TEAM,
+        ALONE,
+        TROEL,
+        ABONDANCE,
         MISERIE,
         SOLO,
         SOLOSLIM

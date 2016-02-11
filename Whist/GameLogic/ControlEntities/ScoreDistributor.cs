@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace Whist.GameLogic.ControlEntities
 {
-    public interface IScoreMechanisme {
-        //calculates score and cleans tricks
-        Team distributeScore(Team[] teams, GameMode gameMode);
-    }
-
-    public class SimpleScoreMechanisme : IScoreMechanisme
+    public class SimpleScoreMechanisme : IScoreCalculation
     {
-        public Team distributeScore(Team[] teams,GameMode gameMode)
+        public Team distributeScore(Team[] teams, Case gameCase)
         {
             int[] scores = new int[teams.Length];
 
             for (int i = 0; i < teams.Length; i++)
-                scores[i] = teams[i].Tricks; 
+            {
+                scores[i] = teams[i].Tricks;
+                foreach (var player in teams[i].Players)
+                    player.score += scores[i];
+            }
+            
 
             //assumes 2 teams can not have same score
             return teams[scores.ToList().IndexOf(scores.Max())];

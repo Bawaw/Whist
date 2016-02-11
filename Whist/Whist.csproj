@@ -46,6 +46,9 @@
     <Compile Include="GameLogic\ControlEntities\DealAndBidNormal.cs" />
     <Compile Include="GameLogic\ControlEntities\Dealer.cs" />
     <Compile Include="GameLogic\ControlEntities\GameController.cs" />
+    <Compile Include="GameLogic\ControlEntities\IDealingAndBidding.cs" />
+    <Compile Include="GameLogic\ControlEntities\IPlayTricks.cs" />
+    <Compile Include="GameLogic\ControlEntities\IScoreCalculation.cs" />
     <Compile Include="GameLogic\ControlEntities\Player.cs" />
     <Compile Include="GameLogic\ControlEntities\Referee.cs" />
     <Compile Include="GameLogic\ControlEntities\Round.cs" />
