@@ -43,7 +43,7 @@ namespace Whist.GameLogic.ControlEntities
         */
         private bool CheckForTroel()
         {
-            var troel = false;
+            bool troel = false;
             List<Player> troelPlayers = new List<Player>();
             for (int i = 0; i < players.Count(); i++)
             {
@@ -72,9 +72,8 @@ namespace Whist.GameLogic.ControlEntities
                                     {
                                         teamPlayerFound = true;
                                         troelPlayers.Add(players[j]);
-                                        //set trump and currentPlayer
+                                        //set trump
                                         trump = card.Suit;
-                                        CurrentPlayer = players[j];
                                         //card found, break out of loop of cards
                                         break;
                                     }
@@ -101,12 +100,9 @@ namespace Whist.GameLogic.ControlEntities
                         //teamplayer is player with highestHeart
                         Player teamPlayer = players.Where(p => p.hand.Cards.Contains(highestHeart)).First();
                         troelPlayers.Add(teamPlayer);
-                        //set trump and currentPlayer
+                        //set trump
                         trump = Suits.HEARTS;
-                        CurrentPlayer = teamPlayer;
                     }
-                    //teams[0] = new Team(troelPlayers.ToArray(), teams[0].TeamName);
-                    //teams[1] = new Team((players.Except(troelPlayers)).ToArray(), teams[1].TeamName);
                     troel = true;
                 }
             }
@@ -116,6 +112,8 @@ namespace Whist.GameLogic.ControlEntities
             {
                 playerA = troelPlayers.First();//Player with most aces
                 playerB = troelPlayers.Last();//Team member;
+                //set currentPlayer
+                CurrentPlayer = playerB;
                 GameCase = Case.TROEL;
                 return true;
             }
@@ -336,6 +334,7 @@ namespace Whist.GameLogic.ControlEntities
                         Player[] others = (Player[]) players.Except(teamA.Players);
                         Team teamC = new Team(new Player[] { others.First() }, 4);
                         Team teamD = new Team(new Player[] { others.Last() }, 4);
+                        teams = new Team[] { teamA, teamB, teamC, teamD };
                         break;
                     }
                 case Case.TROEL:
@@ -343,9 +342,29 @@ namespace Whist.GameLogic.ControlEntities
                         Team teamA = new Team(new Player[] { playerA, playerB }, 9);
                         Player[] others = (Player[])players.Except(teamA.Players);
                         Team teamB = new Team(others, 5);
+                        teams = new Team[] { teamA, teamB };
                         break;
                     }
-                    case Case.ABONDANCE
+                case Case.ABONDANCE:
+                    {
+                        Team teamA = new Team(new Player[] { HighestSpecialPlayer }, 9);
+                        playerB[] others = (playerB[])players.Except(teamA.Players);
+                        Team teamB = new Team(others, 5);
+                        teams = new Team[] { team1, teamB };
+                        break;
+                    }
+                case Case.MISERIE:
+                    {
+
+                    }
+                case Case.SOLO:
+                    {
+
+                    }
+                case Case.SOLOSLIM:
+                    {
+
+                    }
                 default: return null;
             }
 
