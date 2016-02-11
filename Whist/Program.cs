@@ -10,6 +10,8 @@ namespace Whist
 {
     class Program
     {
+        static void Main(string[] args) { }
+        /*
         private static WhistController whistController;
         static void Main(string[] args)
         {
@@ -64,6 +66,6 @@ namespace Whist
                 line += i + ") " + data[i].ToString() + seperator;
 
             return line.Remove(line.Length - 1);
-        }
+        }*/
     }
 }

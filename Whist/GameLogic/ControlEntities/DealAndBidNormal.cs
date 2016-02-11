@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -348,23 +348,26 @@ namespace Whist.GameLogic.ControlEntities
                 case Case.ABONDANCE:
                     {
                         Team teamA = new Team(new Player[] { HighestSpecialPlayer }, 9);
-                        playerB[] others = (playerB[])players.Except(teamA.Players);
+                        Player[] others = (Player[])players.Except(teamA.Players);
                         Team teamB = new Team(others, 5);
-                        teams = new Team[] { team1, teamB };
+                        teams = new Team[] { teamA, teamB };
                         break;
                     }
-                case Case.MISERIE:
-                    {
-
-                    }
-                case Case.SOLO:
-                    {
-
-                    }
-                case Case.SOLOSLIM:
-                    {
-
-                    }
+                //case Case.MISERIE:
+                //    {
+                //        //TODO
+                //        break;
+                //    }
+                //case Case.SOLO:
+                //    {
+                //        //TODO
+                //        break;
+                //    }
+                //case Case.SOLOSLIM:
+                //    {
+                //        //TODO
+                //        break;
+                //    }
                 default: return null;
             }
 

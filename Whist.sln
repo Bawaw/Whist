@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Whist-GUI", "Whist-GUI\Whist-GUI.csproj", "{E7D0BA1C-96BE-4161-A719-FFC9C0DDE5EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Whist", "Whist\Whist.csproj", "{615956B7-6C61-4935-8CEC-F0C45521C8AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{E7D0BA1C-96BE-4161-A719-FFC9C0DDE5EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7D0BA1C-96BE-4161-A719-FFC9C0DDE5EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7D0BA1C-96BE-4161-A719-FFC9C0DDE5EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{615956B7-6C61-4935-8CEC-F0C45521C8AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{615956B7-6C61-4935-8CEC-F0C45521C8AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{615956B7-6C61-4935-8CEC-F0C45521C8AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{615956B7-6C61-4935-8CEC-F0C45521C8AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
