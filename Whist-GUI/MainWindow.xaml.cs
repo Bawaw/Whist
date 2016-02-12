@@ -27,8 +27,8 @@ namespace Whist_GUI
         public MainWindow() {
             model = new MainViewModel();
 
-            Hand.DataContext = model.GetPlayerCards;
             InitializeComponent();
+            Hand.DataContext = model.GetPlayerCards;
         }
     }
 }

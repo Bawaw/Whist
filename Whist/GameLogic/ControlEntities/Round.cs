@@ -34,11 +34,11 @@ namespace Whist.GameLogic.ControlEntities
             Players = players;
             phase1 = new DealAndBidNormal(Players);
             Trump = phase1.Trump;
-            while (phase1.InBiddingPhase)
+            /*while (phase1.InBiddingPhase)
             {
                 var possibleActions = phase1.GetPossibleActions();
                 phase1.DoAction(possibleActions.First());
-            }
+            }*/
 
             //play game testing phase
             phase2 = new WhistController(Players, Trump, new StandardReferee());
