@@ -14,7 +14,8 @@ namespace Whist_GUI
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Whist.GameLogic.Card card = ((CardViewModel) value).Card;
+            //Whist.GameLogic.Card card = ((CardViewModel) value).Card;
+            Card card = value as Card;
             if (card == null) return new Uri(@"Textures\red_back.png", UriKind.Relative);
             //check is face, else number as #
             string number = ((int)card.Number < 11) ? ((int)card.Number).ToString() : card.Number.ToString().ToLower();

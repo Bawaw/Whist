@@ -13,6 +13,7 @@ namespace Whist.GameLogic.ControlEntities
     {
         public bool ValidateMove(Card card,Card lead, List<Card> currentPlayerCards)
         {
+            if (lead == null) return true;
             //if did not play same suit
             if (card.Suit != lead.Suit) {
                 int index = currentPlayerCards.FindIndex(x => x.Suit == lead.Suit);
