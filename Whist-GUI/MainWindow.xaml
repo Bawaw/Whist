@@ -16,6 +16,7 @@
                 <ImageBrush ImageSource="Textures/Table.png" />
             </Canvas.Background>
         </Canvas>
+        
         <ItemsControl x:Name="Hand" ItemsSource="{Binding PlayerCards}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -24,33 +25,12 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command ="{Binding DataContext.PlayCmd , RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding }" Height="160" Width="100" Margin ="-30 0 0 20" >
-                        <Button.Template>
-                            <ControlTemplate TargetType="{x:Type Button}">
-                                <Border Name="border" BorderThickness="1.4">
-                                    <Border.BorderBrush>
-                                        <SolidColorBrush Color="Transparent">
-                                        </SolidColorBrush>
-                                    </Border.BorderBrush>
-                                    <Border.Background>
-                                        <ImageBrush ImageSource="{Binding Converter={StaticResource CardConverter}}" />
-                                    </Border.Background>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsEnabled" Value="false">
-                                        <Setter TargetName="border" Property="Background" Value="#195A5A5A" />
-                                    </Trigger>
-                                    <Trigger Property="IsMouseOver" Value="true">
-                                        <Setter TargetName="border" Property="BorderBrush" Value="#99001FFF"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
+                    <local:CardView/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <StackPanel x:Name="Enemy_1">
+        
+        <!--<StackPanel x:Name="Enemy_1">
             <Label Content="{Binding Name}" />
             <Label Content="{Binding Score}" />
             <ItemsControl ItemsSource="{Binding Cards}"  >
@@ -69,6 +49,6 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </StackPanel>
+        </StackPanel>-->
     </Grid>
 </Window>

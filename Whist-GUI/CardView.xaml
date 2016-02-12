@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="Whist_GUI.CardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Whist_GUI"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <local:CardImageConverter x:Key="CardConverter" />
+    </UserControl.Resources>
+    
+    <Button Command ="{Binding Play}" Height="160" Width="100" Margin ="-30 0 0 20" >
+        <Button.Template>
+            <ControlTemplate TargetType="{x:Type Button}">
+                <Border Name="border" BorderThickness="1.4">
+                    <Border.BorderBrush>
+                        <SolidColorBrush Color="Transparent">
+                        </SolidColorBrush>
+                    </Border.BorderBrush>
+                    <Border.Background>
+                        <ImageBrush ImageSource="{Binding Converter={StaticResource CardConverter}}" />
+                    </Border.Background>
+                </Border>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsEnabled" Value="false">
+                        <Setter TargetName="border" Property="Background" Value="#195A5A5A" />
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="true">
+                        <Setter TargetName="border" Property="BorderBrush" Value="#99001FFF"/>
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </Button.Template>
+    </Button>
+</UserControl>

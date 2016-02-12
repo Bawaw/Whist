@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Whist.GameLogic;
 using Whist.GameLogic.ControlEntities;
 
@@ -23,31 +25,45 @@ namespace Whist_GUI.ViewLogic
                 new Player("P4")
             };
             round = new Round(players);
-            HandVM = new HandViewModel(round.GetPlayerCards(round.CurrentPlayer), this);
+            HandVM = new HandViewModel(round.CurrentPlayer, this);
         }
 
-        public void PlayCard(Card card)
+        public bool PlayCard(Card card)
         {
-            round.PlayCard(card);
+            return true;// round.PlayCard(card);
+        }
+
+        internal IList<Card> PlayerCards(Player player)
+        {
+            return round.GetPlayerCards(player);
         }
     }
 
-    public class HandViewModel
+    public class HandViewModel : INotifyPropertyChanged
     {
         private MainViewModel mainVM;
+        private Player player;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public IList<CardViewModel> PlayerCards { get; private set; }
 
-        public HandViewModel(IList<Card> cards, MainViewModel mainVM)
+        public HandViewModel(Player player, MainViewModel mainVM)
         {
             this.mainVM = mainVM;
+            this.player = player;
             PlayerCards = new List<CardViewModel>();
-            foreach (Card card in cards)
+            foreach (Card card in mainVM.PlayerCards(player))
                 PlayerCards.Add(new CardViewModel(card, this));
         }
 
-        public void PlayCard(Card card)
+        public void PlayCard(CardViewModel card)
         {
-            mainVM.PlayCard(card);
+            if (mainVM.PlayCard(card.Card))
+            {
+                PlayerCards.Remove(card);
+                //Notify view somehow
+            }
         }
     }
 
@@ -56,16 +72,47 @@ namespace Whist_GUI.ViewLogic
         public Card Card { get; private set; }
         private HandViewModel handVM;
 
+        private readonly PlayCommand play;
+        public ICommand Play { get { return play; } }
+
         public CardViewModel(Card card, HandViewModel handVM)
         {
             Card = card;
             this.handVM = handVM;
+            play = new PlayCommand(this);
         }
 
 
         public void PlayCard()
         {
-            handVM.PlayCard(Card);
+            handVM.PlayCard(this);
+        }
+
+        public bool IsValidMove
+        {
+            get { return true; }
+        }
+
+        private class PlayCommand : ICommand
+        {
+            CardViewModel card;
+
+            public PlayCommand(CardViewModel card)
+            {
+                this.card = card;
+            }
+
+            public bool CanExecute(object parameter)
+            {
+                return true;
+            }
+
+            public event EventHandler CanExecuteChanged;
+
+            public void Execute(object parameter)
+            {
+                card.PlayCard();
+            }
         }
     }
     
