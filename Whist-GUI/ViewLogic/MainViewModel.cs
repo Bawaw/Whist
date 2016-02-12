@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ namespace Whist_GUI.ViewLogic
     public class MainViewModel
     {
         private Round round;
+
         public HandViewModel HandVM { get; private set; }
 
         public MainViewModel()
@@ -25,95 +27,63 @@ namespace Whist_GUI.ViewLogic
                 new Player("P4")
             };
             round = new Round(players);
-            HandVM = new HandViewModel(round.CurrentPlayer, this);
-        }
-
-        public bool PlayCard(Card card)
-        {
-            return true;// round.PlayCard(card);
-        }
-
-        internal IList<Card> PlayerCards(Player player)
-        {
-            return round.GetPlayerCards(player);
+            HandVM = new HandViewModel(round.Start());
         }
     }
 
     public class HandViewModel : INotifyPropertyChanged
     {
-        private MainViewModel mainVM;
-        private Player player;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public IList<CardViewModel> PlayerCards { get; private set; }
-
-        public HandViewModel(Player player, MainViewModel mainVM)
-        {
-            this.mainVM = mainVM;
-            this.player = player;
-            PlayerCards = new List<CardViewModel>();
-            foreach (Card card in mainVM.PlayerCards(player))
-                PlayerCards.Add(new CardViewModel(card, this));
-        }
-
-        public void PlayCard(CardViewModel card)
-        {
-            if (mainVM.PlayCard(card.Card))
-            {
-                PlayerCards.Remove(card);
-                //Notify view somehow
-            }
-        }
-    }
-
-    public class CardViewModel
-    {
-        public Card Card { get; private set; }
-        private HandViewModel handVM;
-
-        private readonly PlayCommand play;
-        public ICommand Play { get { return play; } }
-
-        public CardViewModel(Card card, HandViewModel handVM)
-        {
-            Card = card;
-            this.handVM = handVM;
-            play = new PlayCommand(this);
-        }
-
-
-        public void PlayCard()
-        {
-            handVM.PlayCard(this);
-        }
-
-        public bool IsValidMove
-        {
-            get { return true; }
-        }
-
         private class PlayCommand : ICommand
         {
-            CardViewModel card;
+            HandViewModel handViewModel;
 
-            public PlayCommand(CardViewModel card)
-            {
-                this.card = card;
+            public PlayCommand(HandViewModel handViewModel) {
+                this.handViewModel = handViewModel;
             }
 
             public bool CanExecute(object parameter)
             {
-                return true;
+                Card card = parameter as Card;
+                if (card == null) return false;
+                return handViewModel.whistController.IsValidPlay(card);
             }
 
             public event EventHandler CanExecuteChanged;
 
             public void Execute(object parameter)
             {
-                card.PlayCard();
+                Card card = parameter as Card;
+                if (card == null) return;
+                handViewModel.playCard(card);
             }
         }
-    }
-    
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private readonly PlayCommand playCmd;
+        public ICommand PlayCmd { get { return playCmd; } }
+
+        private IPlayTricks whistController;
+
+        public IList<Card> PlayerCards { get { return whistController.GetPlayerCards(); } }
+
+        public HandViewModel(IPlayTricks controller)
+        {
+            this.playCmd = new PlayCommand(this);
+            this.whistController = controller;
+        }
+
+        public void playCard(Card card) {
+            whistController.PlayCard(card);
+
+            NotifyPropertyChanged("Hand");
+        }
+
+        public void NotifyPropertyChanged(String propName)
+        {
+            if (propName != null)
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
+        }
+
+    } 
 }

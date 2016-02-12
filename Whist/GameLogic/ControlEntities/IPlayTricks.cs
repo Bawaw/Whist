@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Whist.GameLogic.ControlEntities
 {
@@ -11,6 +12,7 @@ namespace Whist.GameLogic.ControlEntities
         bool InTrickPhase { get; }
 
         Player EndTrick();
+        bool IsValidPlay(Card card);
         bool PlayCard(Card card);
         IList<Card> GetPlayerCards(Player player);
         IList<Card> GetPlayerCards();

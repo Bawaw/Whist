@@ -56,6 +56,10 @@ namespace Whist.GameLogic.ControlEntities
             }*/
         }
 
+        public IPlayTricks Start() {
+            return phase2;
+        }
+
         public bool BiddingDoAction(Action action)
         {
             return phase1.DoAction(action);
