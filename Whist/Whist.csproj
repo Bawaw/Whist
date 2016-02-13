@@ -43,9 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AI\SimpleBiddingAI.cs" />
+    <Compile Include="AI\SimpleGameAI.cs" />
     <Compile Include="GameLogic\ControlEntities\DealAndBidNormal.cs" />
-    <Compile Include="GameLogic\ControlEntities\Dealer.cs" />
     <Compile Include="GameLogic\ControlEntities\GameController.cs" />
+    <Compile Include="GameLogic\ControlEntities\IDealCards.cs" />
     <Compile Include="GameLogic\ControlEntities\IDealingAndBidding.cs" />
     <Compile Include="GameLogic\ControlEntities\IPlayTricks.cs" />
     <Compile Include="GameLogic\ControlEntities\IScoreCalculation.cs" />

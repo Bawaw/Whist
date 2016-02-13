@@ -8,7 +8,7 @@ namespace Whist.GameLogic.ControlEntities
 {
     public class SimpleScoreMechanisme : IScoreCalculation
     {
-        public Team distributeScore(Team[] teams, Case gameCase)
+        public void CalculateScores(Team[] teams, Case gameCase)
         {
             int[] scores = new int[teams.Length];
 
@@ -18,10 +18,6 @@ namespace Whist.GameLogic.ControlEntities
                 foreach (var player in teams[i].Players)
                     player.score += scores[i];
             }
-            
-
-            //assumes 2 teams can not have same score
-            return teams[scores.ToList().IndexOf(scores.Max())];
         }
     }
 }

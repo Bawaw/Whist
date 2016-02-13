@@ -15,6 +15,28 @@ namespace Whist.GameLogic.ControlEntities
             private set;
         }
 
+        Player playerA; //PlayerA is, when no special: asking/alone player, or when special miserie: (possibly) one of miserie players, or when special troel: player with most aces 
+        Player playerB; //PlayerB is, when no special: joining/alone player, or when special miserie: (possibly) one of miserie players, or when special troel: other teammember
+        Player HighestSpecialPlayer;
+        Action currentSpecial = 0;
+        Dictionary<Player, bool> passedPlayers;
+        public const int lowestSpecial = 4;
+        public Case GameCase
+        {
+            get; private set;
+        }
+
+        public Player CurrentPlayer
+        {
+            get;
+            private set;
+        }
+        public bool InBiddingPhase
+        {
+            get { return CurrentPlayer != null; }
+        }
+
+
         public DealAndBidNormal(Player[] players)
         {
             this.players = players;
@@ -22,23 +44,16 @@ namespace Whist.GameLogic.ControlEntities
             passedPlayers = new Dictionary<Player, bool>();
             foreach (var player in players)
                 passedPlayers.Add(player, false);
+            
             DealCards();
         }
 
         //Deal Cards and set initial Trump, also check for Troel
         private void DealCards()
         {
-            DeckCollection cardCollection = new DeckCollection();
-            cardCollection.initialise();
-            cardCollection.shuffle();
-            Card firstCard = cardCollection.peep();
-            int nCards = cardCollection.Count / players.Length;
-            foreach (var player in players)
-                player.hand.AddCards(cardCollection.Draw(nCards));
-            Trump = firstCard.Suit;
-
-            if (CheckForTroel())
-                CurrentPlayer = null;
+            (new DealCardsSimple()).DealCards(players);
+            Trump = players[4].hand.Cards.Last().Suit;
+            CheckForTroel();
         }
 
         /*
@@ -123,31 +138,11 @@ namespace Whist.GameLogic.ControlEntities
             }
         }
 
-        public bool InBiddingPhase
-        {
-            get { return CurrentPlayer != null; }
-        }
 
         //Bidding
         //Let each player in turn make a decision
 
-        Player playerA; //PlayerA is, when no special: asking/alone player, or when special miserie: (possibly) one of miserie players, or when special troel: player with most aces 
-        Player playerB; //PlayerB is, when no special: joining/alone player, or when special miserie: (possibly) one of miserie players, or when special troel: other teammember
-        Player HighestSpecialPlayer;
-        Action currentSpecial = 0;
-        Dictionary<Player, bool> passedPlayers;
-        public const int lowestSpecial = 4;
-        public Case GameCase
-        {
-            get; private set;
-        }
-
-        public Player CurrentPlayer
-        {
-            get;
-            private set;
-        }
-
+        
         public IEnumerable<Action> GetPossibleActions()
         {
             var possibleActions = new HashSet<Action>();
@@ -301,7 +296,7 @@ namespace Whist.GameLogic.ControlEntities
         }
 
         //Set Game Case and teams
-        public CaseAndTeam FinalizeBidding()
+        public ResultData FinalizeBidding()
         {
             if (GameCase == 0)//GameCase 0 is FFA, perhaps unnecessary.
             {
@@ -312,6 +307,7 @@ namespace Whist.GameLogic.ControlEntities
             }
 
             Team[] teams;
+            Player firstPlayer = players[0];
             switch (GameCase)
             {
                 case Case.TEAM:
@@ -324,6 +320,7 @@ namespace Whist.GameLogic.ControlEntities
                     }
                 case Case.ALONE:
                     {
+                        firstPlayer = playerA;
                         Team teamA = new Team(new Player[] { playerA }, 5);
                         Player[] others = (Player[])players.Except(teamA.Players);
                         Team teamB = new Team(others, 9);
@@ -349,6 +346,7 @@ namespace Whist.GameLogic.ControlEntities
                     }
                 case Case.ABONDANCE:
                     {
+                        firstPlayer = HighestSpecialPlayer;
                         Team teamA = new Team(new Player[] { HighestSpecialPlayer }, 9);
                         Player[] others = (Player[])players.Except(teamA.Players);
                         Team teamB = new Team(others, 5);
@@ -373,6 +371,7 @@ namespace Whist.GameLogic.ControlEntities
                     }
                 case Case.SOLO:
                     {
+                        firstPlayer = HighestSpecialPlayer;
                         Team teamA = new Team(new Player[] { HighestSpecialPlayer }, 13);
                         Player[] others = (Player[])players.Except(teamA.Players);
                         Team teamB = new Team(others, 1);
@@ -391,19 +390,23 @@ namespace Whist.GameLogic.ControlEntities
             }
 
 
-            return new CaseAndTeam(teams, GameCase);
+            return new ResultData(teams, GameCase, firstPlayer, Trump);
         }
     }
 
-    internal class CaseAndTeam
+    internal class ResultData
     {
         public Team[] teams;
         public Case gameCase;
+        public Player firstPlayer;
+        public Suits trump;
 
-        public CaseAndTeam(Team[] teams, Case gameCase)
+        public ResultData(Team[] teams, Case gameCase, Player firstPlayer, Suits trump)
         {
             this.teams = teams;
             this.gameCase = gameCase;
+            this.firstPlayer = firstPlayer;
+            this.trump = trump;
         }
     }
 

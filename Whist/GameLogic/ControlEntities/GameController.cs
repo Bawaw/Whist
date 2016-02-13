@@ -9,7 +9,6 @@ namespace Whist.GameLogic.ControlEntities
 {
     public abstract class GameController 
     {
-        protected IDealer dealer;
         protected IReferee referee;
 
         protected DeckCollection deck;
@@ -60,19 +59,19 @@ namespace Whist.GameLogic.ControlEntities
         private Card lead;
         private Suits trump;
         public Suits Trump { get { return trump; } }
-        private bool troel;
-        public bool Troel { get { return troel; } }
 
         private int pileOwner;
         public Player PileOwner { get { return players[pileOwner]; } }
 
-        public bool HasTrickEnded
+        public bool TrickInProgress
         {
             get
             {
+                if (!InTrickPhase)
+                    return false;
                 if (pile.Count >= players.Length)
-                    return true;
-                return false;
+                    return false;
+                return true;
             }
         }
 
@@ -80,14 +79,22 @@ namespace Whist.GameLogic.ControlEntities
         {
             get
             {
-                throw new NotImplementedException();
+                if (players.Any(p => p.hand.Cards.Count > 0))
+                    return true;
+                return false;
             }
         }
 
-        public WhistController(Player[] players, Suits trump ,IReferee referee) 
+        public WhistController(Player[] players, Player FirstPlayer, Suits trump ,IReferee referee) 
             : base(players, referee)
         {
             this.trump = trump;
+            for (int i = 0; i < players.Length; i++)
+                if (players[i] == FirstPlayer)
+                {
+                    currentPlayer = i;
+                    break;
+                }
         }
 
 
