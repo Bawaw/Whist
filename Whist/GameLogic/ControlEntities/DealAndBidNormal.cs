@@ -361,7 +361,7 @@ namespace Whist.GameLogic.ControlEntities
                 case Case.TEAM:
                     {
                         Team teamA = new Team(new Player[] { playerA, playerB }, 8);
-                        Player[] others = (Player[])players.Except(teamA.Players);
+                        Player[] others = players.Except(teamA.Players).ToArray();
                         Team teamB = new Team(others, 6);
                         teams = new Team[] { teamA, teamB };
                         break;
