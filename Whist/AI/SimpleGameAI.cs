@@ -10,25 +10,33 @@ namespace Whist.AI
         public Card GetMove(Player player, IList<Card> pile, Suits trump)
         {
             var cards = player.hand.Cards;
-            var pileSuit = pile[0].Suit;
-            if (cards.Any(c => c.Suit == pileSuit))//Hand contains card of same suit as pile.
+
+            if (pile.Count > 0)
             {
-                var cardsOfSuit = cards.Where(c => c.Suit == pileSuit);
-                var pileCardsOfSuit = pile.Where(c => c.Suit == pileSuit);
-                return HighOrLowCardSelection(cardsOfSuit, pileCardsOfSuit);
+                var pileSuit = pile[0].Suit;
+                if (cards.Any(c => c.Suit == pileSuit))//Hand contains card of same suit as pile.
+                {
+                    var cardsOfSuit = cards.Where(c => c.Suit == pileSuit);
+                    var pileCardsOfSuit = pile.Where(c => c.Suit == pileSuit);
+                    return HighOrLowCardSelection(cardsOfSuit, pileCardsOfSuit);
+                }
+                else//Hand contains no card of the same suit as pile.
+                {
+                    if (cards.Any(c => c.Suit == trump))//Hand has trump card.
+                    {
+                        var cardsOfTrump = cards.Where(c => c.Suit == pileSuit);
+                        var pileCardsOfTrump = pile.Where(c => c.Suit == pileSuit);
+                        return HighOrLowCardSelection(cardsOfTrump, pileCardsOfTrump);
+                    }
+                    else //Hand contains neither pileSuit card of trump card.
+                    {
+                        return GetLowestCard(cards);
+                    }
+                }
             }
-            else//Hand contains no card of the same suit as pile.
+            else//AI Starts Pile.
             {
-                if (cards.Any(c => c.Suit == trump))//Hand has trump card.
-                {
-                    var cardsOfTrump = cards.Where(c => c.Suit == pileSuit);
-                    var pileCardsOfTrump = pile.Where(c => c.Suit == pileSuit);
-                    return HighOrLowCardSelection(cardsOfTrump, pileCardsOfTrump);
-                }
-                else //Hand contains neither pileSuit card of trump card.
-                {
-                    return GetLowestCard(cards);
-                }
+                return GetHighestCard(cards);
             }
         }
 
