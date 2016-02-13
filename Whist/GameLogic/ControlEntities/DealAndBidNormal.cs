@@ -370,7 +370,7 @@ namespace Whist.GameLogic.ControlEntities
                     {
                         firstPlayer = playerA;
                         Team teamA = new Team(new Player[] { playerA }, 5);
-                        Player[] others = (Player[])players.Except(teamA.Players);
+                        Player[] others = players.Except(teamA.Players).ToArray();
                         Team teamB = new Team(others, 9);
                         teams = new Team[] { teamA, teamB };
                         break;
@@ -387,7 +387,7 @@ namespace Whist.GameLogic.ControlEntities
                 case Case.TROEL:
                     {
                         Team teamA = new Team(new Player[] { playerA, playerB }, 9);
-                        Player[] others = (Player[])players.Except(teamA.Players);
+                        Player[] others = players.Except(teamA.Players).ToArray();
                         Team teamB = new Team(others, 5);
                         teams = new Team[] { teamA, teamB };
                         break;
@@ -396,7 +396,7 @@ namespace Whist.GameLogic.ControlEntities
                     {
                         firstPlayer = HighestSpecialPlayer;
                         Team teamA = new Team(new Player[] { HighestSpecialPlayer }, 9);
-                        Player[] others = (Player[])players.Except(teamA.Players);
+                        Player[] others = players.Except(teamA.Players).ToArray();
                         Team teamB = new Team(others, 5);
                         teams = new Team[] { teamA, teamB };
                         break;
@@ -413,7 +413,7 @@ namespace Whist.GameLogic.ControlEntities
 
                         foreach (var mplayer in miserieplayers)
                             teammmsss.Add(new Team(new Player[] { mplayer }, 0));
-                        teammmsss.Add(new Team((Player[])players.Except(miserieplayers), 1));
+                        teammmsss.Add(new Team(players.Except(miserieplayers).ToArray(), 1));
                         teams = teammmsss.ToArray();
                         break;
                     }
@@ -421,7 +421,7 @@ namespace Whist.GameLogic.ControlEntities
                     {
                         firstPlayer = HighestSpecialPlayer;
                         Team teamA = new Team(new Player[] { HighestSpecialPlayer }, 13);
-                        Player[] others = (Player[])players.Except(teamA.Players);
+                        Player[] others = players.Except(teamA.Players).ToArray();
                         Team teamB = new Team(others, 1);
                         teams = new Team[] { teamA, teamB };
                         break;
@@ -429,7 +429,7 @@ namespace Whist.GameLogic.ControlEntities
                 case Case.SOLOSLIM:
                     {
                         Team teamA = new Team(new Player[] { HighestSpecialPlayer }, 13);
-                        Player[] others = (Player[])players.Except(teamA.Players);
+                        Player[] others = players.Except(teamA.Players).ToArray();
                         Team teamB = new Team(others, 1);
                         teams = new Team[] { teamA, teamB };
                         break;
