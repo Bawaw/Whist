@@ -52,7 +52,7 @@ namespace Whist.GameLogic.ControlEntities
         private void DealCards()
         {
             (new DealCardsSimple()).DealCards(players);
-            Trump = players[4].hand.Cards.Last().Suit;
+            Trump = players[3].hand.Cards.Last().Suit;
             CheckForTroel();
         }
 
