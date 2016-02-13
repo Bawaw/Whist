@@ -22,20 +22,14 @@ namespace Whist_GUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        MainViewModel model = new MainViewModel();
+        BaseGameViewModel model = new BaseGameViewModel();
 
         public MainWindow()
         {
             InitializeComponent();
-            model.HandVM.PropertyChanged += HandVM_PropertyChanged;
             
-            Hand.DataContext = model.HandVM;
-        }
-
-        private void HandVM_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            Hand.DataContext = null;
-            Hand.DataContext = model.HandVM;
+            //Hand.DataContext = model.HandVM;
+            Whist.DataContext = model; 
         }
     }
 }

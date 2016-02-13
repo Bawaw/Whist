@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,12 +9,12 @@ namespace Whist.GameLogic
 {
     public abstract class CardCollection{
         public static Random rng;
-        protected List<Card> deck;
+        protected ObservableCollection<Card> deck;
         public int Count { get { return deck.Count; } }
 
         public CardCollection() {
             rng = new Random();
-            deck = new List<Card>(); 
+            deck = new ObservableCollection<Card>(); 
         }
 
         protected Card Remove(Card card) {
@@ -51,10 +52,10 @@ namespace Whist.GameLogic
         }
 
         //Draw #n cards, card gets removed from deck
-        public List<Card> Draw(int n)
+        public IList<Card> Draw(int n)
         {
             if (deck.Count < n) return null;
-            List<Card> cards = deck.GetRange(0, n);
+            IList<Card> cards = deck.GetRange(0, n);
             deck.RemoveRange(0, n);
             return cards;
         }
@@ -80,10 +81,10 @@ namespace Whist.GameLogic
             }
         }
     }
-
+        
     public class HandCollection : CardCollection
     {
-        public IList<Card> Cards { get { return deck.AsReadOnly(); } }
+        public ObservableCollection<Card> Cards { get { return deck; } }
 
         public void sort() {
             deck.Sort();
@@ -94,7 +95,7 @@ namespace Whist.GameLogic
             return Remove(card);
         }
 
-        public void AddCards(List<Card> cards) {
+        public void AddCards(IList<Card> cards) {
             cards.ForEach(x => AddCard(x));
         }
     }

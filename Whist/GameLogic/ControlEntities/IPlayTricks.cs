@@ -8,13 +8,13 @@ namespace Whist.GameLogic.ControlEntities
         bool HasTrickEnded { get; }
         Player PileOwner { get; }
         Player CurrentPlayer { get; }
-        List<Card> Pile { get; }
+        ObservableCollection<Card> Pile { get; }
         bool InTrickPhase { get; }
 
         Player EndTrick();
         bool IsValidPlay(Card card);
         bool PlayCard(Card card);
-        IList<Card> GetPlayerCards(Player player);
-        IList<Card> GetPlayerCards();
+        ObservableCollection<Card> GetPlayerCards(Player player);
+        ObservableCollection<Card> GetPlayerCards();
     }
 }

@@ -11,14 +11,19 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist_GUI.ViewLogic
 {
-    public class MainViewModel
+    public class BaseGameViewModel
     {
         private Round round;
 
+        public ObservableCollection<Card> Pile { get { return whistController.Pile; } }
         public HandViewModel HandVM { get; private set; }
 
-        public MainViewModel()
+        private IPlayTricks whistController;
+
+        public BaseGameViewModel()
         {
+            HandVM = new HandViewModel(this);
+
             Player[] players = new Player[]
             {
                 new Player("P1"),
@@ -27,17 +32,31 @@ namespace Whist_GUI.ViewLogic
                 new Player("P4")
             };
             round = new Round(players);
-            HandVM = new HandViewModel(round.Start());
+
+            whistController = round.Start();
+        }
+
+        public void PlayCard(Card card) {
+            whistController.PlayCard(card);
+        }
+
+        public bool IsValidPlay(Card card) {
+            return whistController.IsValidPlay(card);
+        }
+
+        public ObservableCollection<Card> GetCurrentPlayerCards() {
+            return whistController.GetPlayerCards();
         }
     }
 
-    public class HandViewModel : INotifyPropertyChanged
+    public class HandViewModel
     {
         private class PlayCommand : ICommand
         {
             HandViewModel handViewModel;
 
-            public PlayCommand(HandViewModel handViewModel) {
+            public PlayCommand(HandViewModel handViewModel)
+            {
                 this.handViewModel = handViewModel;
             }
 
@@ -45,7 +64,7 @@ namespace Whist_GUI.ViewLogic
             {
                 Card card = parameter as Card;
                 if (card == null) return false;
-                return handViewModel.whistController.IsValidPlay(card);
+                return handViewModel.mainViewModel.IsValidPlay(card);
             }
 
             public event EventHandler CanExecuteChanged;
@@ -58,32 +77,21 @@ namespace Whist_GUI.ViewLogic
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private readonly PlayCommand playCmd;
         public ICommand PlayCmd { get { return playCmd; } }
 
-        private IPlayTricks whistController;
+        private BaseGameViewModel mainViewModel;
 
-        public IList<Card> PlayerCards { get { return whistController.GetPlayerCards(); } }
+        public ObservableCollection<Card> PlayerCards { get { return mainViewModel.GetCurrentPlayerCards(); } }
 
-        public HandViewModel(IPlayTricks controller)
+        public HandViewModel(BaseGameViewModel mainViewModel)
         {
+            this.mainViewModel = mainViewModel;
             this.playCmd = new PlayCommand(this);
-            this.whistController = controller;
         }
 
         public void playCard(Card card) {
-            whistController.PlayCard(card);
-
-            NotifyPropertyChanged("Hand");
+            mainViewModel.PlayCard(card);
         }
-
-        public void NotifyPropertyChanged(String propName)
-        {
-            if (propName != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
-        }
-
     } 
 }

@@ -10,7 +10,7 @@
         <local:CardImageConverter x:Key="CardConverter" />
     </UserControl.Resources>
 
-    <Button CommandParameter="{Binding }" Command ="{Binding DataContext.PlayCmd , RelativeSource={RelativeSource AncestorType=ItemsControl}}" Height="160" Width="100" Margin ="-30 0 0 20" >
+    <Button CommandParameter="{Binding }" Command ="{Binding DataContext.HandVM.PlayCmd , RelativeSource={RelativeSource AncestorType=ItemsControl}}" Height="160" Width="100" Margin ="-30 0 0 20">
         <Button.Template>
             <ControlTemplate TargetType="{x:Type Button}">
                 <Border Name="border" BorderThickness="1.4">

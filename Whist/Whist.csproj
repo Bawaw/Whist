@@ -53,6 +53,7 @@
     <Compile Include="GameLogic\ControlEntities\Referee.cs" />
     <Compile Include="GameLogic\ControlEntities\Round.cs" />
     <Compile Include="GameLogic\ControlEntities\ScoreDistributor.cs" />
+    <Compile Include="GameLogic\ExtendedObservableCollection.cs" />
     <Compile Include="GameLogic\GameCases\GameCase.cs" />
     <Compile Include="GameLogic\GameEntities\Card.cs" />
     <Compile Include="GameLogic\GameEntities\CardCollection.cs" />

@@ -10,14 +10,26 @@
         <local:CardImageConverter x:Key="CardConverter" />
     </Window.Resources>
 
-    <Grid>
-        <Canvas x:Name="Canvas" >
-            <Canvas.Background>
+    <Grid x:Name="Whist" Background="Black" >
+        <DockPanel Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}" >
+            <DockPanel.Background>
                 <ImageBrush ImageSource="Textures/Table.png" />
-            </Canvas.Background>
-        </Canvas>
-        
-        <ItemsControl x:Name="Hand"  ItemsSource="{Binding PlayerCards}">
+            </DockPanel.Background>
+            <ItemsControl ItemsSource="{Binding Pile}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Image Height="100" Width="100" Source="{Binding Converter={StaticResource CardConverter}}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DockPanel>
+
+        <ItemsControl ItemsSource="{Binding HandVM.PlayerCards}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
@@ -29,7 +41,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        
         <!--<StackPanel x:Name="Enemy_1">
             <Label Content="{Binding Name}" />
             <Label Content="{Binding Score}" />
