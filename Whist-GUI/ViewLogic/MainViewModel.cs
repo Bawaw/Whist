@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Whist.AI;
 using Whist.GameLogic;
@@ -39,18 +40,33 @@ namespace Whist_GUI.ViewLogic
         }
 
         public void PlayCard(Card card) {
+
             whistController.PlayCard(card);
+            if (!round.TrickInProgress)
+                round.EndTrick();
+            
 
             var AI = new SimpleGameAI();
             while (round.CurrentPlayer != null && round.CurrentPlayer != round.Players[0])
             {
-                while (round.CurrentPlayer != null && round.CurrentPlayer != round.Players[0])
+                while (round.TrickInProgress && round.CurrentPlayer != null && round.CurrentPlayer != round.Players[0])
                 {
                     var aiCard = AI.GetMove(round.CurrentPlayer, round.Pile, round.Trump);
                     round.PlayCard(aiCard);
                 }
                 if (!round.TrickInProgress)
                     round.EndTrick();
+            }
+
+            if (!round.InTrickPhase)
+            {
+                round.EndTricksRound();
+                string str = "";
+                foreach (var player in round.Players)
+                    str += player.name + " - " + player.score + "\n";
+                
+                MessageBoxResult result = MessageBox.Show(str, "Round End", MessageBoxButton.OK, MessageBoxImage.None);
+                
             }
         }
 
