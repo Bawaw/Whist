@@ -7,7 +7,7 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist.GameLogic.GameCases
 {
-    abstract class SpecialGameCase
+    public abstract class SpecialGameCase
     {
         public virtual int ID { get; }
 
@@ -30,7 +30,7 @@ namespace Whist.GameLogic.GameCases
         public abstract void ApplyScores(Team[] teams);
     }
 
-    class Troel : SpecialGameCase
+    public class Troel : SpecialGameCase
     {
         public override bool IsSelectable { get { return false; } }
         public override bool HasAfterDealCheck { get { return true; } }
@@ -133,7 +133,7 @@ namespace Whist.GameLogic.GameCases
 
     }
 
-    class Abondance : SpecialGameCase
+    public class Abondance : SpecialGameCase
     {
         public override int ID { get { return 10; } }
 
@@ -165,7 +165,7 @@ namespace Whist.GameLogic.GameCases
         }
     }
 
-    class Miserie : SpecialGameCase
+    public class Miserie : SpecialGameCase
     {
         public override int ID { get { return 20; } }
 
@@ -202,7 +202,7 @@ namespace Whist.GameLogic.GameCases
         }
     }
 
-    class Solo : SoloSlim
+    public class Solo : SoloSlim
     {
         public override int ID { get { return 30; } }
 
@@ -227,7 +227,7 @@ namespace Whist.GameLogic.GameCases
         }
     }
 
-    class SoloSlim : SpecialGameCase
+    public class SoloSlim : SpecialGameCase
     {
         public override int ID { get { return 40; } }
 
