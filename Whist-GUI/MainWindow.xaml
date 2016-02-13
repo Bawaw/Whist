@@ -12,7 +12,7 @@
     </Window.Resources>
 
     <Grid x:Name="Whist" Background="GhostWhite">
-        <Grid Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}" Margin="0 30 0 100" >
+        <Grid Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}" Margin="0 30 0 120" >
             <Grid.Background>
                 <ImageBrush ImageSource="Textures/Table.png" />
             </Grid.Background>
