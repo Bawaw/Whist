@@ -44,7 +44,7 @@ namespace Whist.GameLogic.ControlEntities
             passedPlayers = new Dictionary<Player, bool>();
             foreach (var player in players)
                 passedPlayers.Add(player, false);
-            
+
             DealCards();
         }
 
@@ -142,7 +142,7 @@ namespace Whist.GameLogic.ControlEntities
         //Bidding
         //Let each player in turn make a decision
 
-        
+
         public IEnumerable<Action> GetPossibleActions()
         {
             var possibleActions = new HashSet<Action>();
@@ -193,6 +193,7 @@ namespace Whist.GameLogic.ControlEntities
             return possibleActions;
         }
 
+        int actionsDone = 0;
 
         public bool DoAction(Action action)
         {
@@ -215,6 +216,7 @@ namespace Whist.GameLogic.ControlEntities
                     {
                         playerB = CurrentPlayer;
                         GameCase = Case.TEAM;
+                        actionsDone--;
                         break;
                     }
                 case Action.ALONE:
@@ -266,6 +268,7 @@ namespace Whist.GameLogic.ControlEntities
                 default:
                     return false;
             }
+            actionsDone++;
             SetNextPlayer();
             return true;
         }
@@ -274,10 +277,53 @@ namespace Whist.GameLogic.ControlEntities
         //Skip passed players.
         private void SetNextPlayer()
         {
-            if (!passedPlayers.ContainsValue(false))//everyone passed
+
+            if (actionsDone >= 4)
             {
-                CurrentPlayer = null;
+                switch (passedPlayers.Where(p => p.Value == true).Count())//Amount of players that passed.
+                {
+                    case 4:
+                        {
+                            CurrentPlayer = null;
+                            return;
+                        }
+                    case 3:
+                        {
+                            if (GameCase == Case.FFA && playerA != null)//No one did anything special, one player Asked, no one responded.
+                                CurrentPlayer = playerA;//Ask player if he wants to go alone or FFA.
+                            else
+                                CurrentPlayer = null;
+                            return;
+                        }
+                    case 2:
+                        {
+                            if (GameCase == Case.TEAM)
+                            {
+                                CurrentPlayer = null;
+                                return;
+                            }
+                            if (GameCase == Case.MISERIE && playerA != null)
+                            {
+                                CurrentPlayer = null;
+                                return;
+                            }
+                            break;
+                        }
+
+                    case 1:
+                        {
+                            if (GameCase == Case.MISERIE && playerA != null && playerB != null)
+                            {
+                                CurrentPlayer = null;
+                                return;
+                            }
+                            break;
+                        }
+                }
             }
+
+            if (CurrentPlayer == null)
+                return;
 
             do
             {
@@ -315,7 +361,7 @@ namespace Whist.GameLogic.ControlEntities
                 case Case.TEAM:
                     {
                         Team teamA = new Team(new Player[] { playerA, playerB }, 8);
-                        Player[] others = (Player[]) players.Except(teamA.Players);
+                        Player[] others = (Player[])players.Except(teamA.Players);
                         Team teamB = new Team(others, 6);
                         teams = new Team[] { teamA, teamB };
                         break;
@@ -367,7 +413,7 @@ namespace Whist.GameLogic.ControlEntities
 
                         foreach (var mplayer in miserieplayers)
                             teammmsss.Add(new Team(new Player[] { mplayer }, 0));
-                        teammmsss.Add(new Team((Player[]) players.Except(miserieplayers),1));
+                        teammmsss.Add(new Team((Player[])players.Except(miserieplayers), 1));
                         teams = teammmsss.ToArray();
                         break;
                     }
