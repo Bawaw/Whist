@@ -74,7 +74,7 @@ namespace Whist.GameLogic.GameCases
                         {
                             if (selectedPlayers[0] != playerTwo)
                             {
-                                foreach (Card card in player.hand.Cards)
+                                foreach (Card card in playerTwo.hand.Cards)
                                     if (card.Number == Numbers.ACE)
                                     {
                                         selectedPlayers.Add(playerTwo);
