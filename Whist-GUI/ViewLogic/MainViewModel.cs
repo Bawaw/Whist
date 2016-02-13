@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Whist.AI;
 using Whist.GameLogic;
 using Whist.GameLogic.ControlEntities;
 
@@ -27,10 +28,10 @@ namespace Whist_GUI.ViewLogic
 
             Player[] players = new Player[]
             {
-                new Player("P1"),
-                new Player("P2"),
-                new Player("P3"),
-                new Player("P4")
+                new Player("Player"),
+                new Player("Comp 1"),
+                new Player("Comp 2"),
+                new Player("Comp 3")
             };
             round = new Round(players);
 
@@ -39,6 +40,18 @@ namespace Whist_GUI.ViewLogic
 
         public void PlayCard(Card card) {
             whistController.PlayCard(card);
+
+            var AI = new SimpleGameAI();
+            while (round.CurrentPlayer != null && round.CurrentPlayer != round.Players[0])
+            {
+                while (round.CurrentPlayer != null && round.CurrentPlayer != round.Players[0])
+                {
+                    var aiCard = AI.GetMove(round.CurrentPlayer, round.Pile, round.Trump);
+                    round.PlayCard(aiCard);
+                }
+                if (!round.TrickInProgress)
+                    round.EndTrick();
+            }
         }
 
         public bool IsValidPlay(Card card) {

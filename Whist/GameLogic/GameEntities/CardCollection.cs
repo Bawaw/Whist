@@ -18,7 +18,8 @@ namespace Whist.GameLogic
         }
 
         protected Card Remove(Card card) {
-            if (deck.Count <= 0 || !deck.Contains(card)) return null;
+            if (deck.Count <= 0 || !deck.Contains(card))
+                return null;
             deck.Remove(card);
             return card;
         }
@@ -55,8 +56,10 @@ namespace Whist.GameLogic
         public IList<Card> Draw(int n)
         {
             if (deck.Count < n) return null;
-            IList<Card> cards = deck.GetRange(0, n);
-            deck.RemoveRange(0, n);
+            IList<Card> cards = deck.GetRange(0, n-1);
+            foreach (Card c in cards)
+                deck.Remove(c);
+            //deck.RemoveRange(0, n);
             return cards;
         }
 
