@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="TrumpImageConverter.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="CardView.xaml.cs">
       <DependentUpon>CardView.xaml</DependentUpon>
     </Compile>
@@ -184,6 +187,12 @@
       <Project>{615956b7-6c61-4935-8cec-f0c45521c8ab}</Project>
       <Name>Whist</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\CLUBS.png" />
+    <Resource Include="Textures\DIAMONDS.png" />
+    <Resource Include="Textures\HEARTS.png" />
+    <Resource Include="Textures\SPADES.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

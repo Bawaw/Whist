@@ -17,6 +17,7 @@ namespace Whist_GUI.ViewLogic
 
         public ObservableCollection<Card> Pile { get { return whistController.Pile; } }
         public HandViewModel HandVM { get; private set; }
+        public Suits Trump { get { return round.Trump; } }
 
         private IPlayTricks whistController;
 
