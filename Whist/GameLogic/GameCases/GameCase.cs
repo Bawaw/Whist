@@ -142,7 +142,7 @@ namespace Whist.GameLogic.GameCases
         public override Team[] Teams(Player[] players)
         {
             Team teamA = new Team(new Player[] { selectedPlayers[0] }, 9);
-            Player[] others = (Player[])players.Except(selectedPlayers);
+            Player[] others = players.Except(selectedPlayers).ToArray();
             Team teamB = new Team(others, 5);
             return new Team[] { teamA, teamB };
         }
@@ -176,7 +176,7 @@ namespace Whist.GameLogic.GameCases
             var teammmsss = new List<Team>();
             foreach (var mplayer in selectedPlayers)
                 teammmsss.Add(new Team(new Player[] { mplayer }, 0));
-            teammmsss.Add(new Team((Player[])players.Except(selectedPlayers), 1));
+            teammmsss.Add(new Team(players.Except(selectedPlayers).ToArray(), 1));
             return teammmsss.ToArray();
         }
 
@@ -234,7 +234,7 @@ namespace Whist.GameLogic.GameCases
         public override Team[] Teams(Player[] players)
         {
             Team teamA = new Team(new Player[] { selectedPlayers[0] }, 13);
-            Player[] others = (Player[])players.Except(selectedPlayers);
+            Player[] others = players.Except(selectedPlayers).ToArray();
             Team teamB = new Team(others, 5);
             return new Team[] { teamA, teamB };
         }
