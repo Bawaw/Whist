@@ -63,13 +63,15 @@ namespace Whist.GameLogic.ControlEntities
         private int pileOwner;
         public Player PileOwner { get { return players[pileOwner]; } }
 
-        public bool HasTrickEnded
+        public bool TrickInProgress
         {
             get
             {
+                if (!InTrickPhase)
+                    return false;
                 if (pile.Count >= players.Length)
-                    return true;
-                return false;
+                    return false;
+                return true;
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿namespace Whist.GameLogic.ControlEntities
 {
-    internal interface IScoreCalculation
+    public interface IScoreCalculation
     {
+        void CalculateScores(Team[] teams, Case gameCase);
     }
 }
