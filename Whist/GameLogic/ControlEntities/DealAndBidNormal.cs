@@ -204,31 +204,31 @@ namespace Whist.GameLogic.ControlEntities
                 case Action.PASS:
                     {
                         passedPlayers[CurrentPlayer] = true;
-                        return true;
+                        break;
                     }
                 case Action.ASK:
                     {
                         playerA = CurrentPlayer;
-                        return true;
+                        break;
                     }
                 case Action.JOIN:
                     {
                         playerB = CurrentPlayer;
                         GameCase = Case.TEAM;
-                        return true;
+                        break;
                     }
                 case Action.ALONE:
                     {
                         playerB = CurrentPlayer; //(intended) result: PlayerB == PlayerA || perhaps unnecessary with changes. 
                         GameCase = Case.ALONE;
-                        return true;
+                        break;
                     }
                 case Action.ABONDANCE:
                     {
                         currentSpecial = Action.ABONDANCE;
                         GameCase = Case.ABONDANCE;
                         HighestSpecialPlayer = CurrentPlayer;
-                        return true;
+                        break;
                     }
                 case Action.MISERIE:
                     {
@@ -247,25 +247,27 @@ namespace Whist.GameLogic.ControlEntities
                             GameCase = Case.MISERIE;
                         }
                         HighestSpecialPlayer = CurrentPlayer;
-                        return true;
+                        break;
                     }
                 case Action.SOLO:
                     {
                         currentSpecial = Action.SOLO;
                         GameCase = Case.SOLO;
                         HighestSpecialPlayer = CurrentPlayer;
-                        return true;
+                        break;
                     }
                 case Action.SOLOSLIM:
                     {
                         currentSpecial = Action.SOLOSLIM;
                         GameCase = Case.SOLOSLIM;
                         HighestSpecialPlayer = CurrentPlayer;
-                        return true;
+                        break;
                     }
                 default:
                     return false;
             }
+            SetNextPlayer();
+            return true;
         }
 
         //Set the Current Player to the next player.
