@@ -3,13 +3,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using Whist.GameLogic.ControlEntities;
 using Whist.GameLogic;
+using Whist.GameLogic.GameCases;
 
 namespace WhistTest
 {
     [TestClass]
     public class DealAndBidNormalTest
     {
-        private IList<Player> players = new List<Player>();
+        private List<Player> players = new List<Player>();
 
         [TestInitialize]
         private void createPlayers()
@@ -70,6 +71,14 @@ namespace WhistTest
                 Console.WriteLine();
             }
             //...
+
+            SpecialGameCase troel = new Troel();
+            Team[] teams = troel.Teams(players.ToArray());
+            Assert.IsTrue(troel.AfterDealCheck(players.ToArray()));//troel
+            Assert.AreEqual(players[0], teams[0].Players[0]);//troelplayers, player with 3 aces
+            Assert.AreEqual(players[2], teams[0].Players[1]);//troelplayers, player with 4th ace
+            Assert.AreEqual(players[1], teams[1].Players[0]);//otherplayers
+            Assert.AreEqual(players[3], teams[1].Players[1]);//otherplayers
         }
     }
 }
