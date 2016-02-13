@@ -278,7 +278,7 @@ namespace Whist.GameLogic.ControlEntities
         private void SetNextPlayer()
         {
 
-            if (actionsDone >= 4)
+            if (actionsDone >= 4)//All players made a decision.
             {
                 switch (passedPlayers.Where(p => p.Value == true).Count())//Amount of players that passed.
                 {
