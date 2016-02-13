@@ -19,7 +19,7 @@ namespace Whist.GameLogic.ControlEntities
         public Player[] Players { get; private set; }
         public Suits Trump { get; private set; }
         public bool RoundInProgress { get; private set; }
-
+        public Team[] Teams { get { return teams; } }
 
         public Round(Player[] players)
         {

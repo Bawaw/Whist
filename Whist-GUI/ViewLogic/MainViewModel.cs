@@ -35,7 +35,14 @@ namespace Whist_GUI.ViewLogic
                 new Player("Comp 3")
             };
             round = new Round(players);
-
+            string str = "Case: " + round.GameCase + "\nTeams: ";
+            foreach (Team team in round.Teams)
+            {
+                str += "\n-";
+                foreach (Player player in team.Players)
+                    str += "["+player.name + "] ";
+            }
+            MessageBoxResult result = MessageBox.Show(str, "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
             whistController = round.Start();
         }
 
@@ -43,8 +50,11 @@ namespace Whist_GUI.ViewLogic
 
             whistController.PlayCard(card);
             if (!round.TrickInProgress)
+            {
+                MessageBoxResult result = MessageBox.Show(round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
                 round.EndTrick();
-            
+            }
+
 
             var AI = new SimpleGameAI();
             while (round.CurrentPlayer != null && round.CurrentPlayer != round.Players[0])
@@ -55,7 +65,10 @@ namespace Whist_GUI.ViewLogic
                     round.PlayCard(aiCard);
                 }
                 if (!round.TrickInProgress)
+                {
+                    MessageBoxResult result = MessageBox.Show(round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
                     round.EndTrick();
+                }
             }
 
             if (!round.InTrickPhase)
