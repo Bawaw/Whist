@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Whist.AI;
 
 namespace Whist.GameLogic.ControlEntities
 {
@@ -26,8 +27,19 @@ namespace Whist.GameLogic.ControlEntities
             phase1 = new DealAndBidNormal(Players);
             Trump = phase1.Trump;
             RoundInProgress = true;
+
+            LetAIHandleFirstPhase();
         }
 
+        private void LetAIHandleFirstPhase()
+        {
+            while (InBiddingPhase)
+            {
+                var AI = new SimpleBiddingAI();
+                BiddingDoAction(AI.GetAction(CurrentPlayer, BiddingGetPossibleActions(), Trump));
+            }
+            EndBiddingRound();
+        }
 
 
         public void EndBiddingRound()
@@ -59,7 +71,7 @@ namespace Whist.GameLogic.ControlEntities
         public Case GameCase { get { return phase1.GameCase; } }
         public bool BiddingDoAction(Action action) { if (!phase1.InBiddingPhase) return false; return phase1.DoAction(action); }
         public IEnumerable<Action> BiddingGetPossibleActions() { if(!phase1.InBiddingPhase) return null; return phase1.GetPossibleActions(); }
-
+        public bool InBiddingPhase { get { return phase1.InBiddingPhase; } }
 
         public Player CurrentPlayer
         {
