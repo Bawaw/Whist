@@ -12,7 +12,7 @@ namespace Whist.GameLogic.ControlEntities
         private IPlayTricks phase2;
         private IScoreCalculation phase3;
 
-        protected Team[] teams;
+        private Team[] teams;
         public Player[] Players
         {
             get;
@@ -26,7 +26,19 @@ namespace Whist.GameLogic.ControlEntities
 
         public Suits Trump
         {
-            get; internal set;
+            get; private set;
+        }
+
+        public void EndBiddingRound()
+        {
+            if (!phase1.InBiddingPhase)
+            {
+                var result = phase1.FinalizeBidding();
+                //result.gameCase;
+                teams = result.teams;
+                Trump = result.trump;
+                phase2 = new WhistController(Players, result.firstPlayer, Trump, new StandardReferee());
+            }
         }
 
         public Round(Player[] players)
@@ -41,7 +53,6 @@ namespace Whist.GameLogic.ControlEntities
             }*/
 
             //play game testing phase
-            phase2 = new WhistController(Players, Trump, new StandardReferee());
 
 
             /*
