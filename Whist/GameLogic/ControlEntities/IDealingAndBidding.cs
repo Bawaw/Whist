@@ -11,5 +11,6 @@ namespace Whist.GameLogic.ControlEntities
 
         bool DoAction(Action action);
         IEnumerable<Action> GetPossibleActions();
+        ResultData FinalizeBidding();
     }
 }

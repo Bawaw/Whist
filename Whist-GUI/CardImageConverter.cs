@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using Whist.GameLogic;
+using Whist_GUI.ViewLogic;
 
 namespace Whist_GUI
 {
@@ -13,11 +14,12 @@ namespace Whist_GUI
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            //Whist.GameLogic.Card card = ((CardViewModel) value).Card;
             Card card = value as Card;
             if (card == null) return new Uri(@"Textures\red_back.png", UriKind.Relative);
             //check is face, else number as #
-            String number = ((int)card.Number < 11) ? ((int)card.Number).ToString() : card.Number.ToString().ToLower();
-            String uri = "Textures\\" + number + "_of_" + card.Suit.ToString().ToLower() + ".png";
+            string number = ((int)card.Number < 11) ? ((int)card.Number).ToString() : card.Number.ToString().ToLower();
+            string uri = "Textures\\" + number + "_of_" + card.Suit.ToString().ToLower() + ".png";
             return new Uri(@uri, UriKind.Relative); 
         }
 

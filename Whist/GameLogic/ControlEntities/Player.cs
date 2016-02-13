@@ -46,5 +46,12 @@ namespace Whist.GameLogic.ControlEntities
             this.objective = objective;
         }
         public int objective;
+        public void applyScore(int score)
+        {
+            foreach (Player player in players)
+            {
+                player.score += score;
+            }
+        }
     }
 }

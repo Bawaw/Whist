@@ -301,7 +301,7 @@ namespace Whist.GameLogic.ControlEntities
         }
 
         //Set Game Case and teams
-        public CaseAndTeam FinalizeBidding()
+        public ResultData FinalizeBidding()
         {
             if (GameCase == 0)//GameCase 0 is FFA, perhaps unnecessary.
             {
@@ -312,6 +312,7 @@ namespace Whist.GameLogic.ControlEntities
             }
 
             Team[] teams;
+            Player firstPlayer = players[0];
             switch (GameCase)
             {
                 case Case.TEAM:
@@ -324,6 +325,7 @@ namespace Whist.GameLogic.ControlEntities
                     }
                 case Case.ALONE:
                     {
+                        firstPlayer = playerA;
                         Team teamA = new Team(new Player[] { playerA }, 5);
                         Player[] others = (Player[])players.Except(teamA.Players);
                         Team teamB = new Team(others, 9);
@@ -349,6 +351,7 @@ namespace Whist.GameLogic.ControlEntities
                     }
                 case Case.ABONDANCE:
                     {
+                        firstPlayer = HighestSpecialPlayer;
                         Team teamA = new Team(new Player[] { HighestSpecialPlayer }, 9);
                         Player[] others = (Player[])players.Except(teamA.Players);
                         Team teamB = new Team(others, 5);
@@ -373,6 +376,7 @@ namespace Whist.GameLogic.ControlEntities
                     }
                 case Case.SOLO:
                     {
+                        firstPlayer = HighestSpecialPlayer;
                         Team teamA = new Team(new Player[] { HighestSpecialPlayer }, 13);
                         Player[] others = (Player[])players.Except(teamA.Players);
                         Team teamB = new Team(others, 1);
@@ -391,19 +395,23 @@ namespace Whist.GameLogic.ControlEntities
             }
 
 
-            return new CaseAndTeam(teams, GameCase);
+            return new ResultData(teams, GameCase, firstPlayer, Trump);
         }
     }
 
-    internal class CaseAndTeam
+    internal class ResultData
     {
         public Team[] teams;
         public Case gameCase;
+        public Player firstPlayer;
+        public Suits trump;
 
-        public CaseAndTeam(Team[] teams, Case gameCase)
+        public ResultData(Team[] teams, Case gameCase, Player firstPlayer, Suits trump)
         {
             this.teams = teams;
             this.gameCase = gameCase;
+            this.firstPlayer = firstPlayer;
+            this.trump = trump;
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,6 @@ namespace Whist.GameLogic.ControlEntities
 {
     public abstract class GameController 
     {
-        protected IDealer dealer;
         protected IReferee referee;
 
         protected DeckCollection deck;
@@ -34,7 +34,7 @@ namespace Whist.GameLogic.ControlEntities
 
         public IList<Card> GetPlayerCards(Player player)
         {
-            return player.hand.Cards;
+            return new ObservableCollection<Card>(player.hand.Cards);
         }
 
         public abstract bool PlayCard(Card card);
@@ -59,8 +59,6 @@ namespace Whist.GameLogic.ControlEntities
         private Card lead;
         private Suits trump;
         public Suits Trump { get { return trump; } }
-        private bool troel;
-        public bool Troel { get { return troel; } }
 
         private int pileOwner;
         public Player PileOwner { get { return players[pileOwner]; } }
@@ -79,14 +77,22 @@ namespace Whist.GameLogic.ControlEntities
         {
             get
             {
-                throw new NotImplementedException();
+                if (players.Any(p => p.hand.Cards.Count > 0))
+                    return true;
+                return false;
             }
         }
 
-        public WhistController(Player[] players, Suits trump ,IReferee referee) 
+        public WhistController(Player[] players, Player FirstPlayer, Suits trump ,IReferee referee) 
             : base(players, referee)
         {
             this.trump = trump;
+            for (int i = 0; i < players.Length; i++)
+                if (players[i] == FirstPlayer)
+                {
+                    currentPlayer = i;
+                    break;
+                }
         }
 
 
@@ -128,6 +134,12 @@ namespace Whist.GameLogic.ControlEntities
                 }
             //else ignore card
             nextPlayer();
+            return true;
+        }
+
+        public bool IsValidPlay(Card card) {
+            if (!referee.ValidateMove(card, lead, new List<Card>(players[currentPlayer].hand.Cards)))
+                return false;
             return true;
         }
 
