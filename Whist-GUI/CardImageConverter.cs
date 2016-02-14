@@ -19,7 +19,10 @@ namespace Whist_GUI
             if (card == null) return new Uri(@"Textures\red_back.png", UriKind.Relative);
             //check is face, else number as #
             string number = ((int)card.Number < 11) ? ((int)card.Number).ToString() : card.Number.ToString().ToLower();
-            string uri = "Textures\\" + number + "_of_" + card.Suit.ToString().ToLower() + ".png";
+            string extrabit = "";
+            if (card.Number >= Numbers.JACK && card.Number < Numbers.ACE)
+                extrabit = "2";
+            string uri = "Textures\\" + number + "_of_" + card.Suit.ToString().ToLower() + extrabit + ".png";
             return new Uri(@uri, UriKind.Relative); 
         }
 
