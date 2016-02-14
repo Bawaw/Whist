@@ -91,7 +91,7 @@ namespace Whist.GameLogic.GameCases
                         {
                             //highestHeart--;
                             int number = (int)highestHeart.Number;
-                            highestHeart = new Card(1, number--);
+                            highestHeart = new Card(1, --number);
                         }
                         //teamplayer is player with highestHeart
                         selectedPlayers.Add(players.Where(p => p.hand.Cards.Contains(highestHeart)).Single());

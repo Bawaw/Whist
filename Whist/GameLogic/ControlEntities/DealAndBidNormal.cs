@@ -114,7 +114,7 @@ namespace Whist.GameLogic.ControlEntities
                         {
                             //highestHeart--;
                             int number = (int)highestHeart.Number;
-                            highestHeart = new Card(1, number--);
+                            highestHeart = new Card(1, --number);
                         }
                         //teamplayer is player with highestHeart
                         Player teamPlayer = players.Where(p => p.hand.Cards.Contains(highestHeart)).First();
