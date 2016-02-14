@@ -202,7 +202,7 @@ namespace Whist.GameLogic.GameCases
         }
     }
 
-    public class Solo : SoloSlim
+    public class Solo : Soloslim
     {
         public override int ID { get { return 30; } }
 
@@ -227,7 +227,7 @@ namespace Whist.GameLogic.GameCases
         }
     }
 
-    public class SoloSlim : SpecialGameCase
+    public class Soloslim : SpecialGameCase
     {
         public override int ID { get { return 40; } }
 

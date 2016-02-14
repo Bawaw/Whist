@@ -42,7 +42,7 @@ namespace Whist_GUI.ViewLogic
                 foreach (Player player in team.Players)
                     str += "["+player.name + "] ";
             }
-            MessageBoxResult result = MessageBox.Show(str, "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
+            MessageBoxResult result = MessageBox.Show(str, "Round Start", MessageBoxButton.OK, MessageBoxImage.None);
             whistController = round.Start();
         }
 
@@ -76,7 +76,7 @@ namespace Whist_GUI.ViewLogic
                 round.EndTricksRound();
                 string str = "";
                 foreach (var player in round.Players)
-                    str += player.name + " - " + player.score + "\n";
+                    str += player.name + " (" + player.Tricks + ") - " + player.score + "\n";
                 
                 MessageBoxResult result = MessageBox.Show(str, "Round End", MessageBoxButton.OK, MessageBoxImage.None);
                 

@@ -57,7 +57,7 @@ namespace Whist.GameLogic.ControlEntities
         {
             if (!phase2.InTrickPhase)
             {
-                phase3 = new SimpleScoreMechanisme();
+                phase3 = new BasicScoreMechanism();
                 phase3.CalculateScores(teams, GameCase);
                 RoundInProgress = false;
             }
