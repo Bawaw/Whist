@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Whist.GameLogic.GameCases;
 
 namespace Whist.GameLogic.ControlEntities
 {
@@ -64,7 +65,15 @@ namespace Whist.GameLogic.ControlEntities
         */
         private bool CheckForTroel()
         {
-            bool troel = false;
+            Troel troel = new Troel();
+            if (troel.AfterDealCheck(players))
+            {
+                GameCase = Case.TROEL;
+                return true;
+            }
+            else
+                return false;
+            /*
             List<Player> troelPlayers = new List<Player>();
             for (int i = 0; i < players.Count(); i++)
             {
@@ -137,7 +146,7 @@ namespace Whist.GameLogic.ControlEntities
                 CurrentPlayer = playerB;
                 GameCase = Case.TROEL;
                 return true;
-            }
+            }*/
         }
 
 
@@ -388,10 +397,12 @@ namespace Whist.GameLogic.ControlEntities
                     }
                 case Case.TROEL:
                     {
-                        Team teamA = new Team(new Player[] { playerA, playerB }, 9);
+                        Troel troel = new Troel();
+                        teams = troel.Teams(players);
+                        /*Team teamA = new Team(new Player[] { playerA, playerB }, 9);
                         Player[] others = players.Except(teamA.Players).ToArray();
                         Team teamB = new Team(others, 5);
-                        teams = new Team[] { teamA, teamB };
+                        teams = new Team[] { teamA, teamB };*/
                         break;
                     }
                 case Case.ABONDANCE:
