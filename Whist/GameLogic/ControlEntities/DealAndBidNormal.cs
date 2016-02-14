@@ -52,6 +52,8 @@ namespace Whist.GameLogic.ControlEntities
         private void DealCards()
         {
             (new DealCardsSimple()).DealCards(players);
+            foreach (Player player in players)
+                player.hand.sort();
             Trump = players[3].hand.Cards.Last().Suit;
             CheckForTroel();
         }
