@@ -38,18 +38,8 @@ namespace Whist.GameLogic.GameCases
         {
             //What about Trump? Need some way to give Trump, or decide troel doesn't change Trump.
             foreach (Player player in players)
-            {
-                int aces = 0;
-                foreach (Card card in player.hand.Cards)
-                {
-                    if (card.Number == Numbers.ACE)
-                    {
-                        aces++;
-                    }
-                }
-                if (aces >= 3)
+                if (player.hand.Cards.Where(c => c.Number == Numbers.ACE).Count() >= 3)
                     return true;
-            }
             return false;
         }
 
@@ -57,45 +47,39 @@ namespace Whist.GameLogic.GameCases
         {
             foreach (Player player in players)
             {
-                int aces = 0;
-                foreach (Card card in player.hand.Cards)
-                {
-                    if (card.Number == Numbers.ACE)
-                    {
-                        aces++;
-                    }
-                }
+                int aces = player.hand.Cards.Where(c => c.Number == Numbers.ACE).Count();
                 if (aces >= 3)
                 {
                     selectedPlayers.Add(player);
                     if (aces == 3)
                     {
-                        foreach (Player playerTwo in players)
+                        foreach (Player playerTwo in players.Except(selectedPlayers))
                         {
-                            if (selectedPlayers[0] != playerTwo)
+                            if (playerTwo.hand.Cards.Where(c => c.Number == Numbers.ACE).Count() > 0)
                             {
-                                foreach (Card card in playerTwo.hand.Cards)
-                                    if (card.Number == Numbers.ACE)
-                                    {
-                                        selectedPlayers.Add(playerTwo);
-                                        break;
-                                    }
+                                selectedPlayers.Add(playerTwo);
+                                break;
                             }
                         }
                     }
                     else if (aces == 4)
                     {
-                        //search for player with king of hearts, or if player with 4 aces also contains king of hearts, search for player with queen of hearts and so on
-                        Card highestHeart = new Card(Suits.HEARTS, Numbers.KING);
-                        while (selectedPlayers[0].hand.Cards.Contains(highestHeart))
+                        var playerOneHearts = player.hand.Cards.Where(c => c.Suit == Suits.HEARTS);
+                        Numbers highestHeart = Numbers.KING;
+                        while (playerOneHearts.Any(c => c.Number == highestHeart))
                         {
-                            //highestHeart--;
-                            int number = (int)highestHeart.Number;
-                            highestHeart = new Card(1, number--);
+                            highestHeart--;
                         }
-                        //teamplayer is player with highestHeart
-                        selectedPlayers.Add(players.Where(p => p.hand.Cards.Contains(highestHeart)).Single());
+                        foreach (Player p in players.Except(selectedPlayers))
+                        {
+                            if (p.hand.Cards.Any(c => c.Suit == Suits.HEARTS && c.Number == highestHeart))
+                            {
+                                selectedPlayers.Add(p);
+                                break;
+                            }
+                        }
                     }
+                    break;
                 }
             }
 
