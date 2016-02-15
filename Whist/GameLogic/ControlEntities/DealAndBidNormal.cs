@@ -20,7 +20,8 @@ namespace Whist.GameLogic.ControlEntities
         Player playerB; //PlayerB is, when no special: joining/alone player, or when special miserie: (possibly) one of miserie players, or when special troel: other teammember
         Action currentSpecial = 0;
         Dictionary<Player, bool> passedPlayers;
-        public const int lowestSpecial = 4;
+        private bool askForTrump;
+        public const int lowestSpecial = 8;
         public Case GameCase
         {
             get; private set;
@@ -83,6 +84,14 @@ namespace Whist.GameLogic.ControlEntities
         public IEnumerable<Action> GetPossibleActions()
         {
             var possibleActions = new HashSet<Action>();
+            if (askForTrump)
+            {
+                possibleActions.Add(Action.HEARTS);
+                possibleActions.Add(Action.CLUBS);
+                possibleActions.Add(Action.DIAMONDS);
+                possibleActions.Add(Action.SPADES);
+                return possibleActions;
+            }
             possibleActions.Add(Action.PASS);
             if (currentSpecial == 0 && GameCase != Case.TROEL)
             {
@@ -137,65 +146,94 @@ namespace Whist.GameLogic.ControlEntities
             if (!GetPossibleActions().Contains(action))
                 return false;
 
-            switch (action)
+            if (askForTrump)
             {
-                case Action.PASS:
-                    {
-                        passedPlayers[CurrentPlayer] = true;
-                        break;
-                    }
-                case Action.ASK:
-                    {
-                        playerA = CurrentPlayer;
-                        break;
-                    }
-                case Action.JOIN:
-                    {
-                        playerB = CurrentPlayer;
-                        GameCase = Case.TEAM;
-                        break;
-                    }
-                case Action.ALONE:
-                    {
-                        playerB = CurrentPlayer; //(intended) result: PlayerB == PlayerA || perhaps unnecessary with changes. 
-                        GameCase = Case.ALONE;
-                        break;
-                    }
-                case Action.ABONDANCE:
-                    {
-                        currentSpecial = Action.ABONDANCE;
-                        GameCase = Case.ABONDANCE;
-                        specialGameCases[Case.ABONDANCE].selectPlayer(CurrentPlayer);
-                        break;
-                    }
-                case Action.MISERIE:
-                    {
-                        if (currentSpecial != Action.MISERIE)
+                switch (action)
+                {
+                    case Action.HEARTS:
                         {
-                            playerA = null;
-                            playerB = null;
-                            currentSpecial = Action.MISERIE;
-                            GameCase = Case.MISERIE;
+                            Trump = Suits.HEARTS;
+                            break;
                         }
-                        specialGameCases[Case.MISERIE].selectPlayer(CurrentPlayer);
-                        break;
-                    }
-                case Action.SOLO:
-                    {
-                        currentSpecial = Action.SOLO;
-                        GameCase = Case.SOLO;
-                        specialGameCases[Case.SOLO].selectPlayer(CurrentPlayer);
-                        break;
-                    }
-                case Action.SOLOSLIM:
-                    {
-                        currentSpecial = Action.SOLOSLIM;
-                        GameCase = Case.SOLOSLIM;
-                        specialGameCases[Case.SOLOSLIM].selectPlayer(CurrentPlayer);
-                        break;
-                    }
-                default:
-                    return false;
+                    case Action.CLUBS:
+                        {
+                            Trump = Suits.CLUBS;
+                            break;
+                        }
+                    case Action.SPADES:
+                        {
+                            Trump = Suits.SPADES;
+                            break;
+                        }
+                    case Action.DIAMONDS:
+                        {
+                            Trump = Suits.DIAMONDS;
+                            break;
+                        }
+                }
+            }
+            else
+            {
+
+                switch (action)
+                {
+                    case Action.PASS:
+                        {
+                            passedPlayers[CurrentPlayer] = true;
+                            break;
+                        }
+                    case Action.ASK:
+                        {
+                            playerA = CurrentPlayer;
+                            break;
+                        }
+                    case Action.JOIN:
+                        {
+                            playerB = CurrentPlayer;
+                            GameCase = Case.TEAM;
+                            break;
+                        }
+                    case Action.ALONE:
+                        {
+                            GameCase = Case.ALONE;
+                            break;
+                        }
+                    case Action.ABONDANCE:
+                        {
+                            currentSpecial = Action.ABONDANCE;
+                            GameCase = Case.ABONDANCE;
+                            specialGameCases[Case.ABONDANCE].selectPlayer(CurrentPlayer);
+                            break;
+                        }
+                    case Action.MISERIE:
+                        {
+                            if (currentSpecial != Action.MISERIE)
+                            {
+                                playerA = null;
+                                playerB = null;
+                                currentSpecial = Action.MISERIE;
+                                GameCase = Case.MISERIE;
+                            }
+                            specialGameCases[Case.MISERIE].selectPlayer(CurrentPlayer);
+                            break;
+                        }
+                    case Action.SOLO:
+                        {
+                            currentSpecial = Action.SOLO;
+                            GameCase = Case.SOLO;
+                            specialGameCases[Case.SOLO].selectPlayer(CurrentPlayer);
+                            break;
+                        }
+                    case Action.SOLOSLIM:
+                        {
+                            currentSpecial = Action.SOLOSLIM;
+                            GameCase = Case.SOLOSLIM;
+                            specialGameCases[Case.SOLOSLIM].selectPlayer(CurrentPlayer);
+                            break;
+                        }
+                    default:
+                        return false;
+                }
             }
             actionsDone++;
             SetNextPlayer();
@@ -206,15 +244,20 @@ namespace Whist.GameLogic.ControlEntities
         //Skip passed players.
         private void SetNextPlayer()
         {
+            if (askForTrump)
+            {
+                CurrentPlayer = null;
+                return;
+            }
 
-            if (actionsDone >= 4)//All players made a decision.
+            if (actionsDone >= 4 )//All players made a decision.
             {
                 switch (passedPlayers.Where(p => p.Value == true).Count())//Amount of players that passed.
                 {
                     case 4:
                         {
                             CurrentPlayer = null;
-                            return;
+                            break;
                         }
                     case 3:
                         {
@@ -222,19 +265,19 @@ namespace Whist.GameLogic.ControlEntities
                                 CurrentPlayer = playerA;//Ask player if he wants to go alone or FFA.
                             else
                                 CurrentPlayer = null;
-                            return;
+                            break;
                         }
                     case 2:
                         {
                             if (GameCase == Case.TEAM)
                             {
                                 CurrentPlayer = null;
-                                return;
+                                break;
                             }
                             if (GameCase == Case.MISERIE && specialGameCases[Case.MISERIE].selectedPlayers.Count() == 2)
                             {
                                 CurrentPlayer = null;
-                                return;
+                                break;
                             }
                             break;
                         }
@@ -244,7 +287,7 @@ namespace Whist.GameLogic.ControlEntities
                             if (GameCase == Case.MISERIE && specialGameCases[Case.MISERIE].selectedPlayers.Count() == 3)
                             {
                                 CurrentPlayer = null;
-                                return;
+                                break;
                             }
                             break;
                         }
@@ -252,7 +295,14 @@ namespace Whist.GameLogic.ControlEntities
             }
 
             if (CurrentPlayer == null)
+            {
+                if (specialGameCases.ContainsKey(GameCase) && specialGameCases[GameCase].AllowsPlayerToSelectTrump)
+                {
+                    CurrentPlayer = specialGameCases[GameCase].selectedPlayers[0];
+                    askForTrump = true;
+                }
                 return;
+            }
 
             do
             {
@@ -342,7 +392,6 @@ namespace Whist.GameLogic.ControlEntities
                 default: return null;
             }
 
-
             return new ResultData(teams, GameCase, firstPlayer, Trump);
         }
     }
@@ -365,6 +414,10 @@ namespace Whist.GameLogic.ControlEntities
 
     public enum Action
     {
+        HEARTS,
+        CLUBS,
+        DIAMONDS,
+        SPADES,
         PASS,
         ASK,
         JOIN,
