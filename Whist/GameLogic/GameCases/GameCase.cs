@@ -7,6 +7,32 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist.GameLogic.GameCases
 {
+    public static class SpecialGameCaseFactory
+    {
+        public static List<SpecialGameCase> GetList()
+        {
+            return new List<SpecialGameCase>()
+            {
+                new Abondance(),
+                new Troel(),
+                new Miserie(),
+                new Solo(),
+                new Soloslim()
+            };
+        }
+
+        public static Dictionary<Case, SpecialGameCase> GetDictionary()
+        {
+            var dict =  new Dictionary<Case, SpecialGameCase>();
+            dict.Add(Case.ABONDANCE, new Abondance());
+            dict.Add(Case.MISERIE, new Miserie());
+            dict.Add(Case.SOLO, new Solo());
+            dict.Add(Case.SOLOSLIM, new Soloslim());
+            dict.Add(Case.TROEL, new Troel());
+            return dict;
+        }
+    }
+
     public abstract class SpecialGameCase
     {
         public virtual int ID { get; }
@@ -241,16 +267,5 @@ namespace Whist.GameLogic.GameCases
             }
         }
     }
-
-    public enum Case
-    {
-        FFA,
-        TEAM,
-        ALONE,
-        TROEL,
-        ABONDANCE,
-        MISERIE,
-        SOLO,
-        SOLOSLIM
-    }
+    
 }
