@@ -11,12 +11,52 @@
         <local:TrumpImageConverter x:Key="TrumpConverter" />
     </Window.Resources>
 
-    <Grid x:Name="Whist" Background="GhostWhite">
-        <Grid Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}" Margin="0 30 0 120" >
-            <Grid.Background>
-                <ImageBrush ImageSource="Textures/Table.png" />
-            </Grid.Background>
+    <Grid x:Name="Whist" Background="Black">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Label Content="Trump:" FontSize="26.667" Foreground="#FFBDB9AC" FontFamily="Gabriola" />
+            <Image Height="40" Width="40" Source="{Binding Path = Trump, Converter = {StaticResource TrumpConverter}}" DockPanel.Dock="Right" />
+            <local:InfoPanel x:Name="InfoPanel"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+            <Grid Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}" >
+            <Viewport3D>
+                <Viewport3D.Camera>
+                    <PerspectiveCamera Position="0, 0, 3"/>
+                </Viewport3D.Camera>
+                <!-- Button on 3D -->
+                    <Viewport2DVisual3D>
+                        <Viewport2DVisual3D.Transform>
+                            <RotateTransform3D>
+                                <RotateTransform3D.Rotation>
+                                    <AxisAngleRotation3D Angle="-33" Axis="1, 0, 0" />
+                                </RotateTransform3D.Rotation>
+                            </RotateTransform3D>
+                        </Viewport2DVisual3D.Transform>
 
+                        <!-- The Geometry, Material, and Visual for the Viewport2DVisual3D -->
+                        <Viewport2DVisual3D.Geometry>
+                            <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0"
+                            TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
+                        </Viewport2DVisual3D.Geometry>
+
+                        <Viewport2DVisual3D.Material>
+                            <DiffuseMaterial>
+                                <DiffuseMaterial.Brush>
+                                    <ImageBrush ImageSource="Textures/table.png"/>
+                                </DiffuseMaterial.Brush>
+                            </DiffuseMaterial>
+                        </Viewport2DVisual3D.Material>
+                    </Viewport2DVisual3D>
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <Model3DGroup>
+                                <AmbientLight Color="#ffb347" />
+                                <!-- TODO: calculate direction and position-->
+                                <SpotLight Color="Yellow" Direction="0 -0.1 -0.3" InnerConeAngle="17" OuterConeAngle="17" Position="0 3 9" />
+                            </Model3DGroup>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+                </Viewport3D>
             <ItemsControl ItemsSource="{Binding Pile}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -25,16 +65,54 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Image Height="150" Source="{Binding Converter={StaticResource CardConverter}}" />
+                        <Viewport3D Height="80" Width="80">
+                            <Viewport3D.Camera>
+                                <PerspectiveCamera Position="0, 0, 3"/>
+                            </Viewport3D.Camera>
+                            <!-- Button on 3D -->
+                            <Viewport2DVisual3D>
+                                <Viewport2DVisual3D.Transform>
+                                    <RotateTransform3D>
+                                        <RotateTransform3D.Rotation>
+                                            <AxisAngleRotation3D Angle="-20" Axis="1, 0, 0" />
+                                        </RotateTransform3D.Rotation>
+                                    </RotateTransform3D>
+                                </Viewport2DVisual3D.Transform>
+
+                                <!-- The Geometry, Material, and Visual for the Viewport2DVisual3D -->
+                                <Viewport2DVisual3D.Geometry>
+                                    <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0"
+                            TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
+                                </Viewport2DVisual3D.Geometry>
+
+                                <Viewport2DVisual3D.Material>
+                                    <DiffuseMaterial>
+                                        <DiffuseMaterial.Brush>
+                                             <ImageBrush ImageSource = "{Binding Converter={StaticResource CardConverter}}"  />
+                                        </DiffuseMaterial.Brush>
+                                    </DiffuseMaterial>
+                                </Viewport2DVisual3D.Material>
+                            </Viewport2DVisual3D>
+
+                            <!-- Lights -->
+                            <ModelVisual3D>
+                                    <ModelVisual3D>
+                                        <ModelVisual3D.Content>
+                                            <Model3DGroup>
+                                                <AmbientLight Color="#ffb347"/>
+                                                <!-- TODO: calculate direction and position-->
+                                                <SpotLight Color="Yellow" Direction="0 -0.1 -0.3" InnerConeAngle="17" OuterConeAngle="17" Position="0 3 9" />
+                                            </Model3DGroup>
+                                        </ModelVisual3D.Content>
+                                    </ModelVisual3D>
+                                </ModelVisual3D>
+                            </Viewport3D>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
-        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
-                <Label Content="Trump:" FontSize="18" />
-            <Image Height="40" Width="40" Source="{Binding Path = Trump, Converter = {StaticResource TrumpConverter}}" DockPanel.Dock="Right" />
-            <local:InfoPanel x:Name="InfoPanel"/>
         </StackPanel>
+
         <ItemsControl ItemsSource="{Binding HandVM.PlayerCards}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
