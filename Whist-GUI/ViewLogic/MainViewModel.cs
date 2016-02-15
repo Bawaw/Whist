@@ -25,6 +25,10 @@ namespace Whist_GUI.ViewLogic
 
         private IPlayTricks whistController;
 
+        public ObservableCollection<Card> Comp1Cards { get { return round.Players.Where(p => p.name == "Comp 1").Single().hand.Cards; } }
+        public ObservableCollection<Card> Comp2Cards { get { return round.Players.Where(p => p.name == "Comp 2").Single().hand.Cards; } }
+        public ObservableCollection<Card> Comp3Cards { get { return round.Players.Where(p => p.name == "Comp 3").Single().hand.Cards; } }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public BaseGameViewModel(Round round, InfoPanelViewModel infoPanelVM)
