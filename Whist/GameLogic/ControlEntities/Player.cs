@@ -14,7 +14,7 @@ namespace Whist.GameLogic.ControlEntities
         public HandCollection hand;
         public int score;
 
-        public Player(String name)
+        public Player(string name)
         {
             this.name = name;
             this.hand = new HandCollection();
@@ -26,7 +26,7 @@ namespace Whist.GameLogic.ControlEntities
 
         //reset tricks
         public void clearTricks() {
-            tricks = 1;
+            tricks = 0;
         }
 
         public override string ToString()

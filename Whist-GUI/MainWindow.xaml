@@ -30,9 +30,10 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <Label Content="Trump:" FontSize="18" />
             <Image Height="40" Width="40" Source="{Binding Path = Trump, Converter = {StaticResource TrumpConverter}}" DockPanel.Dock="Right" />
+            <local:InfoPanel x:Name="InfoPanel"/>
         </StackPanel>
         <ItemsControl ItemsSource="{Binding HandVM.PlayerCards}">
             <ItemsControl.ItemsPanel>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,15 +8,29 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist_GUI
 {
-    public class InfoPanelViewModel
+    public class InfoPanelViewModel : INotifyPropertyChanged
     {
         Team[] teams;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public InfoPanelViewModel(Team[] teams, Player player, string gameCase)
         {
             this.teams = teams;
             Player = player;
-            GameCase = GameCase;
+            GameCase = gameCase;
+        }
+
+        public void propChanged()
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("Player"));
+                PropertyChanged(this, new PropertyChangedEventArgs("Teams"));
+                PropertyChanged(this, new PropertyChangedEventArgs("TricksLeft"));
+                PropertyChanged(this, new PropertyChangedEventArgs("TricksWon"));
+                PropertyChanged(this, new PropertyChangedEventArgs("GameCase"));
+            }
         }
 
         public Player Player
@@ -46,7 +61,7 @@ namespace Whist_GUI
                     {
                         str += "[" + p.name + "(" + p.score + ")] ";
                     }
-                    str += "(" + team.Tricks + ")";
+                    str += "(" + team.Tricks + "/" + team.objective + ")";
                 }
                 return str;
             }

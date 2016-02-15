@@ -24,6 +24,8 @@ namespace Whist.GameLogic.ControlEntities
         public Round(Player[] players)
         {
             Players = players;
+            foreach (Player player in Players)
+                player.clearTricks();
             phase1 = new DealAndBidNormal(Players);
             Trump = phase1.Trump;
             RoundInProgress = true;

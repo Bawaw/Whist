@@ -13,9 +13,10 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist_GUI.ViewLogic
 {
-    public class BaseGameViewModel
+    public class BaseGameViewModel : INotifyPropertyChanged
     {
         private Round round;
+        private InfoPanelViewModel infoPanelVM;
 
         public ObservableCollection<Card> Pile { get { return whistController.Pile; } }
         public HandViewModel HandVM { get; private set; }
@@ -23,26 +24,13 @@ namespace Whist_GUI.ViewLogic
 
         private IPlayTricks whistController;
 
-        public BaseGameViewModel()
-        {
-            HandVM = new HandViewModel(this);
+        public event PropertyChangedEventHandler PropertyChanged;
 
-            Player[] players = new Player[]
-            {
-                new Player("Player"),
-                new Player("Comp 1"),
-                new Player("Comp 2"),
-                new Player("Comp 3")
-            };
-            round = new Round(players);
-            string str = "Case: " + round.GameCase + "\nTeams: ";
-            foreach (Team team in round.Teams)
-            {
-                str += "\n-";
-                foreach (Player player in team.Players)
-                    str += "["+player.name + "] ";
-            }
-            MessageBoxResult result = MessageBox.Show(str, "Round Start", MessageBoxButton.OK, MessageBoxImage.None);
+        public BaseGameViewModel(Round round, InfoPanelViewModel infoPanelVM)
+        {
+            this.round = round;
+            this.infoPanelVM = infoPanelVM;
+            HandVM = new HandViewModel(this);
             whistController = round.Start();
         }
 
@@ -79,8 +67,9 @@ namespace Whist_GUI.ViewLogic
                     str += player.name + " (" + player.Tricks + ") - " + player.score + "\n";
                 
                 MessageBoxResult result = MessageBox.Show(str, "Round End", MessageBoxButton.OK, MessageBoxImage.None);
-                
+                StartNewRound();
             }
+            infoPanelVM.propChanged();
         }
 
         public bool IsValidPlay(Card card) {
@@ -90,10 +79,43 @@ namespace Whist_GUI.ViewLogic
         public ObservableCollection<Card> GetCurrentPlayerCards() {
             return whistController.GetPlayerCards();
         }
+
+        public void StartNewRound()
+        {
+
+            round = new Round(round.Players);
+            whistController = round.Start();
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("Pile"));
+                PropertyChanged(this, new PropertyChangedEventArgs("HandVM"));
+                PropertyChanged(this, new PropertyChangedEventArgs("Trump"));
+                PropertyChanged(this, new PropertyChangedEventArgs("Round"));
+                PropertyChanged(this, new PropertyChangedEventArgs("infoPanelVM"));
+            }
+        }
     }
 
     public class HandViewModel
     {
+        private readonly PlayCommand playCmd;
+        public ICommand PlayCmd { get { return playCmd; } }
+
+        private BaseGameViewModel mainViewModel;
+
+        public ObservableCollection<Card> PlayerCards { get { return mainViewModel.GetCurrentPlayerCards(); } }
+
+        public HandViewModel(BaseGameViewModel mainViewModel)
+        {
+            this.mainViewModel = mainViewModel;
+            this.playCmd = new PlayCommand(this);
+        }
+
+        public void playCard(Card card) {
+            mainViewModel.PlayCard(card);
+        }
+
+
         private class PlayCommand : ICommand
         {
             HandViewModel handViewModel;
@@ -120,21 +142,5 @@ namespace Whist_GUI.ViewLogic
             }
         }
 
-        private readonly PlayCommand playCmd;
-        public ICommand PlayCmd { get { return playCmd; } }
-
-        private BaseGameViewModel mainViewModel;
-
-        public ObservableCollection<Card> PlayerCards { get { return mainViewModel.GetCurrentPlayerCards(); } }
-
-        public HandViewModel(BaseGameViewModel mainViewModel)
-        {
-            this.mainViewModel = mainViewModel;
-            this.playCmd = new PlayCommand(this);
-        }
-
-        public void playCard(Card card) {
-            mainViewModel.PlayCard(card);
-        }
-    } 
+    }
 }
