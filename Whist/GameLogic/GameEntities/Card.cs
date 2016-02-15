@@ -12,7 +12,7 @@ namespace Whist.GameLogic
     }
     public enum Suits
     {
-        HEARTS=1, DIAMONDS, CLUBS, SPADES
+        HEARTS=1, CLUBS, DIAMONDS, SPADES
     }
 
     public class Card : IComparer<Card>, IComparable
