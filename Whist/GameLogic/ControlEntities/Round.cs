@@ -19,11 +19,13 @@ namespace Whist.GameLogic.ControlEntities
         public Player[] Players { get; private set; }
         public Suits Trump { get; private set; }
         public bool RoundInProgress { get; private set; }
-
+        public Team[] Teams { get { return teams; } }
 
         public Round(Player[] players)
         {
             Players = players;
+            foreach (Player player in Players)
+                player.clearTricks();
             phase1 = new DealAndBidNormal(Players);
             Trump = phase1.Trump;
             RoundInProgress = true;
@@ -57,7 +59,7 @@ namespace Whist.GameLogic.ControlEntities
         {
             if (!phase2.InTrickPhase)
             {
-                phase3 = new SimpleScoreMechanisme();
+                phase3 = new BasicScoreMechanism();
                 phase3.CalculateScores(teams, GameCase);
                 RoundInProgress = false;
             }

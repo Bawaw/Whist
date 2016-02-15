@@ -13,28 +13,28 @@ namespace Whist.GameLogic.ControlEntities
 
         protected DeckCollection deck;
         protected Player[] players;
-        protected List<Card> pile;
+        protected ObservableCollection<Card> pile;
 
         protected int currentPlayer;
 
         public Player CurrentPlayer { get { return players[currentPlayer]; } }
-        public List<Card> Pile { get {return pile; } }
+        public ObservableCollection<Card> Pile { get {return pile; } }
 
         public GameController(Player[] players, IReferee referee)
         {
             this.players = players;
             this.referee = referee;
-            pile = new List<Card>();
+            pile = new ObservableCollection<Card>();
         }
 
-        public IList<Card> GetPlayerCards()
+        public ObservableCollection<Card> GetPlayerCards()
         {
             return CurrentPlayer.hand.Cards;
         }
 
-        public IList<Card> GetPlayerCards(Player player)
+        public ObservableCollection<Card> GetPlayerCards(Player player)
         {
-            return new ObservableCollection<Card>(player.hand.Cards);
+            return player.hand.Cards;
         }
 
         public abstract bool PlayCard(Card card);

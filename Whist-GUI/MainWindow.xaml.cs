@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Whist.GameLogic;
+using Whist.GameLogic.ControlEntities;
 using Whist_GUI.ViewLogic;
 
 namespace Whist_GUI
@@ -22,20 +23,27 @@ namespace Whist_GUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        MainViewModel model = new MainViewModel();
+        BaseGameViewModel model;
 
         public MainWindow()
         {
             InitializeComponent();
-            model.HandVM.PropertyChanged += HandVM_PropertyChanged;
-            
-            Hand.DataContext = model.HandVM;
-        }
 
-        private void HandVM_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            Hand.DataContext = null;
-            Hand.DataContext = model.HandVM;
+            Player[] players = new Player[]
+            {
+                new Player("Player"),
+                new Player("Comp 1"),
+                new Player("Comp 2"),
+                new Player("Comp 3")
+            };
+            Round round = new Round(players);
+
+            var infoPanelVM = new InfoPanelViewModel(round.Teams, round.Players[0], round.Trump, round.GameCase.ToString());
+            InfoPanel.DataContext = infoPanelVM;
+            model = new BaseGameViewModel(round, infoPanelVM);
+
+            //Hand.DataContext = model.HandVM;
+            Whist.DataContext = model;
         }
     }
 }

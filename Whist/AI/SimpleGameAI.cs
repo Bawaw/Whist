@@ -5,7 +5,7 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist.AI
 {
-    class SimpleGameAI
+    public class SimpleGameAI
     {
         public Card GetMove(Player player, IList<Card> pile, Suits trump)
         {
@@ -24,9 +24,19 @@ namespace Whist.AI
                 {
                     if (cards.Any(c => c.Suit == trump))//Hand has trump card.
                     {
-                        var cardsOfTrump = cards.Where(c => c.Suit == pileSuit);
-                        var pileCardsOfTrump = pile.Where(c => c.Suit == pileSuit);
-                        return HighOrLowCardSelection(cardsOfTrump, pileCardsOfTrump);
+                        var cardsOfTrump = cards.Where(c => c.Suit == trump);
+                        if (pile.Any(c => c.Suit == trump))
+                        {
+                            var pileCardsOfTrump = pile.Where(c => c.Suit == pileSuit);
+                            return HighOrLowCardSelection(cardsOfTrump, pileCardsOfTrump);
+                        }
+                        else
+                        {
+                            if (cards.Any(c => c.Suit != trump))
+                                return GetLowestCard(cards.Except(cardsOfTrump));
+                            else
+                                return GetLowestCard(cards);
+                        }
                     }
                     else //Hand contains neither pileSuit card of trump card.
                     {
@@ -42,8 +52,8 @@ namespace Whist.AI
 
         private Card HighOrLowCardSelection(IEnumerable<Card> hand, IEnumerable<Card> pile)
         {
-            var HighestPileCard = GetHighestCard(hand);
-            var HighestHandCard = GetHighestCard(pile);
+            var HighestPileCard = GetHighestCard(pile);
+            var HighestHandCard = GetHighestCard(hand);
             if (HighestHandCard.Number > HighestPileCard.Number)//Player has higher card than current highest in pile.
             {
                 return HighestHandCard;

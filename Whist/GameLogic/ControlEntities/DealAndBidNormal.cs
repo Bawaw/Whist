@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Whist.GameLogic.GameCases;
 
 namespace Whist.GameLogic.ControlEntities
 {
@@ -36,9 +37,11 @@ namespace Whist.GameLogic.ControlEntities
             get { return CurrentPlayer != null; }
         }
 
+        Dictionary<Case, SpecialGameCase> specialGameCases;
 
         public DealAndBidNormal(Player[] players)
         {
+            specialGameCases = SpecialGameCaseFactory.GetDictionary();
             this.players = players;
             CurrentPlayer = players[0];
             passedPlayers = new Dictionary<Player, bool>();
@@ -53,7 +56,8 @@ namespace Whist.GameLogic.ControlEntities
         {
             (new DealCardsSimple()).DealCards(players);
             Trump = players[3].hand.Cards.Last().Suit;
-            CheckForTroel();
+            foreach (Player player in players)
+                player.hand.sort();
         }
 
         /*
@@ -62,80 +66,14 @@ namespace Whist.GameLogic.ControlEntities
         */
         private bool CheckForTroel()
         {
-            bool troel = false;
-            List<Player> troelPlayers = new List<Player>();
-            for (int i = 0; i < players.Count(); i++)
+            Troel troel = new Troel();
+            if (troel.AfterDealCheck(players))
             {
-                int aces = 0;
-                foreach (Card card in players[i].hand.Cards)
-                {
-                    if (card.Number == Numbers.ACE)
-                    {
-                        aces++;
-                    }
-                }
-                if (aces == 3 || aces == 4)
-                {
-                    if (aces == 3)
-                    {
-                        troelPlayers.Add(players[i]);
-                        bool teamPlayerFound = false;
-                        for (int j = 0; j < players.Count(); j++)
-                        {
-                            //if it is another player than current player
-                            if (j != i)
-                            {
-                                foreach (Card card in players[j].hand.Cards)
-                                {
-                                    if (card.Number == Numbers.ACE)
-                                    {
-                                        teamPlayerFound = true;
-                                        troelPlayers.Add(players[j]);
-                                        //set trump
-                                        Trump = card.Suit;
-                                        //card found, break out of loop of cards
-                                        break;
-                                    }
-                                }
-                                if (teamPlayerFound)
-                                {
-                                    //player found, break out of loop of players
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    else if (aces == 4)
-                    {
-                        troelPlayers.Add(players[i]);
-                        //search for player with king of hearts, or if player with 4 aces also contains king of hearts, search for player with queen of hearts and so on
-                        Card highestHeart = new Card(Suits.HEARTS, Numbers.KING);
-                        while (players[i].hand.Cards.Contains(highestHeart))
-                        {
-                            //highestHeart--;
-                            int number = (int)highestHeart.Number;
-                            highestHeart = new Card(1, --number);
-                        }
-                        //teamplayer is player with highestHeart
-                        Player teamPlayer = players.Where(p => p.hand.Cards.Contains(highestHeart)).First();
-                        troelPlayers.Add(teamPlayer);
-                        //set trump
-                        Trump = Suits.HEARTS;
-                    }
-                    troel = true;
-                }
-            }
-            if (!troel)//No Troel
-                return false;
-            else//Troel
-            {
-                playerA = troelPlayers.First();//Player with most aces
-                playerB = troelPlayers.Last();//Team member;
-                //set currentPlayer
-                CurrentPlayer = playerB;
                 GameCase = Case.TROEL;
                 return true;
             }
+            else
+                return false;
         }
 
 
@@ -229,40 +167,33 @@ namespace Whist.GameLogic.ControlEntities
                     {
                         currentSpecial = Action.ABONDANCE;
                         GameCase = Case.ABONDANCE;
-                        HighestSpecialPlayer = CurrentPlayer;
+                        specialGameCases[Case.ABONDANCE].selectPlayer(CurrentPlayer);
                         break;
                     }
                 case Action.MISERIE:
                     {
-                        if (currentSpecial == Action.MISERIE)
-                        {
-                            if (playerA == null)
-                                playerA = HighestSpecialPlayer;
-                            else
-                                playerB = HighestSpecialPlayer;
-                        }
-                        else
+                        if (currentSpecial != Action.MISERIE)
                         {
                             playerA = null;
                             playerB = null;
                             currentSpecial = Action.MISERIE;
                             GameCase = Case.MISERIE;
                         }
-                        HighestSpecialPlayer = CurrentPlayer;
+                        specialGameCases[Case.MISERIE].selectPlayer(CurrentPlayer);
                         break;
                     }
                 case Action.SOLO:
                     {
                         currentSpecial = Action.SOLO;
                         GameCase = Case.SOLO;
-                        HighestSpecialPlayer = CurrentPlayer;
+                        specialGameCases[Case.SOLO].selectPlayer(CurrentPlayer);
                         break;
                     }
                 case Action.SOLOSLIM:
                     {
                         currentSpecial = Action.SOLOSLIM;
                         GameCase = Case.SOLOSLIM;
-                        HighestSpecialPlayer = CurrentPlayer;
+                        specialGameCases[Case.SOLOSLIM].selectPlayer(CurrentPlayer);
                         break;
                     }
                 default:
@@ -302,7 +233,7 @@ namespace Whist.GameLogic.ControlEntities
                                 CurrentPlayer = null;
                                 return;
                             }
-                            if (GameCase == Case.MISERIE && playerA != null)
+                            if (GameCase == Case.MISERIE && specialGameCases[Case.MISERIE].selectedPlayers.Count() == 2)
                             {
                                 CurrentPlayer = null;
                                 return;
@@ -312,7 +243,7 @@ namespace Whist.GameLogic.ControlEntities
 
                     case 1:
                         {
-                            if (GameCase == Case.MISERIE && playerA != null && playerB != null)
+                            if (GameCase == Case.MISERIE && specialGameCases[Case.MISERIE].selectedPlayers.Count() == 3)
                             {
                                 CurrentPlayer = null;
                                 return;
@@ -386,52 +317,28 @@ namespace Whist.GameLogic.ControlEntities
                     }
                 case Case.TROEL:
                     {
-                        Team teamA = new Team(new Player[] { playerA, playerB }, 9);
-                        Player[] others = players.Except(teamA.Players).ToArray();
-                        Team teamB = new Team(others, 5);
-                        teams = new Team[] { teamA, teamB };
+                        Troel troel = new Troel();
+                        teams = troel.Teams(players);
                         break;
                     }
                 case Case.ABONDANCE:
                     {
-                        firstPlayer = HighestSpecialPlayer;
-                        Team teamA = new Team(new Player[] { HighestSpecialPlayer }, 9);
-                        Player[] others = players.Except(teamA.Players).ToArray();
-                        Team teamB = new Team(others, 5);
-                        teams = new Team[] { teamA, teamB };
+                        teams = specialGameCases[Case.ABONDANCE].Teams(players);
                         break;
                     }
                 case Case.MISERIE:
                     {
-                        var teammmsss = new List<Team>();
-                        var miserieplayers = new List<Player>();
-                        miserieplayers.Add(HighestSpecialPlayer);
-                        if (playerA != null)
-                            miserieplayers.Add(playerA);
-                        if (playerB != null)
-                            miserieplayers.Add(playerB);
-
-                        foreach (var mplayer in miserieplayers)
-                            teammmsss.Add(new Team(new Player[] { mplayer }, 0));
-                        teammmsss.Add(new Team(players.Except(miserieplayers).ToArray(), 1));
-                        teams = teammmsss.ToArray();
+                        teams = specialGameCases[Case.MISERIE].Teams(players);
                         break;
                     }
                 case Case.SOLO:
                     {
-                        firstPlayer = HighestSpecialPlayer;
-                        Team teamA = new Team(new Player[] { HighestSpecialPlayer }, 13);
-                        Player[] others = players.Except(teamA.Players).ToArray();
-                        Team teamB = new Team(others, 1);
-                        teams = new Team[] { teamA, teamB };
+                        teams = specialGameCases[Case.SOLO].Teams(players);
                         break;
                     }
                 case Case.SOLOSLIM:
                     {
-                        Team teamA = new Team(new Player[] { HighestSpecialPlayer }, 13);
-                        Player[] others = players.Except(teamA.Players).ToArray();
-                        Team teamB = new Team(others, 1);
-                        teams = new Team[] { teamA, teamB };
+                        teams = specialGameCases[Case.SOLOSLIM].Teams(players);
                         break;
                     }
                 default: return null;
