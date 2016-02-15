@@ -54,5 +54,10 @@ namespace Whist.GameLogic
             }
             return 0;
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Card && Suit.Equals((obj as Card).Suit) && Number.Equals((obj as Card).Number);
+        }
     }
 }
