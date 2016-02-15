@@ -40,7 +40,7 @@ namespace Whist_GUI.ViewLogic
             whistController.PlayCard(card);
             if (!round.TrickInProgress)
             {
-                //MessageBoxResult result = MessageBox.Show(round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
+                MessageBoxResult result = MessageBox.Show(round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
                 round.EndTrick();
             }
 
@@ -55,7 +55,7 @@ namespace Whist_GUI.ViewLogic
                 }
                 if (!round.TrickInProgress)
                 {
-                    //MessageBoxResult result = MessageBox.Show(round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
+                    MessageBoxResult result = MessageBox.Show(round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
                     round.EndTrick();
                 }
             }
