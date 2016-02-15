@@ -9,37 +9,41 @@
 
     <UserControl.Resources>
         <local:TrumpImageConverter x:Key="TrumpConverter" />
+        <LinearGradientBrush x:Key="UI_Brush" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFDCD617" Offset="0"/>
+            <GradientStop Color="#FFC2890F" Offset="1"/>
+        </LinearGradientBrush>
     </UserControl.Resources>
-    
-    <StackPanel Orientation="Vertical">
-        
+
+    <StackPanel Orientation="Vertical" Width="300" Margin ="10 20">
         <!-- Panel 1 (Trump) -->
-        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <StackPanel>
             <StackPanel.Background>
                 <ImageBrush ImageSource="Textures/TrumpBoard.png" />
             </StackPanel.Background>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
-                <Label Content="Trump:" FontSize="40" Foreground="#FFBDB9AC" FontFamily="Gabriola" />
+                <Label Content="Trump:" FontSize="40" FontFamily="Gabriola" Foreground = "{StaticResource UI_Brush}" />
                 <Image Height="60" Width="60" Source="{Binding Trump, Converter = {StaticResource TrumpConverter}}" DockPanel.Dock="Right" />
             </StackPanel>
         </StackPanel>
 
         <!-- Panel 2 (Chains) -->
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <Image Source="Textures/Chains.png" Width="30"/>
-        </StackPanel>
-        
+        <Grid Margin="0 -150" Panel.ZIndex="-10">
+            <Image Source="Textures/Chains.png" Width="30"  HorizontalAlignment="Left" />
+            <Image Source="Textures/Chains.png" Width="30"  HorizontalAlignment="Right" />
+        </Grid>
+
         <!-- panel 3 (info panel) -->
-        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0 60">
             <StackPanel.Background>
-            <ImageBrush ImageSource="Textures/TrumpBoard.png" />
+                <ImageBrush ImageSource="Textures/TrumpBoard.png" />
             </StackPanel.Background>
-            <StackPanel VerticalAlignment="Center">
-            <TextBlock Text="{Binding CurrentPlayer, StringFormat=Current: {0}}" />
-            <TextBlock Text="{Binding TricksLeft, StringFormat=Tricks Left: {0}}"/>
-            <TextBlock Text="{Binding TricksWon, StringFormat=Tricks Won: {0}}" />
-            <TextBlock Text="{Binding GameCase, StringFormat=Case: {0}}" />
-            <TextBlock Text="{Binding Teams, StringFormat=Teams: {0}}" />
+            <StackPanel VerticalAlignment="Center" Margin ="20">
+                <!--TextBlock Text="{Binding CurrentPlayer, StringFormat=Current: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="20"  /-->
+                <TextBlock Text="{Binding TricksLeft, StringFormat=Tricks Left: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="17" />
+                <TextBlock Text="{Binding TricksWon, StringFormat=Tricks Won: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="17" />
+                <TextBlock Text="{Binding GameCase, StringFormat=Game Mode: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"  />
+                <TextBlock Text="{Binding Teams, StringFormat=Teams: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"  /> 
             </StackPanel>
         </StackPanel>
     </StackPanel>

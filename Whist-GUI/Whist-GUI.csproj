@@ -58,6 +58,7 @@
     <Compile Include="InfoPanel.xaml.cs">
       <DependentUpon>InfoPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PileConverter.cs" />
     <Compile Include="ViewLogic\InfoPanelViewModel.cs" />
     <Compile Include="TrumpImageConverter.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -218,6 +219,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Textures\Title2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\Chains.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

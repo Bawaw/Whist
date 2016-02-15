@@ -10,6 +10,17 @@
         <local:CardImageConverter x:Key="CardConverter" />
         <local:TrumpImageConverter x:Key="TrumpConverter" />
         <FontFamily x:Key="Western" >/Fonts/#Carnivalee Freakshow</FontFamily>
+        <RotateTransform3D x:Key="RotationAngle">
+            <RotateTransform3D.Rotation>
+                <AxisAngleRotation3D Angle="-33" Axis="1, 0, 0" />
+            </RotateTransform3D.Rotation>
+        </RotateTransform3D>
+        <Model3DGroup x:Key="GeneralLighting">
+            <AmbientLight Color="#ffb347"/>
+            <!-- TODO: calculate direction and position-->
+            <SpotLight Color="Yellow" Direction="0 -0.1 -0.3" InnerConeAngle="17" OuterConeAngle="17" Position="0 3 9" />
+        </Model3DGroup>
+        <PerspectiveCamera x:Key="MainCamera" Position="0, 0, 3"/>
     </Window.Resources>
 
     <Grid x:Name="Whist" Background="Black">
@@ -22,20 +33,9 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
             <Grid Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}" >
-            <Viewport3D>
-                <Viewport3D.Camera>
-                    <PerspectiveCamera Position="0, 0, 3"/>
-                </Viewport3D.Camera>
-                <!-- Button on 3D -->
-                    <Viewport2DVisual3D>
-                        <Viewport2DVisual3D.Transform>
-                            <RotateTransform3D>
-                                <RotateTransform3D.Rotation>
-                                    <AxisAngleRotation3D Angle="-33" Axis="1, 0, 0" />
-                                </RotateTransform3D.Rotation>
-                            </RotateTransform3D>
-                        </Viewport2DVisual3D.Transform>
-
+                <Viewport3D Camera="{StaticResource MainCamera}" >
+                    <!-- Button on 3D -->
+                    <Viewport2DVisual3D Transform="{StaticResource RotationAngle}">
                         <!-- The Geometry, Material, and Visual for the Viewport2DVisual3D -->
                         <Viewport2DVisual3D.Geometry>
                             <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0"
@@ -51,13 +51,7 @@
                         </Viewport2DVisual3D.Material>
                     </Viewport2DVisual3D>
                     <ModelVisual3D>
-                        <ModelVisual3D.Content>
-                            <Model3DGroup>
-                                <AmbientLight Color="#ffb347" />
-                                <!-- TODO: calculate direction and position-->
-                                <SpotLight Color="Yellow" Direction="0 -0.1 -0.3" InnerConeAngle="17" OuterConeAngle="17" Position="0 3 9" />
-                            </Model3DGroup>
-                        </ModelVisual3D.Content>
+                        <ModelVisual3D Content="{StaticResource GeneralLighting}" />
                     </ModelVisual3D>
                 </Viewport3D>
                 <ItemsControl ItemsSource="{Binding Pile}">
@@ -68,24 +62,13 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Viewport3D Height="80" Width="80">
-                                <Viewport3D.Camera>
-                                    <PerspectiveCamera Position="0, 0, 3"/>
-                                </Viewport3D.Camera>
+                            <Viewport3D Height="80" Width="80" Camera="{StaticResource MainCamera}">
                                 <!-- Button on 3D -->
-                                <Viewport2DVisual3D>
-                                    <Viewport2DVisual3D.Transform>
-                                        <RotateTransform3D>
-                                            <RotateTransform3D.Rotation>
-                                                <AxisAngleRotation3D Angle="-30" Axis="1, 0, 0" />
-                                            </RotateTransform3D.Rotation>
-                                        </RotateTransform3D>
-                                    </Viewport2DVisual3D.Transform>
+                                <Viewport2DVisual3D Transform="{StaticResource RotationAngle}">
 
                                     <!-- The Geometry, Material, and Visual for the Viewport2DVisual3D -->
                                     <Viewport2DVisual3D.Geometry>
-                                        <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0"
-                            TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
+                                        <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0" TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
                                     </Viewport2DVisual3D.Geometry>
 
                                     <Viewport2DVisual3D.Material>
@@ -99,15 +82,7 @@
 
                                 <!-- Lights -->
                                 <ModelVisual3D>
-                                    <ModelVisual3D>
-                                        <ModelVisual3D.Content>
-                                            <Model3DGroup>
-                                                <AmbientLight Color="#ffb347"/>
-                                                <!-- TODO: calculate direction and position-->
-                                                <SpotLight Color="Yellow" Direction="0 -0.1 -0.3" InnerConeAngle="17" OuterConeAngle="17" Position="0 3 9" />
-                                            </Model3DGroup>
-                                        </ModelVisual3D.Content>
-                                    </ModelVisual3D>
+                                    <ModelVisual3D Content="{StaticResource GeneralLighting}" />
                                 </ModelVisual3D>
                             </Viewport3D>
                         </DataTemplate>
