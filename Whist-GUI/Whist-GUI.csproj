@@ -109,6 +109,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Resource Include="Fonts\Carnevalee Freakshow.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -201,6 +204,22 @@
     <Resource Include="Textures\DIAMONDS.png" />
     <Resource Include="Textures\HEARTS.png" />
     <Resource Include="Textures\SPADES.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\Board.png" />
+    <Resource Include="Textures\brass_chains.png" />
+    <Resource Include="Textures\TrumpBoard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\Title.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\Wood_TitleBar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\Title2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

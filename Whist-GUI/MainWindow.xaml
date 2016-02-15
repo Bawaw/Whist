@@ -9,9 +9,14 @@
     <Window.Resources>
         <local:CardImageConverter x:Key="CardConverter" />
         <local:TrumpImageConverter x:Key="TrumpConverter" />
+        <FontFamily x:Key="Western" >/Fonts/#Carnivalee Freakshow</FontFamily>
     </Window.Resources>
 
     <Grid x:Name="Whist" Background="Black">
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <Image Source="Textures/Wood_TitleBar.png" />
+            <Image Source="Textures/Title2.png" Height="160" Stretch="Uniform" Margin="0 -80 0 0"/>
+        </StackPanel>
         <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
             <local:InfoPanel x:Name="InfoPanel" Foreground="#FFBDB9AC"/>
         </StackPanel>
@@ -55,45 +60,45 @@
                         </ModelVisual3D.Content>
                     </ModelVisual3D>
                 </Viewport3D>
-            <ItemsControl ItemsSource="{Binding Pile}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Viewport3D Height="80" Width="80">
-                            <Viewport3D.Camera>
-                                <PerspectiveCamera Position="0, 0, 3"/>
-                            </Viewport3D.Camera>
-                            <!-- Button on 3D -->
-                            <Viewport2DVisual3D>
-                                <Viewport2DVisual3D.Transform>
-                                    <RotateTransform3D>
-                                        <RotateTransform3D.Rotation>
-                                            <AxisAngleRotation3D Angle="30" Axis="1, 0, 0" />
-                                        </RotateTransform3D.Rotation>
-                                    </RotateTransform3D>
-                                </Viewport2DVisual3D.Transform>
+                <ItemsControl ItemsSource="{Binding Pile}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Viewport3D Height="80" Width="80">
+                                <Viewport3D.Camera>
+                                    <PerspectiveCamera Position="0, 0, 3"/>
+                                </Viewport3D.Camera>
+                                <!-- Button on 3D -->
+                                <Viewport2DVisual3D>
+                                    <Viewport2DVisual3D.Transform>
+                                        <RotateTransform3D>
+                                            <RotateTransform3D.Rotation>
+                                                <AxisAngleRotation3D Angle="-30" Axis="1, 0, 0" />
+                                            </RotateTransform3D.Rotation>
+                                        </RotateTransform3D>
+                                    </Viewport2DVisual3D.Transform>
 
-                                <!-- The Geometry, Material, and Visual for the Viewport2DVisual3D -->
-                                <Viewport2DVisual3D.Geometry>
-                                    <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0"
+                                    <!-- The Geometry, Material, and Visual for the Viewport2DVisual3D -->
+                                    <Viewport2DVisual3D.Geometry>
+                                        <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0"
                             TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
-                                </Viewport2DVisual3D.Geometry>
+                                    </Viewport2DVisual3D.Geometry>
 
-                                <Viewport2DVisual3D.Material>
-                                    <DiffuseMaterial>
-                                        <DiffuseMaterial.Brush>
-                                             <ImageBrush ImageSource = "{Binding Converter={StaticResource CardConverter}}"  />
-                                        </DiffuseMaterial.Brush>
-                                    </DiffuseMaterial>
-                                </Viewport2DVisual3D.Material>
-                            </Viewport2DVisual3D>
+                                    <Viewport2DVisual3D.Material>
+                                        <DiffuseMaterial>
+                                            <DiffuseMaterial.Brush>
+                                                <ImageBrush ImageSource = "{Binding Converter={StaticResource CardConverter}}"  />
+                                            </DiffuseMaterial.Brush>
+                                        </DiffuseMaterial>
+                                    </Viewport2DVisual3D.Material>
+                                </Viewport2DVisual3D>
 
-                            <!-- Lights -->
-                            <ModelVisual3D>
+                                <!-- Lights -->
+                                <ModelVisual3D>
                                     <ModelVisual3D>
                                         <ModelVisual3D.Content>
                                             <Model3DGroup>
@@ -105,10 +110,10 @@
                                     </ModelVisual3D>
                                 </ModelVisual3D>
                             </Viewport3D>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
         </StackPanel>
 
         <ItemsControl ItemsSource="{Binding HandVM.PlayerCards}">
