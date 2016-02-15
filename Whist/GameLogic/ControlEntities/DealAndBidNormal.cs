@@ -18,7 +18,6 @@ namespace Whist.GameLogic.ControlEntities
 
         Player playerA; //PlayerA is, when no special: asking/alone player, or when special miserie: (possibly) one of miserie players, or when special troel: player with most aces 
         Player playerB; //PlayerB is, when no special: joining/alone player, or when special miserie: (possibly) one of miserie players, or when special troel: other teammember
-        Player HighestSpecialPlayer;
         Action currentSpecial = 0;
         Dictionary<Player, bool> passedPlayers;
         public const int lowestSpecial = 4;
@@ -123,7 +122,7 @@ namespace Whist.GameLogic.ControlEntities
                     {
                         possibleActions.Add((Action)i);
                     }
-                    if (currentSpecial == Action.MISERIE && playerB == null)
+                    if (currentSpecial == Action.MISERIE && specialGameCases[Case.MISERIE].selectedPlayers.Count < specialGameCases[Case.MISERIE].MaxAmountSelectedPlayers)
                         possibleActions.Add(Action.MISERIE);
                 }
             }

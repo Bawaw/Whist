@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -19,7 +19,7 @@ namespace Whist_GUI.ViewLogic
         private Round round;
         private InfoPanelViewModel infoPanelVM;
 
-        public ObservableCollection<Card> Pile { get { return whistController.Pile; } }
+        public ObservableCollection<Card> Pile { get { return whistController?.Pile; } }
         public HandViewModel HandVM { get; private set; }
         public Suits Trump { get { return round.Trump; } }
 
@@ -32,7 +32,41 @@ namespace Whist_GUI.ViewLogic
             this.round = round;
             this.infoPanelVM = infoPanelVM;
             HandVM = new HandViewModel(this);
+            PopActionWindow();
+        }
+
+        Window popup;
+
+        public void PopActionWindow()
+        {
+            if (round.InBiddingPhase)
+            {
+                popup = new BiddingWindow(BiddingActions, this);
+                popup.Show();
+            }
+        }
+
+        public void ChooseAction(Action action)
+        {
+            popup.Close();
+            round.BiddingDoAction(action);
+            if (round.InBiddingPhase)
+                PopActionWindow();
+            else
+                EndBiddingRound();
+            infoPanelVM.propChanged();
+        }
+
+        public void EndBiddingRound()
+        {
+            round.EndBiddingRound();
             whistController = round.Start();
+            NotifyUI();
+        }
+
+        public IEnumerable<Action> BiddingActions
+        {
+            get { return round.BiddingGetPossibleActions(); }
         }
 
         public void PlayCard(Card card) {
@@ -74,18 +108,25 @@ namespace Whist_GUI.ViewLogic
         }
 
         public bool IsValidPlay(Card card) {
+            if (!round.InTrickPhase)
+                return false;
             return whistController.IsValidPlay(card);
         }
 
         public ObservableCollection<Card> GetCurrentPlayerCards() {
-            return whistController.GetPlayerCards();
+            return round.CurrentPlayer.hand.Cards;
         }
 
         public void StartNewRound()
         {
-
             round = new Round(round.Players);
-            whistController = round.Start();
+            whistController = null;
+            PopActionWindow();
+            NotifyUI();
+        }
+
+        public void NotifyUI()
+        {
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs("Pile"));
@@ -94,6 +135,7 @@ namespace Whist_GUI.ViewLogic
                 PropertyChanged(this, new PropertyChangedEventArgs("Round"));
                 PropertyChanged(this, new PropertyChangedEventArgs("infoPanelVM"));
             }
+            infoPanelVM.propChanged();
         }
     }
 
@@ -124,6 +166,14 @@ namespace Whist_GUI.ViewLogic
             public PlayCommand(HandViewModel handViewModel)
             {
                 this.handViewModel = handViewModel;
+
+                handViewModel.mainViewModel.PropertyChanged += (sender, args) =>
+                {
+                    if (CanExecuteChanged != null)
+                    {
+                        CanExecuteChanged(this, new System.EventArgs());
+                    }
+                };
             }
 
             public bool CanExecute(object parameter)
@@ -133,7 +183,7 @@ namespace Whist_GUI.ViewLogic
                 return handViewModel.mainViewModel.IsValidPlay(card);
             }
 
-            public event EventHandler CanExecuteChanged;
+            public event System.EventHandler CanExecuteChanged;
 
             public void Execute(object parameter)
             {

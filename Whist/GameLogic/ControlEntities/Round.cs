@@ -30,7 +30,7 @@ namespace Whist.GameLogic.ControlEntities
             Trump = phase1.Trump;
             RoundInProgress = true;
 
-            LetAIHandleFirstPhase();
+            //LetAIHandleFirstPhase();
         }
 
         private void LetAIHandleFirstPhase()

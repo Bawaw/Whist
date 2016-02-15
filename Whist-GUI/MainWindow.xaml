@@ -12,6 +12,7 @@
     </Window.Resources>
 
     <Grid x:Name="Whist" Background="Black">
+        
         <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
             <local:InfoPanel x:Name="InfoPanel" Foreground="#FFBDB9AC"/>
         </StackPanel>
