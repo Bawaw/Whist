@@ -13,10 +13,6 @@
 
     <Grid x:Name="Whist" Background="Black">
         <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Background="BurlyWood">
-                <Label Content="Trump:" FontSize="26.667" Foreground="#FFBDB9AC" FontFamily="Gabriola" />
-                <Image Height="40" Width="40" Source="{Binding Path = Trump, Converter = {StaticResource TrumpConverter}}" DockPanel.Dock="Right" />
-            </StackPanel>
             <local:InfoPanel x:Name="InfoPanel" Foreground="#FFBDB9AC"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">

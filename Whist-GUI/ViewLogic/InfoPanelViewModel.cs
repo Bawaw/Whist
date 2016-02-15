@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Whist.GameLogic;
 using Whist.GameLogic.ControlEntities;
 
 namespace Whist_GUI
@@ -14,11 +15,12 @@ namespace Whist_GUI
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public InfoPanelViewModel(Team[] teams, Player player, string gameCase)
+        public InfoPanelViewModel(Team[] teams, Player player, Suits trump, string gameCase)
         {
             this.teams = teams;
             Player = player;
             GameCase = gameCase;
+            Trump = trump;
         }
 
         public void propChanged()
@@ -30,6 +32,7 @@ namespace Whist_GUI
                 PropertyChanged(this, new PropertyChangedEventArgs("TricksLeft"));
                 PropertyChanged(this, new PropertyChangedEventArgs("TricksWon"));
                 PropertyChanged(this, new PropertyChangedEventArgs("GameCase"));
+                PropertyChanged(this, new PropertyChangedEventArgs("Trump"));
             }
         }
 
@@ -45,6 +48,7 @@ namespace Whist_GUI
         {
             get { return Player.Tricks; }
         }
+        public Suits Trump { get; private set; }
         public string GameCase
         {
             get; private set;

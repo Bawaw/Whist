@@ -38,7 +38,7 @@ namespace Whist_GUI
             };
             Round round = new Round(players);
 
-            var infoPanelVM = new InfoPanelViewModel(round.Teams, round.Players[0], round.GameCase.ToString());
+            var infoPanelVM = new InfoPanelViewModel(round.Teams, round.Players[0], round.Trump, round.GameCase.ToString());
             InfoPanel.DataContext = infoPanelVM;
             model = new BaseGameViewModel(round, infoPanelVM);
 

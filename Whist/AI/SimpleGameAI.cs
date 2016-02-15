@@ -31,7 +31,12 @@ namespace Whist.AI
                             return HighOrLowCardSelection(cardsOfTrump, pileCardsOfTrump);
                         }
                         else
-                            return GetHighestCard(cardsOfTrump);
+                        {
+                            if (cards.Any(c => c.Suit != trump))
+                                return GetLowestCard(cards.Except(cardsOfTrump));
+                            else
+                                return GetLowestCard(cards);
+                        }
                     }
                     else //Hand contains neither pileSuit card of trump card.
                     {
