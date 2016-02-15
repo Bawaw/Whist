@@ -153,7 +153,6 @@ namespace Whist.GameLogic.ControlEntities
                     {
                         playerB = CurrentPlayer;
                         GameCase = Case.TEAM;
-                        actionsDone--;
                         break;
                     }
                 case Action.ALONE:
