@@ -90,6 +90,9 @@ namespace Whist_GUI.ViewLogic
                 {
                     var aiCard = AI.GetMove(round.CurrentPlayer, round.Pile, round.Trump);
                     round.PlayCard(aiCard);
+
+                    if (UpdateView != null) UpdateView();
+
                 }
                 if (!round.TrickInProgress)
                 {
@@ -110,6 +113,8 @@ namespace Whist_GUI.ViewLogic
             }
             infoPanelVM.propChanged();
         }
+
+        public event System.Action UpdateView;
 
         public bool IsValidPlay(Card card) {
             if (!round.InTrickPhase)

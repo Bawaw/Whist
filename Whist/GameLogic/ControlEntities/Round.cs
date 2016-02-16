@@ -33,17 +33,6 @@ namespace Whist.GameLogic.ControlEntities
             //LetAIHandleFirstPhase();
         }
 
-        private void LetAIHandleFirstPhase()
-        {
-            while (InBiddingPhase)
-            {
-                var AI = new SimpleBiddingAI();
-                BiddingDoAction(AI.GetAction(CurrentPlayer, BiddingGetPossibleActions(), Trump));
-            }
-            EndBiddingRound();
-        }
-
-
         public void EndBiddingRound()
         {
             if (!phase1.InBiddingPhase && phase2 == null)

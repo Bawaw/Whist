@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Whist_GUI"
         mc:Ignorable="d"
-        Title="BiddingWindow" Height="300" Width="300">
+        Title="BiddingWindow" Height="300" Width="300" WindowStyle="None" WindowStartupLocation="CenterScreen">
     <Grid>
         <ItemsControl x:Name="BiddingView" ItemsSource="{Binding BiddingActions}">
             <ItemsControl.ItemsPanel>

@@ -45,5 +45,10 @@ namespace Whist_GUI
             //Hand.DataContext = model.HandVM;
             Whist.DataContext = model;
         }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }
