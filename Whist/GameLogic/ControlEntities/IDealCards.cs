@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Whist.GameLogic.ControlEntities
 {
-    interface IDealCards
+    public interface IDealCards
     {
         void DealCards(Player[] players);
     }

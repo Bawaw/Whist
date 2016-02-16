@@ -32,7 +32,7 @@ namespace Whist.GameLogic
 
         public override string ToString()
         {
-            String cardCollection = "";
+            string cardCollection = "";
             deck.ForEach(x => cardCollection += x);
             return cardCollection;
         }
