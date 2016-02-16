@@ -58,6 +58,7 @@ namespace Whist.GameLogic.ControlEntities
             Trump = players[3].hand.Cards.Last().Suit;
             foreach (Player player in players)
                 player.hand.sort();
+            CheckForTroel();
         }
 
         /*
