@@ -245,7 +245,7 @@ namespace Whist.GameLogic.GameCases
         {
             Team teamA = new Team(new Player[] { selectedPlayers[0] }, 13);
             Player[] others = players.Except(selectedPlayers).ToArray();
-            Team teamB = new Team(others, 5);
+            Team teamB = new Team(others, 1);
             return new Team[] { teamA, teamB };
         }
 

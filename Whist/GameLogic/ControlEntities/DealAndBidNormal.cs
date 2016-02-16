@@ -7,7 +7,7 @@ using Whist.GameLogic.GameCases;
 
 namespace Whist.GameLogic.ControlEntities
 {
-    class DealAndBidNormal : IDealingAndBidding
+    public class DealAndBidNormal : IDealingAndBidding
     {
         private Player[] players;
         public Suits Trump
@@ -396,7 +396,7 @@ namespace Whist.GameLogic.ControlEntities
         }
     }
 
-    internal class ResultData
+    public class ResultData
     {
         public Team[] teams;
         public Case gameCase;

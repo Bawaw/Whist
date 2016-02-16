@@ -2,7 +2,7 @@
 
 namespace Whist.GameLogic.ControlEntities
 {
-    interface IDealingAndBidding
+    public interface IDealingAndBidding
     {
         Player CurrentPlayer { get; }
         Case GameCase { get; }
