@@ -20,7 +20,7 @@ namespace Whist_GUI
             Player = player;
         }
 
-        public void propChanged()
+        public void PropChanged()
         {
             if (PropertyChanged != null)
             {
@@ -31,6 +31,11 @@ namespace Whist_GUI
                 PropertyChanged(this, new PropertyChangedEventArgs("GameCase"));
                 PropertyChanged(this, new PropertyChangedEventArgs("Trump"));
             }
+        }
+
+        public void UpdateRound(Round round)
+        {
+            this.round = round;
         }
 
         public Player Player

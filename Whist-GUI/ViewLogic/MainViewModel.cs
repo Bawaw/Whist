@@ -58,7 +58,7 @@ namespace Whist_GUI.ViewLogic
                 PopActionWindow();
             else
                 EndBiddingRound();
-            infoPanelVM.propChanged();
+            infoPanelVM.PropChanged();
         }
 
         public void EndBiddingRound()
@@ -111,7 +111,7 @@ namespace Whist_GUI.ViewLogic
                 MessageBoxResult result = MessageBox.Show(str, "Round End", MessageBoxButton.OK, MessageBoxImage.None);
                 StartNewRound();
             }
-            infoPanelVM.propChanged();
+            infoPanelVM.PropChanged();
         }
 
         public event System.Action UpdateView;
@@ -129,6 +129,7 @@ namespace Whist_GUI.ViewLogic
         public void StartNewRound()
         {
             round = new Round(round.Players);
+            infoPanelVM.UpdateRound(round);
             whistController = null;
             PopActionWindow();
             NotifyUI();
@@ -144,7 +145,7 @@ namespace Whist_GUI.ViewLogic
                 PropertyChanged(this, new PropertyChangedEventArgs("Round"));
                 PropertyChanged(this, new PropertyChangedEventArgs("infoPanelVM"));
             }
-            infoPanelVM.propChanged();
+            infoPanelVM.PropChanged();
         }
     }
 
