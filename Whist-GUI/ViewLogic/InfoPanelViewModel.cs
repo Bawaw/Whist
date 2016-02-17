@@ -11,16 +11,13 @@ namespace Whist_GUI
 {
     public class InfoPanelViewModel : INotifyPropertyChanged
     {
-        Team[] teams;
-
+        private Round round;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public InfoPanelViewModel(Team[] teams, Player player, Suits trump, string gameCase)
+        public InfoPanelViewModel(Round round, Player player)
         {
-            this.teams = teams;
+            this.round = round;
             Player = player;
-            GameCase = gameCase;
-            Trump = trump;
         }
 
         public void propChanged()
@@ -42,30 +39,41 @@ namespace Whist_GUI
         }
         public int TricksLeft
         {
-            get { return Player.hand.Count; }
+            get { if (Player == null) return -1; return Player.hand.Count; }
         }
         public int TricksWon
         {
-            get { return Player.Tricks; }
+            get { if (Player == null) return -1; return Player.Tricks; }
         }
-        public Suits Trump { get; private set; }
-        public string GameCase
+        public Suits? Trump { get { return round?.Trump; } }
+        public Case? GameCase
         {
-            get; private set;
+            get { return round?.GameCase; }
         }
         public string Teams
         {
             get
             {
                 string str = "";
-                foreach (Team team in teams)
+                Team[] teams = round?.Teams;
+                if (teams == null)
                 {
-                    str += "\n-";
-                    foreach (Player p in team.Players)
+                    foreach (Player p in round.Players)
                     {
-                        str += "[" + p.name + "(" + p.score + ")] ";
+                        str += "\n-" + p.name + " (" + p.score + ") ";
                     }
-                    str += "(" + team.Tricks + "/" + team.objective + ")";
+                }
+                else
+                {
+                    foreach (Team team in teams)
+                    {
+                        str += "\n-";
+                        foreach (Player p in team.Players)
+                        {
+                            str += "[" + p.name + "(" + p.score + ")] ";
+                        }
+                        str += "(" + team.Tricks + "/" + team.objective + ")";
+                    }
                 }
                 return str;
             }

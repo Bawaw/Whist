@@ -55,10 +55,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BiddingWindow.xaml.cs">
+      <DependentUpon>BiddingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="InfoPanel.xaml.cs">
       <DependentUpon>InfoPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PileConverter.cs" />
+    <Compile Include="ViewLogic\BiddingViewModel.cs" />
     <Compile Include="ViewLogic\InfoPanelViewModel.cs" />
     <Compile Include="TrumpImageConverter.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -67,6 +70,10 @@
       <DependentUpon>CardView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewLogic\MainViewModel.cs" />
+    <Page Include="BiddingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -110,9 +117,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Resource Include="Fonts\Carnevalee Freakshow.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -207,25 +211,15 @@
     <Resource Include="Textures\SPADES.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Textures\TrumpBoard.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Textures\Board.png" />
-    <Resource Include="Textures\brass_chains.png" />
-    <Resource Include="Textures\TrumpBoard.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Textures\Title.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Textures\Chains.png" />
+    <Resource Include="Textures\Title2.png" />
     <Resource Include="Textures\Wood_TitleBar.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Textures\Title2.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Textures\Chains.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

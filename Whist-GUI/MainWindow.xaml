@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Whist_GUI"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Closed="Window_Closed"
         Title="MainWindow" Height="auto" Width="auto">
     <Window.Resources>
         <local:CardImageConverter x:Key="CardConverter" />
@@ -34,7 +34,7 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
             <Grid Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}" >
                 <Viewport3D Camera="{StaticResource MainCamera}" >
-                    <!-- Button on 3D -->
+                <!-- Button on 3D -->
                     <Viewport2DVisual3D Transform="{StaticResource RotationAngle}">
                         <!-- The Geometry, Material, and Visual for the Viewport2DVisual3D -->
                         <Viewport2DVisual3D.Geometry>
@@ -54,41 +54,88 @@
                         <ModelVisual3D Content="{StaticResource GeneralLighting}" />
                     </ModelVisual3D>
                 </Viewport3D>
-                <ItemsControl ItemsSource="{Binding Pile}">
+            <ItemsControl ItemsSource="{Binding Pile}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                            <Viewport3D Height="80" Width="80" Camera="{StaticResource MainCamera}">
+                            <!-- Button on 3D -->
+                                <Viewport2DVisual3D Transform="{StaticResource RotationAngle}">
+
+                                <!-- The Geometry, Material, and Visual for the Viewport2DVisual3D -->
+                                <Viewport2DVisual3D.Geometry>
+                                        <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0" TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
+                                </Viewport2DVisual3D.Geometry>
+
+                                <Viewport2DVisual3D.Material>
+                                    <DiffuseMaterial>
+                                        <DiffuseMaterial.Brush>
+                                             <ImageBrush ImageSource = "{Binding Converter={StaticResource CardConverter}}"  />
+                                        </DiffuseMaterial.Brush>
+                                    </DiffuseMaterial>
+                                </Viewport2DVisual3D.Material>
+                            </Viewport2DVisual3D>
+
+                            <!-- Lights -->
+                            <ModelVisual3D>
+                                    <ModelVisual3D Content="{StaticResource GeneralLighting}" />
+                                </ModelVisual3D>
+                            </Viewport3D>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+                <ItemsControl ItemsSource="{Binding Comp1Cards}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="150, 40, 0, 0"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Viewport3D Height="80" Width="80" Camera="{StaticResource MainCamera}">
-                                <!-- Button on 3D -->
-                                <Viewport2DVisual3D Transform="{StaticResource RotationAngle}">
-
-                                    <!-- The Geometry, Material, and Visual for the Viewport2DVisual3D -->
-                                    <Viewport2DVisual3D.Geometry>
-                                        <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0" TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
-                                    </Viewport2DVisual3D.Geometry>
-
-                                    <Viewport2DVisual3D.Material>
-                                        <DiffuseMaterial>
-                                            <DiffuseMaterial.Brush>
-                                                <ImageBrush ImageSource = "{Binding Converter={StaticResource CardConverter}}"  />
-                                            </DiffuseMaterial.Brush>
-                                        </DiffuseMaterial>
-                                    </Viewport2DVisual3D.Material>
-                                </Viewport2DVisual3D>
-
-                                <!-- Lights -->
-                                <ModelVisual3D>
-                                    <ModelVisual3D Content="{StaticResource GeneralLighting}" />
-                                </ModelVisual3D>
-                            </Viewport3D>
+                            <Image Source="Textures\red_back.png" Height="50" Width="100" Margin="0 -30 0 0">
+                                <Image.RenderTransform>
+                                    <RotateTransform Angle="90"/>
+                                </Image.RenderTransform>
+                            </Image>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </Grid>
+
+                <ItemsControl ItemsSource="{Binding Comp2Cards}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20, 160, 0, 0"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="Textures\red_back.png" Height="80" Width="40" Margin ="-24 15 0 0"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <ItemsControl ItemsSource="{Binding Comp3Cards}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0, 40, 60, 0"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="Textures\red_back.png" Height="50" Width="100" Margin="0 -30 0 0">
+                                <Image.RenderTransform>
+                                    <RotateTransform Angle="90"/>
+                                </Image.RenderTransform>
+                            </Image>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+        </Grid>
         </StackPanel>
 
         <ItemsControl ItemsSource="{Binding HandVM.PlayerCards}">
@@ -103,6 +150,9 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+
+        
+
         <!--<StackPanel x:Name="Enemy_1">
             <Label Content="{Binding Name}" />
             <Label Content="{Binding Score}" />

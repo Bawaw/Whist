@@ -12,7 +12,7 @@ namespace WhistTest
     {
         private List<Player> players = new List<Player>();
 
-        //TODO: initialize en cleanup checken hoe dat werkt, en als trump voorzien is in GameCase, testen op trump!
+        //TODO: initialize en cleanup checken hoe dat werkt, en als trump voorzien is in GameCase, testen op trump, en teamPlayer zou eigenlijk ook de eerste slag moeten uitkomen!
 
         [TestInitialize]
         private void createPlayers()
@@ -33,7 +33,7 @@ namespace WhistTest
         }
 
         [TestMethod]
-        public void Test_Troel_When_3_Aces()
+        public void Test_TROEL_When_3_Aces()
         {
             createPlayers();//de attributen van de init en cleanup methodes werken blijkbaar niet...
             IList<Card> aces = new List<Card>() { new Card(1, 14), new Card(2, 14), new Card(3, 14), new Card(4, 14) };
@@ -82,7 +82,7 @@ namespace WhistTest
         }
 
         [TestMethod]
-        public void Test_Troel_When_4_Aces_And_No_King_Of_Hearts()
+        public void Test_TROEL_When_4_Aces_And_No_King_Of_Hearts()
         {
             createPlayers();//de attributen van de init en cleanup methodes werken blijkbaar niet...
             IList<Card> aces = new List<Card>() { new Card(1, 14), new Card(2, 14), new Card(3, 14), new Card(4, 14) };
@@ -132,7 +132,7 @@ namespace WhistTest
         }
 
         [TestMethod]
-        public void Test_Troel_When_4_Aces_And_King_Of_Hearts()
+        public void Test_TROEL_When_4_Aces_And_King_Of_Hearts()
         {
             createPlayers();//de attributen van de init en cleanup methodes werken blijkbaar niet...
             IList<Card> aces = new List<Card>() { new Card(1, 14), new Card(2, 14), new Card(3, 14), new Card(4, 14) };
@@ -183,7 +183,7 @@ namespace WhistTest
         }
 
         [TestMethod]
-        public void Test_Troel_When_4_Aces_And_9_Other_Highest_Hearts()
+        public void Test_TROEL_When_4_Aces_And_9_Other_Highest_Hearts()
         {
             createPlayers();//de attributen van de init en cleanup methodes werken blijkbaar niet...
             IList<Card> aces = new List<Card>() { new Card(1, 14), new Card(2, 14), new Card(3, 14), new Card(4, 14) };
@@ -233,7 +233,7 @@ namespace WhistTest
         }
 
         [TestMethod]
-        public void Test_No_Troel_When_Nobody_With_3_Or_4_Aces()
+        public void Test_No_TROEL_When_Nobody_With_3_Or_4_Aces()
         {
             createPlayers();//de attributen van de init en cleanup methodes werken blijkbaar niet...
             for (int i = 2; i < 15; i++)

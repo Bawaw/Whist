@@ -30,19 +30,8 @@ namespace Whist.GameLogic.ControlEntities
             Trump = phase1.Trump;
             RoundInProgress = true;
 
-            LetAIHandleFirstPhase();
+            //LetAIHandleFirstPhase();
         }
-
-        private void LetAIHandleFirstPhase()
-        {
-            while (InBiddingPhase)
-            {
-                var AI = new SimpleBiddingAI();
-                BiddingDoAction(AI.GetAction(CurrentPlayer, BiddingGetPossibleActions(), Trump));
-            }
-            EndBiddingRound();
-        }
-
 
         public void EndBiddingRound()
         {

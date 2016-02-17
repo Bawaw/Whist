@@ -59,5 +59,10 @@ namespace Whist.GameLogic
         {
             return obj is Card && Suit.Equals((obj as Card).Suit) && Number.Equals((obj as Card).Number);
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
