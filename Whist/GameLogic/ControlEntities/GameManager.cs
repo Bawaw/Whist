@@ -19,8 +19,15 @@ namespace Whist.GameLogic.ControlEntities
                 new Player("Comp 2"),
                 new Player("Comp 3")
             };
+            HumanPlayer = players[0];
+            Round = new Round(players);
         }
 
+        public Player HumanPlayer
+        {
+            get;
+            private set;
+        }
 
         public Round Round
         {

@@ -16,24 +16,28 @@ namespace Whist_GUI.ViewLogic
 {
     public class BaseGameViewModel : INotifyPropertyChanged
     {
-        private Round round;
+        private GameManager gameManager;
+        private Round Round
+        {
+            get { return gameManager.Round; }
+        }
         private InfoPanelViewModel infoPanelVM;
 
         public ObservableCollection<Card> Pile { get { return whistController?.Pile; } }
         public HandViewModel HandVM { get; private set; }
-        public Suits Trump { get { return round.Trump; } }
+        public Suits Trump { get { return Round.Trump; } }
 
         private IPlayTricks whistController;
 
-        public ObservableCollection<Card> Comp1Cards { get { return round.Players.Where(p => p.name == "Comp 1").Single().hand.Cards; } }
-        public ObservableCollection<Card> Comp2Cards { get { return round.Players.Where(p => p.name == "Comp 2").Single().hand.Cards; } }
-        public ObservableCollection<Card> Comp3Cards { get { return round.Players.Where(p => p.name == "Comp 3").Single().hand.Cards; } }
+        public ObservableCollection<Card> Comp1Cards { get { return Round.Players.Where(p => p.name == "Comp 1").Single().hand.Cards; } }
+        public ObservableCollection<Card> Comp2Cards { get { return Round.Players.Where(p => p.name == "Comp 2").Single().hand.Cards; } }
+        public ObservableCollection<Card> Comp3Cards { get { return Round.Players.Where(p => p.name == "Comp 3").Single().hand.Cards; } }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public BaseGameViewModel(Round round, InfoPanelViewModel infoPanelVM)
+        public BaseGameViewModel(GameManager gameManager, InfoPanelViewModel infoPanelVM)
         {
-            this.round = round;
+            this.gameManager = gameManager;
             this.infoPanelVM = infoPanelVM;
             HandVM = new HandViewModel(this);
             PopActionWindow();
@@ -43,7 +47,7 @@ namespace Whist_GUI.ViewLogic
 
         public void PopActionWindow()
         {
-            if (round.InBiddingPhase)
+            if (Round.InBiddingPhase)
             {
                 popup = new BiddingWindow(BiddingActions, this);
                 popup.Show();
@@ -53,8 +57,8 @@ namespace Whist_GUI.ViewLogic
         public void ChooseAction(Action action)
         {
             popup.Close();
-            round.BiddingDoAction(action);
-            if (round.InBiddingPhase)
+            Round.BiddingDoAction(action);
+            if (Round.InBiddingPhase)
                 PopActionWindow();
             else
                 EndBiddingRound();
@@ -63,73 +67,72 @@ namespace Whist_GUI.ViewLogic
 
         public void EndBiddingRound()
         {
-            round.EndBiddingRound();
-            whistController = round.Start();
+            Round.EndBiddingRound();
+            whistController = Round.Start();
+            while (Round.TrickInProgress && Round.CurrentPlayer != null && Round.CurrentPlayer != gameManager.HumanPlayer)
+            {
+                var aiCard = new SimpleGameAI().GetMove(Round.CurrentPlayer, Round.Pile, Round.Trump);
+                Round.PlayCard(aiCard);
+            }
             NotifyUI();
         }
 
         public IEnumerable<Action> BiddingActions
         {
-            get { return round.BiddingGetPossibleActions(); }
+            get { return Round.BiddingGetPossibleActions(); }
         }
 
         public void PlayCard(Card card) {
 
             whistController.PlayCard(card);
-            if (!round.TrickInProgress)
+            if (!Round.TrickInProgress)
             {
-                MessageBoxResult result = MessageBox.Show(round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
-                round.EndTrick();
+                MessageBoxResult result = MessageBox.Show(Round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
+                Round.EndTrick();
             }
 
 
             var AI = new SimpleGameAI();
-            while (round.CurrentPlayer != null && round.CurrentPlayer != round.Players[0])
+            while (Round.CurrentPlayer != null && Round.CurrentPlayer != gameManager.HumanPlayer)
             {
-                while (round.TrickInProgress && round.CurrentPlayer != null && round.CurrentPlayer != round.Players[0])
+                while (Round.TrickInProgress && Round.CurrentPlayer != null && Round.CurrentPlayer != gameManager.HumanPlayer)
                 {
-                    var aiCard = AI.GetMove(round.CurrentPlayer, round.Pile, round.Trump);
-                    round.PlayCard(aiCard);
-
-                    if (UpdateView != null) UpdateView();
-
+                    var aiCard = AI.GetMove(Round.CurrentPlayer, Round.Pile, Round.Trump);
+                    Round.PlayCard(aiCard);
                 }
-                if (!round.TrickInProgress)
+                if (!Round.TrickInProgress)
                 {
-                    MessageBoxResult result = MessageBox.Show(round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
-                    round.EndTrick();
+                    MessageBoxResult result = MessageBox.Show(Round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
+                    Round.EndTrick();
                 }
             }
 
-            if (!round.InTrickPhase)
+            if (!Round.InTrickPhase)
             {
-                round.EndTricksRound();
+                Round.EndTricksRound();
                 string str = "";
-                foreach (var player in round.Players)
+                foreach (var player in Round.Players)
                     str += player.name + " (" + player.Tricks + ") - " + player.score + "\n";
                 
                 MessageBoxResult result = MessageBox.Show(str, "Round End", MessageBoxButton.OK, MessageBoxImage.None);
                 StartNewRound();
             }
-            infoPanelVM.PropChanged();
+            NotifyUI();
         }
 
-        public event System.Action UpdateView;
-
         public bool IsValidPlay(Card card) {
-            if (!round.InTrickPhase)
+            if (!Round.InTrickPhase)
                 return false;
             return whistController.IsValidPlay(card);
         }
 
         public ObservableCollection<Card> GetCurrentPlayerCards() {
-            return round.CurrentPlayer.hand.Cards;
+            return Round.CurrentPlayer.hand.Cards;
         }
 
         public void StartNewRound()
         {
-            round = new Round(round.Players);
-            infoPanelVM.UpdateRound(round);
+            gameManager.StartNewRound();
             whistController = null;
             PopActionWindow();
             NotifyUI();

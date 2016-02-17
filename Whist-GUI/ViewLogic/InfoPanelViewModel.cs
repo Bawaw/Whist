@@ -11,13 +11,13 @@ namespace Whist_GUI
 {
     public class InfoPanelViewModel : INotifyPropertyChanged
     {
-        private Round round;
+        private GameManager gameManager;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public InfoPanelViewModel(Round round, Player player)
+        public InfoPanelViewModel(GameManager gameManager)
         {
-            this.round = round;
-            Player = player;
+            this.gameManager = gameManager;
+            Player = gameManager.HumanPlayer;
         }
 
         public void PropChanged()
@@ -30,12 +30,13 @@ namespace Whist_GUI
                 PropertyChanged(this, new PropertyChangedEventArgs("TricksWon"));
                 PropertyChanged(this, new PropertyChangedEventArgs("GameCase"));
                 PropertyChanged(this, new PropertyChangedEventArgs("Trump"));
+                PropertyChanged(this, new PropertyChangedEventArgs("Round"));
             }
         }
 
-        public void UpdateRound(Round round)
+        private Round Round
         {
-            this.round = round;
+            get { return gameManager?.Round; }
         }
 
         public Player Player
@@ -50,20 +51,20 @@ namespace Whist_GUI
         {
             get { if (Player == null) return -1; return Player.Tricks; }
         }
-        public Suits? Trump { get { return round?.Trump; } }
+        public Suits? Trump { get { return Round?.Trump; } }
         public Case? GameCase
         {
-            get { return round?.GameCase; }
+            get { return Round?.GameCase; }
         }
         public string Teams
         {
             get
             {
                 string str = "";
-                Team[] teams = round?.Teams;
+                Team[] teams = Round?.Teams;
                 if (teams == null)
                 {
-                    foreach (Player p in round.Players)
+                    foreach (Player p in Round.Players)
                     {
                         str += "\n-" + p.name + " (" + p.score + ") ";
                     }
