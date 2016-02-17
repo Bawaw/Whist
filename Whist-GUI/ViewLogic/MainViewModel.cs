@@ -71,7 +71,7 @@ namespace Whist_GUI.ViewLogic
             whistController = Round.Start();
             while (Round.TrickInProgress && Round.CurrentPlayer != null && Round.CurrentPlayer != gameManager.HumanPlayer)
             {
-                var aiCard = new SimpleGameAI().GetMove(Round.CurrentPlayer, Round.Pile, Round.Trump);
+                var aiCard = SimpleGameAI.GetMove(Round);
                 Round.PlayCard(aiCard);
             }
             NotifyUI();
@@ -97,7 +97,7 @@ namespace Whist_GUI.ViewLogic
             {
                 while (Round.TrickInProgress && Round.CurrentPlayer != null && Round.CurrentPlayer != gameManager.HumanPlayer)
                 {
-                    var aiCard = AI.GetMove(Round.CurrentPlayer, Round.Pile, Round.Trump);
+                    var aiCard = SimpleGameAI.GetMove(Round);
                     Round.PlayCard(aiCard);
                 }
                 if (!Round.TrickInProgress)
