@@ -15,6 +15,5 @@ C:\Users\Luc Reintjens\Source\Repos\Whist\Whist\obj\Debug\Whist.pdb
 C:\Users\Luc Reintjens\Source\Repos\Whist\Whist\obj\Debug\Whist.csprojResolveAssemblyReference.cache
 C:\Toegepaste Informatica\TI4\Afstudeerproject\Wiezen\Whist\bin\Debug\Whist.exe
 C:\Toegepaste Informatica\TI4\Afstudeerproject\Wiezen\Whist\bin\Debug\Whist.pdb
-C:\Toegepaste Informatica\TI4\Afstudeerproject\Wiezen\Whist\obj\Debug\Whist.csprojResolveAssemblyReference.cache
 C:\Toegepaste Informatica\TI4\Afstudeerproject\Wiezen\Whist\obj\Debug\Whist.exe
 C:\Toegepaste Informatica\TI4\Afstudeerproject\Wiezen\Whist\obj\Debug\Whist.pdb
