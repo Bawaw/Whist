@@ -14,8 +14,20 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist_GUI.ViewLogic
 {
+    public enum GameState { BIDDING, PLAYING }
     public class BaseGameViewModel : INotifyPropertyChanged
     {
+        private GameState currentGameState;
+        public GameState CurrentGameState { get { return currentGameState; }
+            private set {
+                if (value != currentGameState)
+                {
+                    currentGameState = value;
+                    if(GameStateChanged != null)
+                        GameStateChanged(value);
+                }
+        } }
+
         private Round round;
         private InfoPanelViewModel infoPanelVM;
 
@@ -29,36 +41,28 @@ namespace Whist_GUI.ViewLogic
         public ObservableCollection<Card> Comp2Cards { get { return round.Players.Where(p => p.name == "Comp 2").Single().hand.Cards; } }
         public ObservableCollection<Card> Comp3Cards { get { return round.Players.Where(p => p.name == "Comp 3").Single().hand.Cards; } }
 
+        public delegate void IsInMode(GameState gameState);
+
         public event PropertyChangedEventHandler PropertyChanged;
+        public event IsInMode GameStateChanged;
 
         public BaseGameViewModel(Round round, InfoPanelViewModel infoPanelVM)
         {
             this.round = round;
             this.infoPanelVM = infoPanelVM;
             HandVM = new HandViewModel(this);
-            PopActionWindow();
+            CurrentGameState = GameState.BIDDING;
         }
 
-        Window popup;
-
-        public void PopActionWindow()
-        {
-            if (round.InBiddingPhase)
-            {
-                popup = new BiddingWindow(BiddingActions, this);
-                popup.Show();
-            }
-        }
 
         public void ChooseAction(Action action)
         {
-            popup.Close();
             round.BiddingDoAction(action);
-            if (round.InBiddingPhase)
-                PopActionWindow();
-            else
-                EndBiddingRound();
             infoPanelVM.propChanged();
+            if (!round.InBiddingPhase) {
+                    EndBiddingRound();
+                    CurrentGameState = GameState.PLAYING;
+                }
         }
 
         public void EndBiddingRound()
@@ -130,7 +134,7 @@ namespace Whist_GUI.ViewLogic
         {
             round = new Round(round.Players);
             whistController = null;
-            PopActionWindow();
+            CurrentGameState = GameState.BIDDING;
             NotifyUI();
         }
 

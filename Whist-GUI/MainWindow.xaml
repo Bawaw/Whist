@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Whist_GUI"
         mc:Ignorable="d" Closed="Window_Closed"
-        Title="MainWindow" Height="auto" Width="auto">
+        Title="MainWindow" Height="auto" Width="auto" WindowState="Maximized">
     <Window.Resources>
         <local:CardImageConverter x:Key="CardConverter" />
         <local:TrumpImageConverter x:Key="TrumpConverter" />
@@ -21,6 +21,10 @@
             <SpotLight Color="Yellow" Direction="0 -0.1 -0.3" InnerConeAngle="17" OuterConeAngle="17" Position="0 3 9" />
         </Model3DGroup>
         <PerspectiveCamera x:Key="MainCamera" Position="0, 0, 3"/>
+        <LinearGradientBrush x:Key="UI_Brush" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFDCD617" Offset="0"/>
+            <GradientStop Color="#FFC2890F" Offset="1"/>
+        </LinearGradientBrush>
     </Window.Resources>
 
     <Grid x:Name="Whist" Background="Black">
@@ -34,7 +38,7 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
             <Grid Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}" >
                 <Viewport3D Camera="{StaticResource MainCamera}" >
-                <!-- Button on 3D -->
+                    <!-- Button on 3D -->
                     <Viewport2DVisual3D Transform="{StaticResource RotationAngle}">
                         <!-- The Geometry, Material, and Visual for the Viewport2DVisual3D -->
                         <Viewport2DVisual3D.Geometry>
@@ -54,40 +58,40 @@
                         <ModelVisual3D Content="{StaticResource GeneralLighting}" />
                     </ModelVisual3D>
                 </Viewport3D>
-            <ItemsControl ItemsSource="{Binding Pile}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                <ItemsControl ItemsSource="{Binding Pile}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
                             <Viewport3D Height="80" Width="80" Camera="{StaticResource MainCamera}">
-                            <!-- Button on 3D -->
+                                <!-- Button on 3D -->
                                 <Viewport2DVisual3D Transform="{StaticResource RotationAngle}">
 
-                                <!-- The Geometry, Material, and Visual for the Viewport2DVisual3D -->
-                                <Viewport2DVisual3D.Geometry>
+                                    <!-- The Geometry, Material, and Visual for the Viewport2DVisual3D -->
+                                    <Viewport2DVisual3D.Geometry>
                                         <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0" TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
-                                </Viewport2DVisual3D.Geometry>
+                                    </Viewport2DVisual3D.Geometry>
 
-                                <Viewport2DVisual3D.Material>
-                                    <DiffuseMaterial>
-                                        <DiffuseMaterial.Brush>
-                                             <ImageBrush ImageSource = "{Binding Converter={StaticResource CardConverter}}"  />
-                                        </DiffuseMaterial.Brush>
-                                    </DiffuseMaterial>
-                                </Viewport2DVisual3D.Material>
-                            </Viewport2DVisual3D>
+                                    <Viewport2DVisual3D.Material>
+                                        <DiffuseMaterial>
+                                            <DiffuseMaterial.Brush>
+                                                <ImageBrush ImageSource = "{Binding Converter={StaticResource CardConverter}}"  />
+                                            </DiffuseMaterial.Brush>
+                                        </DiffuseMaterial>
+                                    </Viewport2DVisual3D.Material>
+                                </Viewport2DVisual3D>
 
-                            <!-- Lights -->
-                            <ModelVisual3D>
+                                <!-- Lights -->
+                                <ModelVisual3D>
                                     <ModelVisual3D Content="{StaticResource GeneralLighting}" />
                                 </ModelVisual3D>
                             </Viewport3D>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
                 <ItemsControl ItemsSource="{Binding Comp1Cards}">
                     <ItemsControl.ItemsPanel>
@@ -135,7 +139,32 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-        </Grid>
+                <DockPanel x:Name="PopupAnchor" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Popup x:Name="popup" IsOpen = "True" PlacementTarget="{Binding ElementName=PopupAnchor}" Placement="Center" Width="190" HorizontalAlignment="Center">
+                        <Grid>
+                                <ItemsControl x:Name="BiddingView" ItemsSource="{Binding BiddingActions}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button CommandParameter="{Binding }" Command="{Binding DataContext.BidCmd , RelativeSource={RelativeSource AncestorType=ItemsControl}}" Content="{Binding}" FontFamily="Tahoma" FontSize="15" Foreground="{StaticResource UI_Brush}" BorderBrush="#FF604108" >
+                                            <Button.Background>
+                                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                    <GradientStop Color="#FF7F6036" Offset="0.503"/>
+                                                    <GradientStop Color="#FFA88556" Offset="0.112"/>
+                                                </LinearGradientBrush>
+                                            </Button.Background>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                    </Popup>
+                </DockPanel>
+            </Grid>
         </StackPanel>
 
         <ItemsControl ItemsSource="{Binding HandVM.PlayerCards}">
@@ -151,7 +180,7 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        
+
 
         <!--<StackPanel x:Name="Enemy_1">
             <Label Content="{Binding Name}" />

@@ -41,9 +41,17 @@ namespace Whist_GUI
             var infoPanelVM = new InfoPanelViewModel(round, round.Players[0]);//round.Teams, round.Players[0], round.Trump, round.GameCase.ToString());
             InfoPanel.DataContext = infoPanelVM;
             model = new BaseGameViewModel(round, infoPanelVM);
+            model.GameStateChanged += start_end_InitialBiddingPhase;
 
-            //Hand.DataContext = model.HandVM;
             Whist.DataContext = model;
+            BiddingView.DataContext = new BiddingViewModel(model.BiddingActions, model);
+        }
+
+        private void start_end_InitialBiddingPhase(GameState gameState) {
+            if (gameState == GameState.BIDDING)
+                popup.IsOpen = true;
+            else
+                popup.IsOpen = false;
         }
 
         private void Window_Closed(object sender, EventArgs e)

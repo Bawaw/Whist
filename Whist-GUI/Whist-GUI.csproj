@@ -55,9 +55,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BiddingWindow.xaml.cs">
-      <DependentUpon>BiddingWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="InfoPanel.xaml.cs">
       <DependentUpon>InfoPanel.xaml</DependentUpon>
     </Compile>
@@ -70,10 +67,6 @@
       <DependentUpon>CardView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewLogic\MainViewModel.cs" />
-    <Page Include="BiddingWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="CardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
