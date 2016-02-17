@@ -29,18 +29,11 @@ namespace Whist_GUI
         {
             InitializeComponent();
 
-            Player[] players = new Player[]
-            {
-                new Player("Player"),
-                new Player("Comp 1"),
-                new Player("Comp 2"),
-                new Player("Comp 3")
-            };
-            Round round = new Round(players);
+            GameManager gameManager = new GameManager();
 
-            var infoPanelVM = new InfoPanelViewModel(round, round.Players[0]);//round.Teams, round.Players[0], round.Trump, round.GameCase.ToString());
+            var infoPanelVM = new InfoPanelViewModel(gameManager);
             InfoPanel.DataContext = infoPanelVM;
-            model = new BaseGameViewModel(round, infoPanelVM);
+            model = new BaseGameViewModel(gameManager, infoPanelVM);
 
             //Hand.DataContext = model.HandVM;
             Whist.DataContext = model;
