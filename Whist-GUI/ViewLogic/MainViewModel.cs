@@ -58,6 +58,10 @@ namespace Whist_GUI.ViewLogic
         {
             popup.Close();
             Round.BiddingDoAction(action);
+            while(Round.InBiddingPhase && Round.CurrentPlayer != gameManager.HumanPlayer)
+            {
+                Round.BiddingDoAction(SimpleBiddingAI.GetAction(Round.CurrentPlayer, Round.BiddingGetPossibleActions(), Round.Trump));
+            }
             if (Round.InBiddingPhase)
                 PopActionWindow();
             else
@@ -134,8 +138,12 @@ namespace Whist_GUI.ViewLogic
         {
             gameManager.StartNewRound();
             whistController = null;
-            PopActionWindow();
+            while (Round.InBiddingPhase && Round.CurrentPlayer != gameManager.HumanPlayer)
+            {
+                Round.BiddingDoAction(SimpleBiddingAI.GetAction(Round.CurrentPlayer, Round.BiddingGetPossibleActions(), Round.Trump));
+            }
             NotifyUI();
+            PopActionWindow();
         }
 
         public void NotifyUI()
