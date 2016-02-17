@@ -12,7 +12,7 @@ namespace WhistTest
         private List<Player> players = new List<Player>();
 
         //TODO: actions testen voor third en fourth player
-        //TODO: alone(after someone asked and all the rest passed), choose trump(hearts, clubs, diamonds, spades) when abondance or solo, and optionally no choose trump when solo slim
+        //TODO: alone(after someone asked and all the rest passed), and no choose trump when solo slim(this is done, only pass shouldn't be possible...)
 
         private void createPlayers()
         {
@@ -315,6 +315,58 @@ namespace WhistTest
         }
 
         [TestMethod]
+        public void Test_Valid_And_Invalid_Actions_When_ABONDANCE_And_PASS_And_PASS_And_PASS_And_No_TROEL()
+        {
+            SpecialGameCase troel = new Troel();
+            do
+            {
+                createPlayers();    //Need to be sure that it isn't troel, otherwise, if it's troel, tests will fail
+            } while (troel.AfterDealCheck(players.ToArray()));
+            DealAndBidNormal dealAndBid = new DealAndBidNormal(players.ToArray());
+            dealAndBid.DoAction(Action.ABONDANCE);
+            dealAndBid.DoAction(Action.PASS);
+            dealAndBid.DoAction(Action.PASS);
+            dealAndBid.DoAction(Action.PASS);
+            bool containsInvalidAction = false;
+            bool containsActionHEARTS = false;
+            bool containsActionCLUBS = false;
+            bool containsActionDIAMONDS = false;
+            bool containsActionSPADES = false;
+            foreach (Action action in dealAndBid.GetPossibleActions())
+            {
+                if (action == Action.PASS || action == Action.ASK || action == Action.JOIN || action == Action.ABONDANCE || action == Action.MISERIE || action == Action.SOLO || action == Action.SOLOSLIM)
+                {
+                    containsInvalidAction = true;
+                    break;
+                }
+            }
+            foreach (Action action in dealAndBid.GetPossibleActions())
+            {
+                if (action == Action.HEARTS)
+                {
+                    containsActionHEARTS = true;
+                }
+                else if (action == Action.CLUBS)
+                {
+                    containsActionCLUBS = true;
+                }
+                else if (action == Action.DIAMONDS)
+                {
+                    containsActionDIAMONDS = true;
+                }
+                else if (action == Action.SPADES)
+                {
+                    containsActionSPADES = true;
+                }
+            }
+            Assert.IsFalse(containsInvalidAction);
+            Assert.IsTrue(containsActionHEARTS);
+            Assert.IsTrue(containsActionCLUBS);
+            Assert.IsTrue(containsActionDIAMONDS);
+            Assert.IsTrue(containsActionSPADES);
+        }
+
+        [TestMethod]
         public void Test_Valid_And_Invalid_Actions_When_MISERIE_And_No_TROEL()
         {
             SpecialGameCase troel = new Troel();
@@ -492,6 +544,54 @@ namespace WhistTest
         }
 
         [TestMethod]
+        public void Test_Valid_And_Invalid_Actions_When_SOLO_And_PASS_And_PASS_And_PASS()
+        {
+            createPlayers();    //Independent of whether it's troel or not
+            DealAndBidNormal dealAndBid = new DealAndBidNormal(players.ToArray());
+            dealAndBid.DoAction(Action.SOLO);
+            dealAndBid.DoAction(Action.PASS);
+            dealAndBid.DoAction(Action.PASS);
+            dealAndBid.DoAction(Action.PASS);
+            bool containsInvalidAction = false;
+            bool containsActionHEARTS = false;
+            bool containsActionCLUBS = false;
+            bool containsActionDIAMONDS = false;
+            bool containsActionSPADES = false;
+            foreach (Action action in dealAndBid.GetPossibleActions())
+            {
+                if (action == Action.PASS || action == Action.ASK || action == Action.JOIN || action == Action.ABONDANCE || action == Action.MISERIE || action == Action.SOLO || action == Action.SOLOSLIM)
+                {
+                    containsInvalidAction = true;
+                    break;
+                }
+            }
+            foreach (Action action in dealAndBid.GetPossibleActions())
+            {
+                if (action == Action.HEARTS)
+                {
+                    containsActionHEARTS = true;
+                }
+                else if (action == Action.CLUBS)
+                {
+                    containsActionCLUBS = true;
+                }
+                else if (action == Action.DIAMONDS)
+                {
+                    containsActionDIAMONDS = true;
+                }
+                else if (action == Action.SPADES)
+                {
+                    containsActionSPADES = true;
+                }
+            }
+            Assert.IsFalse(containsInvalidAction);
+            Assert.IsTrue(containsActionHEARTS);
+            Assert.IsTrue(containsActionCLUBS);
+            Assert.IsTrue(containsActionDIAMONDS);
+            Assert.IsTrue(containsActionSPADES);
+        }
+
+        [TestMethod]
         public void Test_Valid_And_Invalid_Actions_When_SOLOSLIM()
         {
             createPlayers();    //Independent of whether it's troel or not
@@ -510,6 +610,36 @@ namespace WhistTest
             foreach (Action action in dealAndBid.GetPossibleActions())
             {
                 if (action == Action.PASS)
+                {
+                    containsActionPASS = true;
+                }
+            }
+            Assert.IsFalse(containsInvalidAction);
+            Assert.IsTrue(containsActionPASS);
+        }
+
+        [TestMethod]
+        public void Test_Valid_And_Invalid_Actions_When_SOLOSLIM_And_PASS_And_PASS_And_PASS()
+        {
+            createPlayers();    //Independent of whether it's troel or not
+            DealAndBidNormal dealAndBid = new DealAndBidNormal(players.ToArray());
+            dealAndBid.DoAction(Action.SOLOSLIM);
+            dealAndBid.DoAction(Action.PASS);
+            dealAndBid.DoAction(Action.PASS);
+            dealAndBid.DoAction(Action.PASS);
+            bool containsInvalidAction = false;
+            bool containsActionPASS = false;
+            foreach (Action action in dealAndBid.GetPossibleActions())
+            {
+                if (action == Action.ASK || action == Action.JOIN || action == Action.ABONDANCE || action == Action.MISERIE || action == Action.SOLO || action == Action.SOLOSLIM || action == Action.HEARTS || action == Action.CLUBS || action == Action.DIAMONDS || action == Action.SPADES)
+                {
+                    containsInvalidAction = true;
+                    break;
+                }
+            }
+            foreach (Action action in dealAndBid.GetPossibleActions())
+            {
+                if (action == Action.PASS) //actually this should be impossible(even if it doesn't really pass)
                 {
                     containsActionPASS = true;
                 }
