@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Whist.GameLogic.ControlEntities
 {
-    public abstract class GameController 
+    public abstract class GameController
     {
         protected IReferee referee;
 
@@ -18,7 +18,7 @@ namespace Whist.GameLogic.ControlEntities
         protected int currentPlayer;
 
         public Player CurrentPlayer { get { return players[currentPlayer]; } }
-        public ObservableCollection<Card> Pile { get {return pile; } }
+        public ObservableCollection<Card> Pile { get { return pile; } }
 
         public GameController(Player[] players, IReferee referee)
         {
@@ -38,8 +38,9 @@ namespace Whist.GameLogic.ControlEntities
         }
 
         public abstract bool PlayCard(Card card);
-       
-        protected void nextPlayer() {
+
+        protected void nextPlayer()
+        {
             if (currentPlayer + 1 < players.Length)
                 currentPlayer++;
             else
@@ -47,7 +48,8 @@ namespace Whist.GameLogic.ControlEntities
         }
 
         //is hand over? (all cards played)
-        public bool isEndGame() {
+        public bool isEndGame()
+        {
             if (players[currentPlayer].hand.Count <= 0)
                 return true;
             return false;
@@ -85,7 +87,7 @@ namespace Whist.GameLogic.ControlEntities
             }
         }
 
-        public WhistController(Player[] players, Player FirstPlayer, Suits trump ,IReferee referee) 
+        public WhistController(Player[] players, Player FirstPlayer, Suits trump, IReferee referee)
             : base(players, referee)
         {
             this.trump = trump;
@@ -95,16 +97,21 @@ namespace Whist.GameLogic.ControlEntities
                     currentPlayer = i;
                     break;
                 }
+            CardPlayedByPlayer = new Dictionary<Player, Card>();
+            foreach (Player player in players)
+                CardPlayedByPlayer.Add(player, null);
         }
 
 
         //play a card for current player, returns true if valid play
         public override bool PlayCard(Card card)
         {
-            if (pile.Count <= 0) {
+            if (pile.Count <= 0)
+            {
                 pileOwner = currentPlayer;
                 lead = card;
                 pile.Add(card);
+                CardPlayedByPlayer[CurrentPlayer] = card;
                 CurrentPlayer.hand.Play(card);
                 nextPlayer();
                 return true;
@@ -115,9 +122,11 @@ namespace Whist.GameLogic.ControlEntities
 
             //add card to pile
             pile.Add(CurrentPlayer.hand.Play(card));
+            CardPlayedByPlayer[CurrentPlayer] = card;
 
-            //if card is same suit
-            if (card.Suit == lead.Suit)
+            var pileTrumps = pile.Where(x => x.Suit == trump);
+            //if card is same suit and (there are no trump cards or lead suit is trump)
+            if (card.Suit == lead.Suit && (pileTrumps.Count() == 0 || lead.Suit == Trump))
             {
                 //check cards with same suit by highest number
                 var list = pile.Where(x => x.Suit == lead.Suit);
@@ -126,20 +135,21 @@ namespace Whist.GameLogic.ControlEntities
                     pileOwner = currentPlayer;
                 }
             }
-
-            //if card is of trump suit
-            else if (card.Suit == trump)
+            else if (card.Suit == trump)//if card is of trump suit
+            {
                 //check cards with same suit by highest number
-                if (pile.Where(x => x.Suit == trump).All(crd => (int)crd.Number <= (int)card.Number))
+                if (pileTrumps.Count() == 0 || pileTrumps.All(crd => (int)crd.Number <= (int)card.Number))
                 {
                     pileOwner = currentPlayer;
                 }
+            }
             //else ignore card
             nextPlayer();
             return true;
         }
 
-        public bool IsValidPlay(Card card) {
+        public bool IsValidPlay(Card card)
+        {
             if (!referee.ValidateMove(card, lead, new List<Card>(players[currentPlayer].hand.Cards)))
                 return false;
             return true;
@@ -150,11 +160,14 @@ namespace Whist.GameLogic.ControlEntities
         {
             players[pileOwner].addTrick();
             pile.Clear();
+            foreach (Player player in players)
+                CardPlayedByPlayer[player] = null;
             lead = null;
             currentPlayer = pileOwner;
             return players[pileOwner];
         }
 
-        
+        public Dictionary<Player, Card> CardPlayedByPlayer { get; private set; }
+
     }
 }

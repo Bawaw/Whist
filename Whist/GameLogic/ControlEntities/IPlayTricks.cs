@@ -9,6 +9,7 @@ namespace Whist.GameLogic.ControlEntities
         Player PileOwner { get; }
         Player CurrentPlayer { get; }
         ObservableCollection<Card> Pile { get; }
+        Dictionary<Player, Card> CardPlayedByPlayer { get; }
         bool InTrickPhase { get; }
 
         Player EndTrick();

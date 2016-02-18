@@ -348,7 +348,6 @@ namespace Whist.GameLogic.ControlEntities
                     }
                 case Case.ALONE:
                     {
-                        firstPlayer = playerA;
                         Team teamA = new Team(new Player[] { playerA }, 5);
                         Player[] others = players.Except(teamA.Players).ToArray();
                         Team teamB = new Team(others, 9);
@@ -368,10 +367,12 @@ namespace Whist.GameLogic.ControlEntities
                     {
                         Troel troel = new Troel();
                         teams = troel.Teams(players);
+                        Trump = troel.GetTrump(players);
                         break;
                     }
                 case Case.ABONDANCE:
                     {
+                        firstPlayer = specialGameCases[Case.ABONDANCE].selectedPlayers[0];
                         teams = specialGameCases[Case.ABONDANCE].Teams(players);
                         break;
                     }
@@ -382,11 +383,13 @@ namespace Whist.GameLogic.ControlEntities
                     }
                 case Case.SOLO:
                     {
+                        firstPlayer = specialGameCases[Case.SOLO].selectedPlayers[0];
                         teams = specialGameCases[Case.SOLO].Teams(players);
                         break;
                     }
                 case Case.SOLOSLIM:
                     {
+                        firstPlayer = specialGameCases[Case.SOLOSLIM].selectedPlayers[0];
                         teams = specialGameCases[Case.SOLOSLIM].Teams(players);
                         break;
                     }
