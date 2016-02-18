@@ -37,6 +37,13 @@ namespace Whist_GUI
 
             //Hand.DataContext = model.HandVM;
             Whist.DataContext = model;
+
+            TransformGroup transformGroup = new TransformGroup();
+            RotateTransform rotate1 = new RotateTransform();
+            rotate1.Angle = 90;
+            transformGroup.Children.Add(rotate1);
+            //Comp1SingleCard.i
+            //ImageBrush brush = new ImageBrush("Textures\red_back.png");
         }
 
         private void Window_Closed(object sender, EventArgs e)
