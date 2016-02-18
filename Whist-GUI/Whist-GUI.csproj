@@ -55,9 +55,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BiddingWindow.xaml.cs">
-      <DependentUpon>BiddingWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="InfoPanel.xaml.cs">
       <DependentUpon>InfoPanel.xaml</DependentUpon>
     </Compile>
@@ -70,10 +67,6 @@
       <DependentUpon>CardView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewLogic\MainViewModel.cs" />
-    <Page Include="BiddingWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="CardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -209,6 +202,17 @@
     <Resource Include="Textures\DIAMONDS.png" />
     <Resource Include="Textures\HEARTS.png" />
     <Resource Include="Textures\SPADES.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\TrumpBoard.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\Board.png" />
+    <Resource Include="Textures\Chains.png" />
+    <Resource Include="Textures\Title2.png" />
+    <Resource Include="Textures\Wood_TitleBar.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

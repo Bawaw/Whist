@@ -14,8 +14,21 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist_GUI.ViewLogic
 {
+    public enum GameState { BIDDING, PLAYING }
     public class BaseGameViewModel : INotifyPropertyChanged
     {
+        private GameState currentGameState;
+        public GameState CurrentGameState { get { return currentGameState; }
+            private set {
+                if (value != currentGameState)
+                {
+                    currentGameState = value;
+                    if(GameStateChanged != null)
+                        GameStateChanged(value);
+                }
+        } }
+
+        private Round round;
         private GameManager gameManager;
         private Round Round
         {
@@ -33,39 +46,31 @@ namespace Whist_GUI.ViewLogic
         public ObservableCollection<Card> Comp2Cards { get { return Round.Players.Where(p => p.name == "Comp 2").Single().hand.Cards; } }
         public ObservableCollection<Card> Comp3Cards { get { return Round.Players.Where(p => p.name == "Comp 3").Single().hand.Cards; } }
 
+        public delegate void IsInMode(GameState gameState);
+
         public event PropertyChangedEventHandler PropertyChanged;
+        public event IsInMode GameStateChanged;
 
         public BaseGameViewModel(GameManager gameManager, InfoPanelViewModel infoPanelVM)
         {
             this.gameManager = gameManager;
             this.infoPanelVM = infoPanelVM;
             HandVM = new HandViewModel(this);
-            PopActionWindow();
+            CurrentGameState = GameState.BIDDING;
         }
 
-        Window popup;
-
-        public void PopActionWindow()
-        {
-            if (Round.InBiddingPhase)
-            {
-                popup = new BiddingWindow(BiddingActions, this);
-                popup.Show();
-            }
-        }
 
         public void ChooseAction(Action action)
         {
-            popup.Close();
-            Round.BiddingDoAction(action);
-            while(Round.InBiddingPhase && Round.CurrentPlayer != gameManager.HumanPlayer)
+            round.BiddingDoAction(action);
+            while (Round.InBiddingPhase && Round.CurrentPlayer != gameManager.HumanPlayer)
             {
                 Round.BiddingDoAction(SimpleBiddingAI.GetAction(Round.CurrentPlayer, Round.BiddingGetPossibleActions(), Round.Trump));
             }
-            if (Round.InBiddingPhase)
-                PopActionWindow();
-            else
+            if (!round.InBiddingPhase) {
                 EndBiddingRound();
+                    CurrentGameState = GameState.PLAYING;
+                }
             infoPanelVM.PropChanged();
         }
 

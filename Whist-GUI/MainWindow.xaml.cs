@@ -34,9 +34,11 @@ namespace Whist_GUI
             var infoPanelVM = new InfoPanelViewModel(gameManager);
             InfoPanel.DataContext = infoPanelVM;
             model = new BaseGameViewModel(gameManager, infoPanelVM);
+            model.GameStateChanged += start_end_InitialBiddingPhase;
 
-            //Hand.DataContext = model.HandVM;
             Whist.DataContext = model;
+            BiddingView.DataContext = new BiddingViewModel(model.BiddingActions, model);
+
 
             TransformGroup transformGroup = new TransformGroup();
             RotateTransform rotate1 = new RotateTransform();
@@ -44,6 +46,13 @@ namespace Whist_GUI
             transformGroup.Children.Add(rotate1);
             //Comp1SingleCard.i
             //ImageBrush brush = new ImageBrush("Textures\red_back.png");
+        }
+
+        private void start_end_InitialBiddingPhase(GameState gameState) {
+            if (gameState == GameState.BIDDING)
+                popup.IsOpen = true;
+            else
+                popup.IsOpen = false;
         }
 
         private void Window_Closed(object sender, EventArgs e)

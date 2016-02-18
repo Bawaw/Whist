@@ -25,16 +25,9 @@ namespace Whist_GUI.ViewLogic
             get;
             private set;
         }
-        /*
-        public Action ChosenAction
-        {
-            get;
-            private set;
-        }*/
-
+        
         private void ReturnResult(Action action)
         {
-            //ChosenAction = action;
             baseVM.ChooseAction(action);
         }
 
