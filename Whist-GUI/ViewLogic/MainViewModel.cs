@@ -27,8 +27,7 @@ namespace Whist_GUI.ViewLogic
                         GameStateChanged(value);
                 }
         } }
-
-        private Round round;
+        
         private GameManager gameManager;
         private Round Round
         {
@@ -62,12 +61,12 @@ namespace Whist_GUI.ViewLogic
 
         public void ChooseAction(Action action)
         {
-            round.BiddingDoAction(action);
+            Round.BiddingDoAction(action);
             while (Round.InBiddingPhase && Round.CurrentPlayer != gameManager.HumanPlayer)
             {
                 Round.BiddingDoAction(SimpleBiddingAI.GetAction(Round.CurrentPlayer, Round.BiddingGetPossibleActions(), Round.Trump));
             }
-            if (!round.InBiddingPhase) {
+            if (!Round.InBiddingPhase) {
                 EndBiddingRound();
                     CurrentGameState = GameState.PLAYING;
                 }
@@ -140,19 +139,19 @@ namespace Whist_GUI.ViewLogic
         }
 
         public ObservableCollection<Card> GetCurrentPlayerCards() {
-            return Round.CurrentPlayer.hand.Cards;
+            return gameManager.HumanPlayer.hand.Cards;
         }
 
         public void StartNewRound()
         {
             gameManager.StartNewRound();
+            CurrentGameState = GameState.BIDDING;
             whistController = null;
             while (Round.InBiddingPhase && Round.CurrentPlayer != gameManager.HumanPlayer)
             {
                 Round.BiddingDoAction(SimpleBiddingAI.GetAction(Round.CurrentPlayer, Round.BiddingGetPossibleActions(), Round.Trump));
             }
             NotifyUI();
-            PopActionWindow();
         }
 
         public void NotifyUI()

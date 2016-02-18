@@ -38,7 +38,7 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
             <Grid Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}" >
                 <Viewport3D Camera="{StaticResource MainCamera}" >
-                <!-- Button on 3D -->
+                    <!-- Button on 3D -->
                     <Viewport2DVisual3D Transform="{StaticResource RotationAngle}">
                         <!-- The Geometry, Material, and Visual for the Viewport2DVisual3D -->
                         <Viewport2DVisual3D.Geometry>
@@ -58,40 +58,40 @@
                         <ModelVisual3D Content="{StaticResource GeneralLighting}" />
                     </ModelVisual3D>
                 </Viewport3D>
-            <ItemsControl ItemsSource="{Binding Pile}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                <ItemsControl ItemsSource="{Binding Pile}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
                             <Viewport3D Height="80" Width="80" Camera="{StaticResource MainCamera}">
-                            <!-- Button on 3D -->
+                                <!-- Button on 3D -->
                                 <Viewport2DVisual3D Transform="{StaticResource RotationAngle}">
 
-                                <!-- The Geometry, Material, and Visual for the Viewport2DVisual3D -->
-                                <Viewport2DVisual3D.Geometry>
+                                    <!-- The Geometry, Material, and Visual for the Viewport2DVisual3D -->
+                                    <Viewport2DVisual3D.Geometry>
                                         <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0" TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
-                                </Viewport2DVisual3D.Geometry>
+                                    </Viewport2DVisual3D.Geometry>
 
-                                <Viewport2DVisual3D.Material>
-                                    <DiffuseMaterial>
-                                        <DiffuseMaterial.Brush>
-                                             <ImageBrush ImageSource = "{Binding Converter={StaticResource CardConverter}}"  />
-                                        </DiffuseMaterial.Brush>
-                                    </DiffuseMaterial>
-                                </Viewport2DVisual3D.Material>
-                            </Viewport2DVisual3D>
+                                    <Viewport2DVisual3D.Material>
+                                        <DiffuseMaterial>
+                                            <DiffuseMaterial.Brush>
+                                                <ImageBrush ImageSource = "{Binding Converter={StaticResource CardConverter}}"  />
+                                            </DiffuseMaterial.Brush>
+                                        </DiffuseMaterial>
+                                    </Viewport2DVisual3D.Material>
+                                </Viewport2DVisual3D>
 
-                            <!-- Lights -->
-                            <ModelVisual3D>
+                                <!-- Lights -->
+                                <ModelVisual3D>
                                     <ModelVisual3D Content="{StaticResource GeneralLighting}" />
                                 </ModelVisual3D>
                             </Viewport3D>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
                 <ItemsControl x:Name="Comp1SingleCard" ItemsSource="{Binding Comp1Cards}">
                     <ItemsControl.ItemsPanel>
@@ -146,8 +146,8 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                
-              <!--<ItemsControl ItemsSource="{Binding Comp1Cards}">
+
+                <!--<ItemsControl ItemsSource="{Binding Comp1Cards}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="150, 40, 0, 0"/>
@@ -300,11 +300,11 @@
                             </Image>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                </ItemsControl>-->
                 <DockPanel x:Name="PopupAnchor" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Popup x:Name="popup" IsOpen = "True" PlacementTarget="{Binding ElementName=PopupAnchor}" Placement="Center" Width="190" HorizontalAlignment="Center">
                         <Grid>
-                                <ItemsControl x:Name="BiddingView" ItemsSource="{Binding BiddingActions}">
+                            <ItemsControl x:Name="BiddingView" ItemsSource="{Binding BiddingActions}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Vertical"/>
@@ -323,7 +323,7 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-            </Grid>
+                        </Grid>
                     </Popup>
                 </DockPanel>
             </Grid>
@@ -342,9 +342,9 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        
 
-        <!--<StackPanel x:Name="Enemy_1">
+        <!--
+         <StackPanel x:Name="Enemy_1">
             <Label Content="{Binding Name}" />
             <Label Content="{Binding Score}" />
             <ItemsControl ItemsSource="{Binding Cards}"  >
