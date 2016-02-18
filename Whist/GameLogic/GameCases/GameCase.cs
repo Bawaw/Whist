@@ -140,7 +140,25 @@ namespace Whist.GameLogic.GameCases
                 teamB.applyScore(8);
             }
         }
-
+        
+        public Suits GetTrump(Player[] players)
+        {
+            foreach (Player player in players)
+            {
+                var aces = player.hand.Cards.Where(c => c.Number == Numbers.ACE);
+                if (aces.Count() == 1)
+                {
+                    return aces.Single().Suit;
+                    break;
+                }
+                if (aces.Count() == 4)
+                {
+                    return Suits.HEARTS;
+                    break;
+                }
+            }
+            return Suits.HEARTS;
+        }
     }
 
     public class Abondance : SpecialGameCase

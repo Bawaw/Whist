@@ -106,10 +106,14 @@ namespace Whist_GUI.ViewLogic
                 }
                 if (!Round.TrickInProgress)
                 {
+                    foreach (Player p in Round.Players)
+                        System.Console.WriteLine(p.name + ": " + whistController.CardPlayedByPlayer[p]);
                     MessageBoxResult result = MessageBox.Show(Round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
                     Round.EndTrick();
                 }
             }
+            foreach (Player p in Round.Players)
+                System.Console.WriteLine(p.name + ": " + whistController.CardPlayedByPlayer[p]);
 
             if (!Round.InTrickPhase)
             {
