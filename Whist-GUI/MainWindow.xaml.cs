@@ -29,18 +29,12 @@ namespace Whist_GUI
         {
             InitializeComponent();
 
-            Player[] players = new Player[]
-            {
-                new Player("Player"),
-                new Player("Comp 1"),
-                new Player("Comp 2"),
-                new Player("Comp 3")
-            };
-            Round round = new Round(players);
+            GameManager gameManager = new GameManager();
 
-            var infoPanelVM = new InfoPanelViewModel(round, round.Players[0]);//round.Teams, round.Players[0], round.Trump, round.GameCase.ToString());
+            var infoPanelVM = new InfoPanelViewModel(gameManager);
             InfoPanel.DataContext = infoPanelVM;
-            model = new BaseGameViewModel(round, infoPanelVM);
+            //round
+            model = new BaseGameViewModel(gameManager, infoPanelVM);
             model.GameStateChanged += start_end_InitialBiddingPhase;
 
             Whist.DataContext = model;
@@ -52,6 +46,13 @@ namespace Whist_GUI
                 popup.IsOpen = true;
             else
                 popup.IsOpen = false;
+
+            TransformGroup transformGroup = new TransformGroup();
+            RotateTransform rotate1 = new RotateTransform();
+            rotate1.Angle = 90;
+            transformGroup.Children.Add(rotate1);
+            //Comp1SingleCard.i
+            //ImageBrush brush = new ImageBrush("Textures\red_back.png");
         }
 
         private void Window_Closed(object sender, EventArgs e)

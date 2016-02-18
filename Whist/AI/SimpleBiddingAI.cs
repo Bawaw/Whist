@@ -7,12 +7,28 @@ using Whist.GameLogic;
 
 namespace Whist.AI
 {
-    class SimpleBiddingAI
+    public class SimpleBiddingAI
     {
-        public Action GetAction(Player player, IEnumerable<Action> possibleActions, Suits trump)
+        public static Action GetAction(Player player, IEnumerable<Action> possibleActions, Suits trump)
         {
             int handStrength = GetHandStrength(player, trump);
 
+            if (!possibleActions.Contains(Action.PASS))
+            {
+                switch (trump)
+                {
+                    case Suits.HEARTS:
+                        return Action.HEARTS;
+                    case Suits.DIAMONDS:
+                        return Action.DIAMONDS;
+                    case Suits.SPADES:
+                        return Action.SPADES;
+                    case Suits.CLUBS:
+                        return Action.CLUBS;
+                    default:
+                        return 0;
+                }
+            }
 
             if (handStrength >= 9)
             {
@@ -35,7 +51,7 @@ namespace Whist.AI
             return Action.PASS;
         }
 
-        private int GetHandStrength(Player player, Suits trump)
+        private static int GetHandStrength(Player player, Suits trump)
         {
             int handStrength = 0;
 
