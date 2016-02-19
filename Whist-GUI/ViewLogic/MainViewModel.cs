@@ -27,17 +27,21 @@ namespace Whist_GUI.ViewLogic
                         GameStateChanged(value);
                 }
         } }
-        
+
         private GameManager gameManager;
         private Round Round
         {
             get { return gameManager.Round; }
         }
+
         private InfoPanelViewModel infoPanelVM;
+
+        private TrickEndViewModel trickEndVM;
 
         public ObservableCollection<Card> Pile { get { return whistController?.Pile; } }
         public HandViewModel HandVM { get; private set; }
         public Suits Trump { get { return Round.Trump; } }
+        public Player CurrentPlayer { private set; get; }
 
         private IPlayTricks whistController;
 
@@ -50,27 +54,33 @@ namespace Whist_GUI.ViewLogic
         public event PropertyChangedEventHandler PropertyChanged;
         public event IsInMode GameStateChanged;
 
-        public BaseGameViewModel(GameManager gameManager, InfoPanelViewModel infoPanelVM)
+        public BaseGameViewModel(GameManager gameManager, InfoPanelViewModel infoPanelVM, TrickEndViewModel trickEndVM)
         {
             this.gameManager = gameManager;
             this.infoPanelVM = infoPanelVM;
+            this.trickEndVM = trickEndVM;
             HandVM = new HandViewModel(this);
             CurrentGameState = GameState.BIDDING;
         }
 
-
-        public void ChooseAction(Action action)
+        public async void ChooseAction(Action action)
         {
             Round.BiddingDoAction(action);
             while (Round.InBiddingPhase && Round.CurrentPlayer != gameManager.HumanPlayer)
-            {
-                Round.BiddingDoAction(SimpleBiddingAI.GetAction(Round.CurrentPlayer, Round.BiddingGetPossibleActions(), Round.Trump));
-            }
+                await AsyncBidAI();
+
             if (!Round.InBiddingPhase) {
                 EndBiddingRound();
                     CurrentGameState = GameState.PLAYING;
                 }
             infoPanelVM.PropChanged();
+        }
+
+        Task AsyncBidAI()
+        {
+            return Task.Run(() => {
+                Round.BiddingDoAction(SimpleBiddingAI.GetAction(Round.CurrentPlayer, Round.BiddingGetPossibleActions(), Round.Trump));
+            }); 
         }
 
         public void EndBiddingRound()
@@ -90,12 +100,13 @@ namespace Whist_GUI.ViewLogic
             get { return Round.BiddingGetPossibleActions(); }
         }
 
-        public void PlayCard(Card card) {
-
+        public async void PlayCard(Card card) {
+            CurrentPlayer = Round.CurrentPlayer;
             whistController.PlayCard(card);
             if (!Round.TrickInProgress)
             {
                 MessageBoxResult result = MessageBox.Show(Round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
+                trickEndVM.Winner = Round.PileOwner.name;
                 Round.EndTrick();
             }
 
@@ -105,19 +116,15 @@ namespace Whist_GUI.ViewLogic
             {
                 while (Round.TrickInProgress && Round.CurrentPlayer != null && Round.CurrentPlayer != gameManager.HumanPlayer)
                 {
-                    var aiCard = SimpleGameAI.GetMove(Round);
-                    Round.PlayCard(aiCard);
+                    await AsyncPlayCardAI();
                 }
                 if (!Round.TrickInProgress)
                 {
-                    foreach (Player p in Round.Players)
-                        System.Console.WriteLine(p.name + ": " + whistController.CardPlayedByPlayer[p]);
                     MessageBoxResult result = MessageBox.Show(Round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
+                    trickEndVM.Winner = Round.PileOwner.name;
                     Round.EndTrick();
                 }
             }
-            foreach (Player p in Round.Players)
-                System.Console.WriteLine(p.name + ": " + whistController.CardPlayedByPlayer[p]);
 
             if (!Round.InTrickPhase)
             {
@@ -130,6 +137,16 @@ namespace Whist_GUI.ViewLogic
                 StartNewRound();
             }
             NotifyUI();
+        }
+
+        Task AsyncPlayCardAI()
+        {
+            return Task.Run(() => {
+                Thread.Sleep(600);
+                var aiCard = SimpleGameAI.GetMove(Round);
+                CurrentPlayer = Round.CurrentPlayer;
+                App.Current.Dispatcher.Invoke(() => Round.PlayCard(aiCard));
+            });
         }
 
         public bool IsValidPlay(Card card) {
@@ -147,6 +164,8 @@ namespace Whist_GUI.ViewLogic
             gameManager.StartNewRound();
             CurrentGameState = GameState.BIDDING;
             whistController = null;
+            CurrentGameState = GameState.BIDDING;
+            NotifyUI();
             while (Round.InBiddingPhase && Round.CurrentPlayer != gameManager.HumanPlayer)
             {
                 Round.BiddingDoAction(SimpleBiddingAI.GetAction(Round.CurrentPlayer, Round.BiddingGetPossibleActions(), Round.Trump));
@@ -163,6 +182,7 @@ namespace Whist_GUI.ViewLogic
                 PropertyChanged(this, new PropertyChangedEventArgs("Trump"));
                 PropertyChanged(this, new PropertyChangedEventArgs("Round"));
                 PropertyChanged(this, new PropertyChangedEventArgs("infoPanelVM"));
+                PropertyChanged(this, new PropertyChangedEventArgs("trickEndVM"));
             }
             infoPanelVM.PropChanged();
         }

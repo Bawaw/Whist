@@ -33,19 +33,16 @@ namespace Whist_GUI
 
             var infoPanelVM = new InfoPanelViewModel(gameManager);
             InfoPanel.DataContext = infoPanelVM;
-            model = new BaseGameViewModel(gameManager, infoPanelVM);
+
+            var trickEndVM = new TrickEndViewModel();
+            trickEndPopup.DataContext = trickEndVM;
+
+            //round
+            model = new BaseGameViewModel(gameManager, infoPanelVM, trickEndVM);
             model.GameStateChanged += start_end_InitialBiddingPhase;
 
             Whist.DataContext = model;
             BiddingView.DataContext = new BiddingViewModel(model.BiddingActions, model);
-
-
-            TransformGroup transformGroup = new TransformGroup();
-            RotateTransform rotate1 = new RotateTransform();
-            rotate1.Angle = 90;
-            transformGroup.Children.Add(rotate1);
-            //Comp1SingleCard.i
-            //ImageBrush brush = new ImageBrush("Textures\red_back.png");
         }
 
         private void start_end_InitialBiddingPhase(GameState gameState) {
@@ -53,6 +50,13 @@ namespace Whist_GUI
                 popup.IsOpen = true;
             else
                 popup.IsOpen = false;
+
+            //TransformGroup transformGroup = new TransformGroup();
+            //RotateTransform rotate1 = new RotateTransform();
+            //rotate1.Angle = 90;
+            //transformGroup.Children.Add(rotate1);
+            //Comp1SingleCard.i
+            //ImageBrush brush = new ImageBrush("Textures\red_back.png");
         }
 
         private void Window_Closed(object sender, EventArgs e)

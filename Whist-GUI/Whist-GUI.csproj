@@ -55,18 +55,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\PileViewPortConverter.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="InfoPanel.xaml.cs">
       <DependentUpon>InfoPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewLogic\BiddingViewModel.cs" />
     <Compile Include="ViewLogic\InfoPanelViewModel.cs" />
-    <Compile Include="TrumpImageConverter.cs">
+    <Compile Include="Converters\TrumpImageConverter.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="CardView.xaml.cs">
       <DependentUpon>CardView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewLogic\MainViewModel.cs" />
+    <Compile Include="ViewLogic\TrickEndViewModel.cs" />
     <Page Include="CardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -83,7 +87,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CardImageConverter.cs">
+    <Compile Include="Converters\CardImageConverter.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
