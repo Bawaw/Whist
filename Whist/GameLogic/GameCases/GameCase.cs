@@ -149,12 +149,10 @@ namespace Whist.GameLogic.GameCases
                 if (aces.Count() == 1)
                 {
                     return aces.Single().Suit;
-                    break;
                 }
                 if (aces.Count() == 4)
                 {
                     return Suits.HEARTS;
-                    break;
                 }
             }
             return Suits.HEARTS;

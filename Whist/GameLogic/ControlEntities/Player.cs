@@ -9,13 +9,15 @@ namespace Whist.GameLogic.ControlEntities
     public class Player
     {
         public string name;
+        public int Number { private set; get; }
         private int tricks;
         public int Tricks { get { return tricks; } }
         public HandCollection hand;
         public int score;
 
-        public Player(string name)
+        public Player(string name,int number)
         {
+            this.Number = number;
             this.name = name;
             this.hand = new HandCollection();
         }

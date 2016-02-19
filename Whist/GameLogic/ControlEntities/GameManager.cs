@@ -14,10 +14,10 @@ namespace Whist.GameLogic.ControlEntities
         {
             players = new Player[]
             {
-                new Player("Player"),
-                new Player("Comp 1"),
-                new Player("Comp 2"),
-                new Player("Comp 3")
+                new Player("Player",1),
+                new Player("Comp 1",2),
+                new Player("Comp 2",3),
+                new Player("Comp 3",4)
             };
             HumanPlayer = players[0];
             Round = new Round(players);

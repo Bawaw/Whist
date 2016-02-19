@@ -39,6 +39,7 @@ namespace Whist_GUI.ViewLogic
         public ObservableCollection<Card> Pile { get { return whistController?.Pile; } }
         public HandViewModel HandVM { get; private set; }
         public Suits Trump { get { return Round.Trump; } }
+        public Player CurrentPlayer { private set; get; }
 
         private IPlayTricks whistController;
 
@@ -59,15 +60,24 @@ namespace Whist_GUI.ViewLogic
             CurrentGameState = GameState.BIDDING;
         }
 
-        public void ChooseAction(Action action)
+        public async void ChooseAction(Action action)
         {
             Round.BiddingDoAction(action);
-            //infoPanelVM.propChanged();
+            while (Round.InBiddingPhase && Round.CurrentPlayer != gameManager.HumanPlayer)
+                await AsyncBidAI();
+
             if (!Round.InBiddingPhase) {
                 EndBiddingRound();
-                CurrentGameState = GameState.PLAYING;
-            }
+                    CurrentGameState = GameState.PLAYING;
+                }
             infoPanelVM.PropChanged();
+        }
+
+        Task AsyncBidAI()
+        {
+            return Task.Run(() => {
+                Round.BiddingDoAction(SimpleBiddingAI.GetAction(Round.CurrentPlayer, Round.BiddingGetPossibleActions(), Round.Trump));
+            }); 
         }
 
         public void EndBiddingRound()
@@ -87,8 +97,8 @@ namespace Whist_GUI.ViewLogic
             get { return Round.BiddingGetPossibleActions(); }
         }
 
-        public void PlayCard(Card card) {
-
+        public async void PlayCard(Card card) {
+            CurrentPlayer = Round.CurrentPlayer;
             whistController.PlayCard(card);
             if (!Round.TrickInProgress)
             {
@@ -102,8 +112,7 @@ namespace Whist_GUI.ViewLogic
             {
                 while (Round.TrickInProgress && Round.CurrentPlayer != null && Round.CurrentPlayer != gameManager.HumanPlayer)
                 {
-                    var aiCard = SimpleGameAI.GetMove(Round);
-                    Round.PlayCard(aiCard);
+                    await AsyncPlayCardAI();
                 }
                 if (!Round.TrickInProgress)
                 {
@@ -125,6 +134,16 @@ namespace Whist_GUI.ViewLogic
             NotifyUI();
         }
 
+        Task AsyncPlayCardAI()
+        {
+            return Task.Run(() => {
+                Thread.Sleep(600);
+                var aiCard = SimpleGameAI.GetMove(Round);
+                CurrentPlayer = Round.CurrentPlayer;
+                App.Current.Dispatcher.Invoke(() => Round.PlayCard(aiCard));
+            });
+        }
+
         public bool IsValidPlay(Card card) {
             if (!Round.InTrickPhase)
                 return false;
@@ -132,12 +151,13 @@ namespace Whist_GUI.ViewLogic
         }
 
         public ObservableCollection<Card> GetCurrentPlayerCards() {
-            return Round.CurrentPlayer.hand.Cards;
+            return gameManager.HumanPlayer.hand.Cards;
         }
 
         public void StartNewRound()
         {
             gameManager.StartNewRound();
+            CurrentGameState = GameState.BIDDING;
             whistController = null;
             CurrentGameState = GameState.BIDDING;
             NotifyUI();
