@@ -11,6 +11,7 @@
         <local:TrumpImageConverter x:Key="TrumpConverter" />
         <local:ViewPortConverter x:Key="ViewPortConverter" />
         <local:ViewPortConverter2 x:Key="ViewPortConverter2" />
+        <local:ViewPortConverter3 x:Key="ViewPortConverter3" />
         <local:TestConverter x:Key="TestConverter" />
         <FontFamily x:Key="Western" >/Fonts/#Carnivalee Freakshow</FontFamily>
         <Model3DGroup x:Key="GeneralLighting">
@@ -64,15 +65,15 @@
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Grid HorizontalAlignment="Center" VerticalAlignment="Center" >
-                                    <Grid.RowDefinitions>
+                                <Grid.RowDefinitions>
                                         <RowDefinition Height="100"/>
                                         <RowDefinition Height="100"/>
                                         <RowDefinition Height="100"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
                                         <ColumnDefinition Width="100"/>
-                                        <ColumnDefinition Width="100"/>
-                                        <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="100"/>
                                     </Grid.ColumnDefinitions>
                                 </Grid>
                         </ItemsPanelTemplate>
@@ -100,12 +101,12 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Viewport3D Camera="{StaticResource MainCamera}">
-                                <!--Viewport3D.BindingGroup>
+                                <Viewport3D.BindingGroup>
                                     <MultiBinding Converter="{StaticResource ViewPortConverter}">
                                         <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Grid}"/>
                                         <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}"/>
                                         </MultiBinding>
-                                </-->
+                                    </Viewport3D.BindingGroup>
                                 <Viewport2DVisual3D >
                                     <Viewport2DVisual3D.Geometry>
                                         <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0" TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
@@ -114,7 +115,14 @@
                                     <Viewport2DVisual3D.Material>
                                         <DiffuseMaterial>
                                             <DiffuseMaterial.Brush>
-                                                <ImageBrush ImageSource = "{Binding Converter={StaticResource CardConverter}}"/>
+                                                <ImageBrush ImageSource = "{Binding Converter={StaticResource CardConverter}}">
+                                                    <ImageBrush.RelativeTransform>
+                                                        <MultiBinding Converter="{StaticResource ViewPortConverter3}">
+                                                                    <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Grid}"/>
+                                                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Viewport3D}"/>
+                                                        </MultiBinding>
+                                                    </ImageBrush.RelativeTransform>
+                                                </ImageBrush>
                                             </DiffuseMaterial.Brush>
                                         </DiffuseMaterial>
                                     </Viewport2DVisual3D.Material>

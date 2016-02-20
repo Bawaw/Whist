@@ -12,3 +12,4 @@ C:\Users\Luc Reintjens\Source\Repos\Whist\Whist\bin\Debug\Whist.pdb
 C:\Users\Luc Reintjens\Source\Repos\Whist\Whist\obj\Debug\Whist.csprojResolveAssemblyReference.cache
 C:\Users\Luc Reintjens\Source\Repos\Whist\Whist\obj\Debug\Whist.exe
 C:\Users\Luc Reintjens\Source\Repos\Whist\Whist\obj\Debug\Whist.pdb
+D:\Projects\Whist\Whist\obj\Debug\Whist.csprojResolveAssemblyReference.cache
