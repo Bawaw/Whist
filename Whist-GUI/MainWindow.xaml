@@ -9,10 +9,9 @@
     <Window.Resources>
         <local:CardImageConverter x:Key="CardConverter" />
         <local:TrumpImageConverter x:Key="TrumpConverter" />
-        <local:ViewPortConverter x:Key="ViewPortConverter" />
-        <local:ViewPortConverter2 x:Key="ViewPortConverter2" />
-        <local:ViewPortConverter3 x:Key="ViewPortConverter3" />
-        <local:TestConverter x:Key="TestConverter" />
+        <local:ColumnConverter x:Key="ColumnConverter" />
+        <local:RowConverter x:Key="RowConverter" />
+        <local:AngleConverter x:Key="AngleConverter" />
         <FontFamily x:Key="Western" >/Fonts/#Carnivalee Freakshow</FontFamily>
         <Model3DGroup x:Key="GeneralLighting">
             <AmbientLight Color="#ffb347"/>
@@ -64,16 +63,16 @@
                 <ItemsControl ItemsSource="{Binding Pile}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center" >
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
+                                        <RowDefinition Height="145.2"/>
                                         <RowDefinition Height="100"/>
-                                        <RowDefinition Height="100"/>
-                                        <RowDefinition Height="100"/>
+                                        <RowDefinition Height="145.2"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="145.2"/>
                                     <ColumnDefinition Width="100"/>
-                                        <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="145.2"/>
                                     </Grid.ColumnDefinitions>
                                 </Grid>
                         </ItemsPanelTemplate>
@@ -82,7 +81,7 @@
                         <Style>
                             <Setter Property="Grid.Column" >
                                 <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource ViewPortConverter}">
+                                    <MultiBinding Converter="{StaticResource ColumnConverter}">
                                         <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Grid}"/>
                                         <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}"/>
                                     </MultiBinding>
@@ -90,7 +89,7 @@
                              </Setter>
                             <Setter Property="Grid.Row" >
                                 <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource ViewPortConverter2}">
+                                    <MultiBinding Converter="{StaticResource RowConverter}">
                                         <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Grid}"/>
                                         <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}"/>
                                     </MultiBinding>
@@ -100,13 +99,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Viewport3D Camera="{StaticResource MainCamera}">
-                                <Viewport3D.BindingGroup>
-                                    <MultiBinding Converter="{StaticResource ViewPortConverter}">
-                                        <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Grid}"/>
-                                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}"/>
-                                        </MultiBinding>
-                                    </Viewport3D.BindingGroup>
+                            <Viewport3D Camera="{StaticResource MainCamera}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="145.2" Width="145.2" >
                                 <Viewport2DVisual3D >
                                     <Viewport2DVisual3D.Geometry>
                                         <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0" TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
@@ -115,9 +108,9 @@
                                     <Viewport2DVisual3D.Material>
                                         <DiffuseMaterial>
                                             <DiffuseMaterial.Brush>
-                                                <ImageBrush ImageSource = "{Binding Converter={StaticResource CardConverter}}">
+                                                <ImageBrush Stretch="Uniform" ImageSource = "{Binding Converter={StaticResource CardConverter}}">
                                                     <ImageBrush.RelativeTransform>
-                                                        <MultiBinding Converter="{StaticResource ViewPortConverter3}">
+                                                        <MultiBinding Converter="{StaticResource AngleConverter}">
                                                                     <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Grid}"/>
                                                                     <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Viewport3D}"/>
                                                         </MultiBinding>

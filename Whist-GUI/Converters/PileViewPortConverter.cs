@@ -14,10 +14,8 @@ using Whist_GUI.ViewLogic;
 
 namespace Whist_GUI
 {
-    public class ViewPortConverter : IMultiValueConverter
+    public class ColumnConverter : IMultiValueConverter
     {
-        public const float height = 145.2f;
-        public const float width = 100;
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {    
@@ -49,7 +47,7 @@ namespace Whist_GUI
         }
     }
 
-    public class ViewPortConverter2 : IMultiValueConverter
+    public class RowConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
@@ -82,10 +80,8 @@ namespace Whist_GUI
     }
 
 
-    public class ViewPortConverter3 : IMultiValueConverter
+    public class AngleConverter : IMultiValueConverter
     {
-        public const float HEIGHT = 145.2f;
-        public const float width = 100;
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
