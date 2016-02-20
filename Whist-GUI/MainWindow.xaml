@@ -13,12 +13,12 @@
         <local:RowConverter x:Key="RowConverter" />
         <local:AngleConverter x:Key="AngleConverter" />
         <FontFamily x:Key="Western" >/Fonts/#Carnivalee Freakshow</FontFamily>
+
         <Model3DGroup x:Key="GeneralLighting">
-            <AmbientLight Color="#ffb347"/>
-            <!-- TODO: calculate direction and position-->
-            <SpotLight Color="Yellow" Direction="0 -0.1 -0.3" InnerConeAngle="17" OuterConeAngle="17" Position="0 3 9" />
-        </Model3DGroup>
-        <PerspectiveCamera x:Key="MainCamera" Position="0, 0, 3"/>
+            <AmbientLight Color="Bisque"/>
+        <SpotLight Color="Yellow" Direction="0 -0.1 -0.3" InnerConeAngle="17" OuterConeAngle="17" Position="0 3 9" />
+        </Model3DGroup>  
+        <PerspectiveCamera x:Key="MainCamera" Position="0, 0, 3" />
         <LinearGradientBrush x:Key="UI_Brush" EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FFDCD617" Offset="0"/>
             <GradientStop Color="#FFC2890F" Offset="1"/>
@@ -58,6 +58,51 @@
                     <ModelVisual3D Content="{StaticResource GeneralLighting}" />
                 </Viewport3D>
 
+                <Grid Panel.ZIndex="100" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 380 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Viewport3D Camera="{StaticResource MainCamera}" Height="40" >
+                        <Viewport2DVisual3D >
+                            <Viewport2DVisual3D.Geometry>
+                                <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0"
+                            TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
+                            </Viewport2DVisual3D.Geometry>
+
+                            <Viewport2DVisual3D.Material>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <ImageBrush Stretch="Uniform" ImageSource="Textures/NamePlate.png"/>
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+                            </Viewport2DVisual3D.Material>
+                        </Viewport2DVisual3D>
+                        <ModelVisual3D Content="{StaticResource GeneralLighting}" />
+                    </Viewport3D>
+                    <Viewport3D Camera="{StaticResource MainCamera}" >
+                        <Viewport2DVisual3D >
+                            <Viewport2DVisual3D.Geometry>
+                                <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0"
+                            TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
+                            </Viewport2DVisual3D.Geometry>
+
+                            <Viewport2DVisual3D.Material>
+                                <DiffuseMaterial>
+                                    <DiffuseMaterial.Brush>
+                                        <VisualBrush Stretch="None" >
+                                            <VisualBrush.Visual>
+                                                <Label Content="Player" FontSize="0.18" Foreground="#FFD9D9D9" FontFamily="Monotype Corsiva" />
+                                            </VisualBrush.Visual>
+                                        </VisualBrush>
+                                    </DiffuseMaterial.Brush>
+                                </DiffuseMaterial>
+
+                            </Viewport2DVisual3D.Material>
+                        </Viewport2DVisual3D>
+                        <ModelVisual3D Content="{StaticResource GeneralLighting}" />
+                    </Viewport3D>
+                </Grid>
 
                 <!-- =========================================== PILE =========================================== -->
                 <ItemsControl ItemsSource="{Binding Pile}">
@@ -65,14 +110,14 @@
                         <ItemsPanelTemplate>
                             <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
-                                        <RowDefinition Height="145.2"/>
-                                        <RowDefinition Height="100"/>
-                                        <RowDefinition Height="145.2"/>
+                                        <RowDefinition Height="125.2"/>
+                                        <RowDefinition Height="80"/>
+                                        <RowDefinition Height="125.2"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="145.2"/>
-                                    <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition Width="145.2"/>
+                                    <ColumnDefinition Width="125.2"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="125.2"/>
                                     </Grid.ColumnDefinitions>
                                 </Grid>
                         </ItemsPanelTemplate>

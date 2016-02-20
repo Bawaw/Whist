@@ -220,6 +220,9 @@
     <Resource Include="Textures\Title2.png" />
     <Resource Include="Textures\Wood_TitleBar.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\NamePlate.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
