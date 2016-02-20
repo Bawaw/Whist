@@ -73,7 +73,7 @@ namespace Whist_GUI.ViewLogic
                 EndBiddingRound();
                     CurrentGameState = GameState.PLAYING;
                 }
-            infoPanelVM.PropChanged();
+            NotifyUI();
         }
 
         Task AsyncBidAI()
@@ -109,6 +109,7 @@ namespace Whist_GUI.ViewLogic
                 trickEndVM.Winner = Round.PileOwner.name;
                 Round.EndTrick();
             }
+            NotifyUI();
 
 
             var AI = new SimpleGameAI();
@@ -150,6 +151,8 @@ namespace Whist_GUI.ViewLogic
         }
 
         public bool IsValidPlay(Card card) {
+            if (Round.CurrentPlayer != gameManager.HumanPlayer)
+                return false;
             if (!Round.InTrickPhase)
                 return false;
             return whistController.IsValidPlay(card);
@@ -183,6 +186,7 @@ namespace Whist_GUI.ViewLogic
                 PropertyChanged(this, new PropertyChangedEventArgs("Round"));
                 PropertyChanged(this, new PropertyChangedEventArgs("infoPanelVM"));
                 PropertyChanged(this, new PropertyChangedEventArgs("trickEndVM"));
+                
             }
             infoPanelVM.PropChanged();
         }
