@@ -13,11 +13,13 @@ namespace Whist_GUI
     {
         private GameManager gameManager;
         public event PropertyChangedEventHandler PropertyChanged;
+        private List<string> actionLog;
 
         public InfoPanelViewModel(GameManager gameManager)
         {
             this.gameManager = gameManager;
             Player = gameManager.HumanPlayer;
+            actionLog = new List<string>();
         }
 
         public void PropChanged()
@@ -31,7 +33,21 @@ namespace Whist_GUI
                 PropertyChanged(this, new PropertyChangedEventArgs("GameCase"));
                 PropertyChanged(this, new PropertyChangedEventArgs("Trump"));
                 PropertyChanged(this, new PropertyChangedEventArgs("Round"));
+                PropertyChanged(this, new PropertyChangedEventArgs("ActionLog"));
             }
+        }
+
+        public void AddLineToActionLog(string line)
+        {
+            actionLog.Add(line);
+            if (actionLog.Count > 8)
+                actionLog.RemoveAt(0);
+            PropertyChanged(this, new PropertyChangedEventArgs("ActionLog"));
+        }
+        public void ClearActionLog()
+        {
+            actionLog.Clear();
+            PropertyChanged(this, new PropertyChangedEventArgs("ActionLog"));
         }
 
         private Round Round
@@ -82,6 +98,18 @@ namespace Whist_GUI
                     }
                 }
                 return str;
+            }
+        }
+        public string ActionLog
+        {
+            get
+            {
+                string result = "\n";
+                foreach (string str in actionLog)
+                {
+                    result += str + "\n";
+                }
+                return result;
             }
         }
     }
