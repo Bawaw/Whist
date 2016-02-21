@@ -105,9 +105,10 @@ namespace Whist_GUI.ViewLogic
             whistController.PlayCard(card);
             if (!Round.TrickInProgress)
             {
-                MessageBoxResult result = MessageBox.Show(Round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
-                trickEndVM.Winner = Round.PileOwner.name;
-                Round.EndTrick();
+                //MessageBoxResult result = MessageBox.Show(Round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
+                trickEndVM.Winner = Round.PileOwner.name + " won the trick";
+                trickEndVM.Visibility = "Visible";
+                //Round.EndTrick();
             }
 
 
@@ -120,9 +121,10 @@ namespace Whist_GUI.ViewLogic
                 }
                 if (!Round.TrickInProgress)
                 {
-                    MessageBoxResult result = MessageBox.Show(Round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
-                    trickEndVM.Winner = Round.PileOwner.name;
-                    Round.EndTrick();
+                    //MessageBoxResult result = MessageBox.Show(Round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
+                    trickEndVM.Winner = Round.PileOwner.name + " won the trick";
+                    trickEndVM.Visibility = "Visible";
+                    //Round.EndTrick();
                 }
             }
 
@@ -137,6 +139,12 @@ namespace Whist_GUI.ViewLogic
                 StartNewRound();
             }
             NotifyUI();
+        }
+
+        public void EndTrick()
+        {
+            Round.EndTrick();
+            //NotifyUI();
         }
 
         Task AsyncPlayCardAI()
@@ -185,6 +193,7 @@ namespace Whist_GUI.ViewLogic
                 PropertyChanged(this, new PropertyChangedEventArgs("trickEndVM"));
             }
             infoPanelVM.PropChanged();
+            trickEndVM.PropChanged();
         }
     }
 

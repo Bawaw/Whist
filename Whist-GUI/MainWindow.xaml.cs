@@ -36,6 +36,7 @@ namespace Whist_GUI
 
             var trickEndVM = new TrickEndViewModel();
             trickEndPopup.DataContext = trickEndVM;
+            KeyDown += new KeyEventHandler(HandleEnter);
 
             //round
             model = new BaseGameViewModel(gameManager, infoPanelVM, trickEndVM);
@@ -43,6 +44,15 @@ namespace Whist_GUI
 
             Whist.DataContext = model;
             BiddingView.DataContext = new BiddingViewModel(model.BiddingActions, model);
+        }
+
+        private void HandleEnter(object sender, KeyEventArgs e)
+        {
+            if(ContinueText.Visibility == Visibility.Visible && e.Key == Key.Enter)
+            {
+                ContinueText.Visibility = Visibility.Hidden;
+                model.EndTrick();
+            }
         }
 
         private void start_end_InitialBiddingPhase(GameState gameState) {
