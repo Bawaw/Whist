@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Whist.GameLogic.ControlEntities;
 using Whist.GameLogic;
 
-namespace Whist.AI
+namespace Whist.AIs
 {
     public class SimpleBiddingAI
     {

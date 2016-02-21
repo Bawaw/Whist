@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Whist.AIs;
 
 namespace Whist.GameLogic.ControlEntities
 {
     public class GameManager
     {
         Player[] players;
+        Dictionary<Player, AI> aiPlayers;
 
         public GameManager()
         {
@@ -20,7 +22,11 @@ namespace Whist.GameLogic.ControlEntities
                 new Player("Comp 3",4)
             };
             HumanPlayer = players[0];
+            RoundNumber = 1;
             Round = new Round(players);
+            aiPlayers = new Dictionary<Player, AI>();
+            foreach(Player player in NonHumanPlayers)
+                aiPlayers.Add(player, AIFactory.CreateAI(player, this, AIType.Basic));
         }
 
         public Player HumanPlayer
@@ -34,6 +40,21 @@ namespace Whist.GameLogic.ControlEntities
             get; private set;
         }
 
+        public int RoundNumber
+        {
+            get; private set;
+        }
+
+        public IEnumerable<Player> NonHumanPlayers
+        {
+            get { return players.Except(new Player[] { HumanPlayer }); }
+        }
+
+        public AI GetAI(Player player)
+        {
+            return aiPlayers[player];
+        }
+
         public bool IsRoundInProgress
         {
             get { if (Round == null) return false; else return Round.RoundInProgress; }
@@ -44,6 +65,7 @@ namespace Whist.GameLogic.ControlEntities
             if (!IsRoundInProgress)
             {
                 CyclePlayers();
+                RoundNumber++;
                 Round = new Round(players);
             }
         }
