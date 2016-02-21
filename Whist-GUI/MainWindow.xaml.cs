@@ -43,7 +43,7 @@ namespace Whist_GUI
             model.GameStateChanged += start_end_InitialBiddingPhase;
 
             Whist.DataContext = model;
-            BiddingView.DataContext = new BiddingViewModel(model.BiddingActions, model);
+            BiddingView.DataContext = new BiddingViewModel(model);
         }
 
         private void HandleEnter(object sender, KeyEventArgs e)

@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Whist.AI;
+using Whist.AIs;
 using Whist.GameLogic;
 using Whist.GameLogic.ControlEntities;
 
@@ -65,6 +65,7 @@ namespace Whist_GUI.ViewLogic
 
         public async void ChooseAction(Action action)
         {
+            infoPanelVM.AddLineToActionLog(Round.CurrentPlayer.name + ": " + action.ToString());
             Round.BiddingDoAction(action);
             while (Round.InBiddingPhase && Round.CurrentPlayer != gameManager.HumanPlayer)
                 await AsyncBidAI();
@@ -73,24 +74,35 @@ namespace Whist_GUI.ViewLogic
                 EndBiddingRound();
                     CurrentGameState = GameState.PLAYING;
                 }
-            infoPanelVM.PropChanged();
+            NotifyUI();
         }
 
         Task AsyncBidAI()
         {
             return Task.Run(() => {
-                Round.BiddingDoAction(SimpleBiddingAI.GetAction(Round.CurrentPlayer, Round.BiddingGetPossibleActions(), Round.Trump));
+                AIBid();
             }); 
         }
 
-        public void EndBiddingRound()
+        private void AIBid()
+        {
+            if (Round.CurrentPlayer == gameManager.HumanPlayer)
+                return;
+            var action = gameManager.GetAI(Round.CurrentPlayer).GetAction();
+            foreach (Player otherAI in gameManager.NonHumanPlayers.Except(new Player[] { Round.CurrentPlayer }))
+                gameManager.GetAI(otherAI).ProcessOtherPlayerAction(Round.CurrentPlayer, action);
+            infoPanelVM.AddLineToActionLog(Round.CurrentPlayer.name + ": " + action.ToString());
+            Round.BiddingDoAction(action);
+        }
+
+        public async void EndBiddingRound()
         {
             Round.EndBiddingRound();
             whistController = Round.Start();
+            CurrentPlayer = Round.CurrentPlayer;
             while (Round.TrickInProgress && Round.CurrentPlayer != null && Round.CurrentPlayer != gameManager.HumanPlayer)
             {
-                var aiCard = SimpleGameAI.GetMove(Round);
-                Round.PlayCard(aiCard);
+                await AsyncPlayCardAI();
             }
             NotifyUI();
         }
@@ -100,7 +112,9 @@ namespace Whist_GUI.ViewLogic
             get { return Round.BiddingGetPossibleActions(); }
         }
 
-        public async void PlayCard(Card card) {
+        public async void PlayCard(Card card)
+        {
+            infoPanelVM.AddLineToActionLog(Round.CurrentPlayer.name + ": " + card.ToString());
             CurrentPlayer = Round.CurrentPlayer;
             whistController.PlayCard(card);
             if (!Round.TrickInProgress)
@@ -110,6 +124,7 @@ namespace Whist_GUI.ViewLogic
                 trickEndVM.Visibility = "Visible";
                 //Round.EndTrick();
             }
+            NotifyUI();
 
 
             var AI = new SimpleGameAI();
@@ -150,14 +165,27 @@ namespace Whist_GUI.ViewLogic
         Task AsyncPlayCardAI()
         {
             return Task.Run(() => {
-                Thread.Sleep(600);
-                var aiCard = SimpleGameAI.GetMove(Round);
+                Thread.Sleep(300);
                 CurrentPlayer = Round.CurrentPlayer;
+                var aiCard = AIPlay();
                 App.Current.Dispatcher.Invoke(() => Round.PlayCard(aiCard));
             });
         }
 
+        private Card AIPlay()
+        {
+            if (Round.CurrentPlayer == gameManager.HumanPlayer)
+                return null;
+            var aiCard = gameManager.GetAI(Round.CurrentPlayer).GetMove();
+            foreach (Player otherAI in gameManager.NonHumanPlayers.Except(new Player[] { Round.CurrentPlayer }))
+                gameManager.GetAI(otherAI).ProcessOtherPlayerCard(Round.CurrentPlayer, aiCard);
+            infoPanelVM.AddLineToActionLog(CurrentPlayer.name + ": " + aiCard.ToString());
+            return aiCard;
+        }
+
         public bool IsValidPlay(Card card) {
+            if (Round.CurrentPlayer != gameManager.HumanPlayer)
+                return false;
             if (!Round.InTrickPhase)
                 return false;
             return whistController.IsValidPlay(card);
@@ -170,13 +198,15 @@ namespace Whist_GUI.ViewLogic
         public void StartNewRound()
         {
             gameManager.StartNewRound();
+            infoPanelVM.ClearActionLog();
             CurrentGameState = GameState.BIDDING;
             whistController = null;
             CurrentGameState = GameState.BIDDING;
             NotifyUI();
+
             while (Round.InBiddingPhase && Round.CurrentPlayer != gameManager.HumanPlayer)
             {
-                Round.BiddingDoAction(SimpleBiddingAI.GetAction(Round.CurrentPlayer, Round.BiddingGetPossibleActions(), Round.Trump));
+                AIBid();
             }
             NotifyUI();
         }
@@ -191,6 +221,7 @@ namespace Whist_GUI.ViewLogic
                 PropertyChanged(this, new PropertyChangedEventArgs("Round"));
                 PropertyChanged(this, new PropertyChangedEventArgs("infoPanelVM"));
                 PropertyChanged(this, new PropertyChangedEventArgs("trickEndVM"));
+                
             }
             infoPanelVM.PropChanged();
             trickEndVM.PropChanged();

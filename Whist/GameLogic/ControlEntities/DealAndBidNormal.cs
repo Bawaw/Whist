@@ -41,12 +41,21 @@ namespace Whist.GameLogic.ControlEntities
 
         public DealAndBidNormal(Player[] players)
         {
-            specialGameCases = SpecialGameCaseFactory.GetDictionary();
             this.players = players;
+            init();
+        }
+
+        private void init()
+        {
+            specialGameCases = SpecialGameCaseFactory.GetDictionary();
             CurrentPlayer = players[0];
+            actionsDone = 0;
             passedPlayers = new Dictionary<Player, bool>();
             foreach (var player in players)
+            {
                 passedPlayers.Add(player, false);
+                player.hand.Cards.Clear();
+            }
 
             DealCards();
         }
@@ -140,7 +149,7 @@ namespace Whist.GameLogic.ControlEntities
             return possibleActions;
         }
 
-        int actionsDone = 0;
+        int actionsDone;
 
         public bool DoAction(Action action)
         {
@@ -257,8 +266,16 @@ namespace Whist.GameLogic.ControlEntities
                 {
                     case 4:
                         {
-                            CurrentPlayer = null;
-                            break;
+                            if (GameCase == Case.FFA)
+                            {
+                                init();
+                                return;
+                            }
+                            else
+                            {
+                                CurrentPlayer = null;
+                                break;//Possible in case of Troel.
+                            }
                         }
                     case 3:
                         {
@@ -331,6 +348,7 @@ namespace Whist.GameLogic.ControlEntities
                 if (!passedPlayers.ContainsValue(false))//Everyone passed => FFA
                 {
                     GameCase = Case.FFA;
+                    throw new ApplicationException();
                 }
             }
 

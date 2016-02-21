@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,23 +8,34 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist_GUI.ViewLogic
 {
-    public class BiddingViewModel
+    public class BiddingViewModel : INotifyPropertyChanged
     {
         private BaseGameViewModel baseVM;
         private readonly BidCommand bidCommand;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public ICommand BidCmd { get { return bidCommand; } }
 
-        public BiddingViewModel(IEnumerable<Action> actions, BaseGameViewModel baseVM)
+        public BiddingViewModel(BaseGameViewModel baseVM)
         {
-            BiddingActions = actions;
             bidCommand = new BidCommand(this);
             this.baseVM = baseVM;
+
+            baseVM.PropertyChanged += (sender, e) => PropChanged();
+        }
+
+        public void PropChanged()
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("BiddingActions"));
+            }
         }
 
         public IEnumerable<Action> BiddingActions
         {
-            get;
-            private set;
+            get { return baseVM.BiddingActions; }
         }
         
         private void ReturnResult(Action action)

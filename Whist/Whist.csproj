@@ -43,8 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AI\SimpleBiddingAI.cs" />
-    <Compile Include="AI\SimpleGameAI.cs" />
+    <Compile Include="AIs\AI.cs" />
+    <Compile Include="AIs\AIFactory.cs" />
+    <Compile Include="AIs\BaseAI.cs" />
+    <Compile Include="AIs\SimpleBiddingAI.cs" />
+    <Compile Include="AIs\SimpleGameAI.cs" />
     <Compile Include="GameLogic\ControlEntities\DealAndBidNormal.cs" />
     <Compile Include="GameLogic\ControlEntities\GameController.cs" />
     <Compile Include="GameLogic\ControlEntities\GameManager.cs" />
