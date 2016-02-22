@@ -3,7 +3,7 @@ using System.Linq;
 using Whist.GameLogic;
 using Whist.GameLogic.ControlEntities;
 
-namespace Whist.AI
+namespace Whist.AIs
 {
     public class SimpleGameAI
     {

@@ -19,7 +19,7 @@ namespace WhistTest
         {
             for (int i = 1; i < 5; i++)
             {
-                players.Add(new Player("P" + i));
+                players.Add(new Player("P" + i, i));
             }
         }
 

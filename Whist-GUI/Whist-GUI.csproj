@@ -70,6 +70,7 @@
       <DependentUpon>CardView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewLogic\MainViewModel.cs" />
+    <Compile Include="ViewLogic\TrickEndViewModel.cs" />
     <Page Include="CardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
