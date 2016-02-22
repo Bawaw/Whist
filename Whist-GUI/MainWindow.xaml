@@ -19,9 +19,15 @@
             <SpotLight Color="Yellow" Direction="0 -0.1 -0.3" InnerConeAngle="17" OuterConeAngle="17" Position="0 3 9" />
         </Model3DGroup>
         <PerspectiveCamera x:Key="MainCamera" Position="0, 0, 3" />
+        
         <LinearGradientBrush x:Key="UI_Brush" EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="#FFDCD617" Offset="0"/>
-            <GradientStop Color="#FFC2890F" Offset="1"/>
+            <GradientStop Color="#FFE7E381" Offset="0"/>
+            <GradientStop Color="#FFB79D64" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <LinearGradientBrush x:Key="ButtonBackGround_Brush" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FF7F6036" Offset="0.503"/>
+            <GradientStop Color="#FFA88556" Offset="0.112"/>
         </LinearGradientBrush>
     </Window.Resources>
 
@@ -445,14 +451,7 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Button CommandParameter="{Binding }" Command="{Binding DataContext.BidCmd , RelativeSource={RelativeSource AncestorType=ItemsControl}}" Content="{Binding}" FontFamily="Tahoma" FontSize="15" Foreground="{StaticResource UI_Brush}" BorderBrush="#FF604108" >
-                                            <Button.Background>
-                                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                                    <GradientStop Color="#FF7F6036" Offset="0.503"/>
-                                                    <GradientStop Color="#FFA88556" Offset="0.112"/>
-                                                </LinearGradientBrush>
-                                            </Button.Background>
-                                        </Button>
+                                        <Button CommandParameter="{Binding }" Command="{Binding DataContext.BidCmd , RelativeSource={RelativeSource AncestorType=ItemsControl}}" Content="{Binding}" FontFamily="Tahoma" FontSize="15" Foreground="{StaticResource UI_Brush}" BorderBrush="#FF604108" Background="{StaticResource ButtonBackGround_Brush}" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -463,13 +462,22 @@
         </StackPanel>
 
         <!-- =========================================== TRICK END UI =========================================== -->
-        <DockPanel  VerticalAlignment="Top" HorizontalAlignment="Right">
-            <Popup x:Name="trickEndPopup" IsOpen="False" PlacementTarget="{Binding ElementName=trickEndDock}" Width="200">
-                <StackPanel Orientation="Vertical" Background="AliceBlue">
-                    <!--<TextBlock Text="{Binding Winner}" Foreground="White"/>-->
-                    <Label x:Name="TrickWinner" Content="{Binding LatestTrickWinner}" Foreground="White"/>
-                    <Button x:Name="StartTrickButton" Content="Press enter to continue" Click="Button_Click" />
-                </StackPanel>
+        <DockPanel  VerticalAlignment="Top" HorizontalAlignment="Right"  Panel.ZIndex="120">
+            <Popup x:Name="trickEndPopup" IsOpen="False" PlacementTarget="{Binding ElementName=trickEndDock}" Width="250">
+                <StackPanel Orientation="Vertical" Background="Transparent">
+                    <Image Source="Textures/DAGGER.png"  Width="160" Panel.ZIndex="121" Margin="0,-50" />
+                    <Grid Height="130">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" x:Name="TrickWinner" TextWrapping="Wrap" Text="Player won the trick" FontFamily="Carnivalee Freakshow" MaxWidth="200" />
+                            <Grid.Background>
+                                <ImageBrush ImageSource = "Textures\red_back.png"  >
+                                    <ImageBrush.RelativeTransform>
+                                        <RotateTransform Angle="90" CenterX="0.5" CenterY="0.5"/>
+                                    </ImageBrush.RelativeTransform>
+                                </ImageBrush>
+                            </Grid.Background>
+                        </Grid>
+                        <Button x:Name="StartTrickButton" Content="Next Trick! (Enter)" FontSize="17" Click="Button_Click" Foreground="{StaticResource UI_Brush}" Background="{StaticResource ButtonBackGround_Brush}" VerticalAlignment="Bottom" />
+                    </StackPanel>
             </Popup>
         </DockPanel>
 

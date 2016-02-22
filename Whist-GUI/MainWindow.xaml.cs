@@ -34,25 +34,12 @@ namespace Whist_GUI
             var infoPanelVM = new InfoPanelViewModel(gameManager);
             InfoPanel.DataContext = infoPanelVM;
 
-            var trickEndVM = new TrickEndViewModel();
-            //trickEndPopup.DataContext = trickEndVM;
-            KeyDown += new KeyEventHandler(HandleEnter);
-
             //round
-            model = new BaseGameViewModel(gameManager, infoPanelVM, trickEndVM);
+            model = new BaseGameViewModel(gameManager, infoPanelVM);
             model.GameStateChanged += OnGameStateChanged;
 
             Whist.DataContext = model;
             BiddingView.DataContext = new BiddingViewModel(model);
-        }
-
-        private void HandleEnter(object sender, KeyEventArgs e)
-        {
-            /*if(ContinueText.Visibility == Visibility.Visible && e.Key == Key.Enter)
-            {
-                ContinueText.Visibility = Visibility.Hidden;*/
-                //model.EndTrick();
-            //}
         }
 
         private void OnGameStateChanged(GameState gameState) {
@@ -61,7 +48,7 @@ namespace Whist_GUI
             else
                 popup.IsOpen = false;
             if (gameState == GameState.ENDTRICK) {
-                TrickWinner.Content = model.LatestTrickWinner + " won the trick!";
+                TrickWinner.Text = model.LatestTrickWinner + " won the trick!";
                 trickEndPopup.IsOpen = true;
                 StartTrickButton.Focus();
             }

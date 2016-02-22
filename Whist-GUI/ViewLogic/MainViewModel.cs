@@ -36,8 +36,6 @@ namespace Whist_GUI.ViewLogic
 
         private InfoPanelViewModel infoPanelVM;
 
-        //private TrickEndViewModel trickEndVM;
-
         public ObservableCollection<Card> Pile { get { return whistController?.Pile; } }
         public HandViewModel HandVM { get; private set; }
         public Suits Trump { get { return Round.Trump; } }
@@ -55,11 +53,10 @@ namespace Whist_GUI.ViewLogic
         public event PropertyChangedEventHandler PropertyChanged;
         public event IsInMode GameStateChanged;
 
-        public BaseGameViewModel(GameManager gameManager, InfoPanelViewModel infoPanelVM, TrickEndViewModel trickEndVM)
+        public BaseGameViewModel(GameManager gameManager, InfoPanelViewModel infoPanelVM)
         {
             this.gameManager = gameManager;
             this.infoPanelVM = infoPanelVM;
-            //this.trickEndVM = trickEndVM;
             HandVM = new HandViewModel(this);
             CurrentGameState = GameState.BIDDING;
         }
