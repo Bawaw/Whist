@@ -50,7 +50,8 @@ namespace Whist_GUI
         {
             if(ContinueText.Visibility == Visibility.Visible && e.Key == Key.Enter)
             {
-                ContinueText.Visibility = Visibility.Hidden;
+                //ContinueText.Visibility = Visibility.Hidden;
+                model.trickEndVM.Visibility = "Hidden";
                 model.EndTrick();
             }
         }

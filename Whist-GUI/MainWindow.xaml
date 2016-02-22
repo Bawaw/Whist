@@ -246,9 +246,9 @@
                 <!-- =========================================== TRICK END UI =========================================== -->
                 <DockPanel x:Name="trickEndDock" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 200 0 0">
                     <Popup x:Name="trickEndPopup" IsOpen="True" PlacementTarget="{Binding ElementName=trickEndDock}" Width="200">
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="{Binding Winner}" Foreground="White"/>
-                            <TextBlock x:Name="ContinueText" Text="Press enter to continue" Foreground="White" Visibility="{Binding Visibility}"/>
+                        <StackPanel x:Name="ContinueText" Visibility="{Binding Visibility}" Orientation="Vertical">
+                            <TextBlock Text="{Binding Winner, StringFormat={}{0} won the trick}" Foreground="White"/>
+                            <TextBlock  Text="Press enter to continue" Foreground="White" />
                         </StackPanel>
                     </Popup>
                 </DockPanel>
