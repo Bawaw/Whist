@@ -10,8 +10,8 @@
     <UserControl.Resources>
         <local:TrumpImageConverter x:Key="TrumpConverter" />
         <LinearGradientBrush x:Key="UI_Brush" EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="#FFE7E381" Offset="0"/>
-            <GradientStop Color="#FFB79D64" Offset="1"/>
+            <GradientStop Color="#FFDAD790" Offset="0.8"/>
+            <GradientStop Color="#FFB19350" Offset="0.2"/>
         </LinearGradientBrush>
     </UserControl.Resources>
 
