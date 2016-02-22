@@ -98,6 +98,7 @@ namespace Whist_GUI.ViewLogic
         }
 
         public async void PlayCard(Card card) {
+            if (Round.CurrentPlayer.Number != 1) return; //TEMP fix for play out of turn
             CurrentPlayer = Round.CurrentPlayer;
             whistController.PlayCard(card);
             if (!Round.TrickInProgress)
