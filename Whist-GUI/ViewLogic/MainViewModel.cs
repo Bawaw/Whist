@@ -14,7 +14,7 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist_GUI.ViewLogic
 {
-    public enum GameState { BIDDING, PLAYING }
+    public enum GameState { BIDDING, PLAYING, ENDTRICK }
     public class BaseGameViewModel : INotifyPropertyChanged
     {
         private GameState currentGameState;
@@ -40,12 +40,11 @@ namespace Whist_GUI.ViewLogic
 
         private InfoPanelViewModel infoPanelVM;
 
-        public TrickEndViewModel trickEndVM;
-
         public ObservableCollection<Card> Pile { get { return whistController?.Pile; } }
         public HandViewModel HandVM { get; private set; }
         public Suits Trump { get { return Round.Trump; } }
         public Player CurrentPlayer { private set; get; }
+        public Player LatestTrickWinner { get { return Round.PileOwner; } }
 
         private IPlayTricks whistController;
 
@@ -58,11 +57,10 @@ namespace Whist_GUI.ViewLogic
         public event PropertyChangedEventHandler PropertyChanged;
         public event IsInMode GameStateChanged;
 
-        public BaseGameViewModel(GameManager gameManager, InfoPanelViewModel infoPanelVM, TrickEndViewModel trickEndVM)
+        public BaseGameViewModel(GameManager gameManager, InfoPanelViewModel infoPanelVM)
         {
             this.gameManager = gameManager;
             this.infoPanelVM = infoPanelVM;
-            this.trickEndVM = trickEndVM;
             HandVM = new HandViewModel(this);
             CurrentGameState = GameState.BIDDING;
         }
@@ -77,8 +75,8 @@ namespace Whist_GUI.ViewLogic
             if (!Round.InBiddingPhase)
             {
                 EndBiddingRound();
-                CurrentGameState = GameState.PLAYING;
-            }
+                    CurrentGameState = GameState.PLAYING;
+                }
             NotifyUI();
         }
 
@@ -87,7 +85,7 @@ namespace Whist_GUI.ViewLogic
             return Task.Run(() =>
             {
                 AIBid();
-            });
+            }); 
         }
 
         private void AIBid()
@@ -118,21 +116,8 @@ namespace Whist_GUI.ViewLogic
             get { return Round.BiddingGetPossibleActions(); }
         }
 
-        public async void PlayCard(Card card)
+        public async void AI_PlaysCards()
         {
-            infoPanelVM.AddLineToActionLog(Round.CurrentPlayer.name + ": " + card.ToString());
-            CurrentPlayer = Round.CurrentPlayer;
-            whistController.PlayCard(card);
-            if (!Round.TrickInProgress)
-            {
-                //MessageBoxResult result = MessageBox.Show(Round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
-                trickEndVM.Winner = Round.PileOwner.name;
-                trickEndVM.Visibility = "Visible";
-                //Round.EndTrick();
-            }
-            NotifyUI();
-
-
             var AI = new SimpleGameAI();
             //while (Round.CurrentPlayer != null && Round.CurrentPlayer != gameManager.HumanPlayer)
             {
@@ -143,33 +128,39 @@ namespace Whist_GUI.ViewLogic
                 if (!Round.TrickInProgress)
                 {
                     //MessageBoxResult result = MessageBox.Show(Round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
-                    trickEndVM.Winner = Round.PileOwner.name;
-                    trickEndVM.Visibility = "Visible";
+                    //trickEndVM.Winner = Round.PileOwner.name + " won the trick";
+                    //trickEndVM.Visibility = "Visible";
                     //Round.EndTrick();
+                    CurrentGameState = GameState.ENDTRICK;
+                    break;
                 }
             }
+            NotifyUI();
+        }
 
+        public void PlayCard(Card card) {
+            CurrentPlayer = Round.CurrentPlayer;
+            whistController.PlayCard(card);
+            if (!Round.TrickInProgress)
+                CurrentGameState = GameState.ENDTRICK;
+
+            NotifyUI();
+            AI_PlaysCards();
+            }
+
+        public void StartNewTrick() {
+            Round.EndTrick();
+            CurrentGameState = GameState.PLAYING;
             if (!Round.InTrickPhase)
             {
                 Round.EndTricksRound();
                 string str = "";
                 foreach (var player in Round.Players)
                     str += player.name + " (" + player.Tricks + ") - " + player.score + "\n";
-
+                
                 MessageBoxResult result = MessageBox.Show(str, "Round End", MessageBoxButton.OK, MessageBoxImage.None);
                 StartNewRound();
             }
-            NotifyUI();
-        }
-
-        public async void EndTrick()
-        {
-            Round.EndTrick();
-            while (Round.TrickInProgress && Round.CurrentPlayer != null && Round.CurrentPlayer != gameManager.HumanPlayer)
-            {
-                await AsyncPlayCardAI();
-            }
-            NotifyUI();
         }
 
         Task AsyncPlayCardAI()
@@ -234,10 +225,10 @@ namespace Whist_GUI.ViewLogic
                 PropertyChanged(this, new PropertyChangedEventArgs("Round"));
                 PropertyChanged(this, new PropertyChangedEventArgs("infoPanelVM"));
                 PropertyChanged(this, new PropertyChangedEventArgs("trickEndVM"));
-
+                
             }
             infoPanelVM.PropChanged();
-            trickEndVM.PropChanged();
+            //trickEndVM.PropChanged();
         }
     }
 
