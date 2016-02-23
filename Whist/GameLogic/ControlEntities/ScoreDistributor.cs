@@ -28,20 +28,6 @@ namespace Whist.GameLogic.ControlEntities
         {
             switch (gameCase)
             {
-                case Case.FFA:
-                    {
-                        foreach (Team team in teams)
-                        {
-                            if (team.Tricks >= team.objective)
-                            {
-                                team.applyScore(3);
-                                foreach (Team loser in teams)
-                                    if (loser != team)
-                                        loser.applyScore(-1);
-                            }
-                        }
-                        break;
-                    }
                 case Case.TEAM:
                     {
                         Team teamA = teams.Where(t => t.objective == 8).Single();
