@@ -11,6 +11,7 @@ namespace Whist.GameLogic.ControlEntities
         ObservableCollection<Card> Pile { get; }
         Dictionary<Player, Card> CardPlayedByPlayer { get; }
         bool InTrickPhase { get; }
+        IList<Player> PlayersLeft { get; }
 
         Player EndTrick();
         bool IsValidPlay(Card card);

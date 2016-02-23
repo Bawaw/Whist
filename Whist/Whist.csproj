@@ -46,6 +46,7 @@
     <Compile Include="AIs\AI.cs" />
     <Compile Include="AIs\AIFactory.cs" />
     <Compile Include="AIs\BaseAI.cs" />
+    <Compile Include="AIs\SearchAI.cs" />
     <Compile Include="AIs\SimpleBiddingAI.cs" />
     <Compile Include="AIs\SimpleGameAI.cs" />
     <Compile Include="GameLogic\ControlEntities\DealAndBidNormal.cs" />

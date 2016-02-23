@@ -18,7 +18,7 @@
             <AmbientLight Color="Bisque"/>
             <SpotLight Color="Yellow" Direction="0 -0.1 -0.3" InnerConeAngle="17" OuterConeAngle="17" Position="0 3 9" />
         </Model3DGroup>
-        <PerspectiveCamera x:Key="MainCamera" Position="0, 0, 3" />
+        <PerspectiveCamera x:Key="MainCamera" Position="0, -0.5, 2.8" LookDirection="0 0.1 -0.5" />
         
         <LinearGradientBrush x:Key="UI_Brush" EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FFE7E381" Offset="0"/>
@@ -150,7 +150,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Viewport3D Camera="{StaticResource MainCamera}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="145.2" Width="145.2" Opacity="0" >
+                            <Viewport3D Camera="{StaticResource MainCamera}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="120" Width="120" Opacity="0" >
                                 <Viewport2DVisual3D >
                                     <Viewport2DVisual3D.Geometry>
                                         <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0" TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
@@ -269,7 +269,7 @@
 
                 <!-- =========================================== COMPUTER 2 =========================================== -->
                 <StackPanel Orientation="Vertical" VerticalAlignment="Top">
-                <ItemsControl ItemsSource="{Binding Comp2Cards}" VerticalAlignment="Top">
+                    <ItemsControl ItemsSource="{Binding Comp2Cards}" VerticalAlignment="Top" Margin ="0 50 ">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -298,7 +298,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 0">
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 -60 0 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150" />
                             <ColumnDefinition Width="*" />
@@ -461,7 +461,7 @@
             </Grid>
         </StackPanel>
 
-        <!-- =========================================== TRICK END UI =========================================== -->
+                <!-- =========================================== TRICK END UI =========================================== -->
         <DockPanel  VerticalAlignment="Top" HorizontalAlignment="Right" >
             <Popup x:Name="trickEndPopup" IsOpen="False" PlacementTarget="{Binding ElementName=trickEndDock}" Width="250" AllowsTransparency="True" >
                 <StackPanel Orientation="Vertical" Background="Transparent">
@@ -477,11 +477,11 @@
                             </Grid.Background>
                         </Grid>
                         <Button x:Name="StartTrickButton" Content="Next Trick! (Enter)" FontSize="17" Click="Button_Click" Foreground="{StaticResource UI_Brush}" Background="{StaticResource ButtonBackGround_Brush}" VerticalAlignment="Bottom" />
-                    </StackPanel>
-            </Popup>
-        </DockPanel>
+                        </StackPanel>
+                    </Popup>
+                </DockPanel>
 
-        <!-- =========================================== PLEYER CARDS =========================================== -->
+        <!-- =========================================== PLAYER CARDS =========================================== -->
         <ItemsControl ItemsSource="{Binding HandVM.PlayerCards}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
