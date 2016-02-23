@@ -24,7 +24,7 @@ namespace Whist_GUI
     public partial class MainWindow : Window
     {
         BaseGameViewModel model;
-
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -36,8 +36,8 @@ namespace Whist_GUI
 
             var trickEndVM = new TrickEndViewModel();
             trickEndPopup.DataContext = trickEndVM;
-            KeyDown += new KeyEventHandler(HandleEnter);
-
+            KeyDown += new KeyEventHandler(HandleEnter); 
+ 
             //round
             model = new BaseGameViewModel(gameManager, infoPanelVM, trickEndVM);
             model.GameStateChanged += start_end_InitialBiddingPhase;
