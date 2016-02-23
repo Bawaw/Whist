@@ -250,7 +250,20 @@
                                         <DiffuseMaterial.Brush>
                                             <VisualBrush Stretch="None" >
                                                 <VisualBrush.Visual>
-                                                    <Label Content="Computer 1" FontSize="0.18" Foreground="#FFD9D9D9" FontFamily="Monotype Corsiva" />
+                                                    <Label x:Name="labelC1" Content="Computer 1" FontSize="0.18" FontFamily="Monotype Corsiva">
+                                                        <Label.Style>
+                                                            <Style TargetType="{x:Type Label}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding Comp1InPlayerTeam}" Value="True">
+                                                                        <Setter Property="Label.Foreground" Value="Blue" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Comp1InPlayerTeam}" Value="False">
+                                                                        <Setter Property="Label.Foreground" Value="#FFD9D9D9" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Label.Style>
+                                                    </Label>
                                                 </VisualBrush.Visual>
                                                 <VisualBrush.RelativeTransform>
                                                     <RotateTransform Angle="90" CenterX="0.5" CenterY ="0.5"/>
@@ -336,7 +349,20 @@
                                         <DiffuseMaterial.Brush>
                                             <VisualBrush Stretch="None" >
                                                 <VisualBrush.Visual>
-                                                    <Label Content="Computer 2" FontSize="0.18" Foreground="#FFD9D9D9" FontFamily="Monotype Corsiva" />
+                                                    <Label x:Name="labelC2" Content="Computer 2" FontSize="0.18" FontFamily="Monotype Corsiva">
+                                                        <Label.Style>
+                                                            <Style TargetType="{x:Type Label}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding Comp2InPlayerTeam}" Value="True">
+                                                                        <Setter Property="Label.Foreground" Value="Blue" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Comp2InPlayerTeam}" Value="False">
+                                                                        <Setter Property="Label.Foreground" Value="#FFD9D9D9" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Label.Style>
+                                                    </Label>
                                                 </VisualBrush.Visual>
                                                 <VisualBrush.RelativeTransform>
                                                     <RotateTransform Angle="180" CenterX="0.5" CenterY ="0.5"/>
@@ -392,7 +418,21 @@
                                         <DiffuseMaterial.Brush>
                                             <VisualBrush Stretch="None" >
                                                 <VisualBrush.Visual>
-                                                    <Label Content="Computer 2" FontSize="0.18" Foreground="#FFD9D9D9" FontFamily="Monotype Corsiva" />
+
+                                                    <Label x:Name="labelC3" Content="Computer 3" FontSize="0.18" FontFamily="Monotype Corsiva">
+                                                        <Label.Style>
+                                                            <Style TargetType="{x:Type Label}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding Comp3InPlayerTeam}" Value="True">
+                                                                        <Setter Property="Label.Foreground" Value="Blue" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Comp3InPlayerTeam}" Value="False">
+                                                                        <Setter Property="Label.Foreground" Value="#FFD9D9D9" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Label.Style>
+                                                    </Label>
                                                 </VisualBrush.Visual>
                                                 <VisualBrush.RelativeTransform>
                                                     <RotateTransform Angle="270" CenterX="0.5" CenterY ="0.5"/>
