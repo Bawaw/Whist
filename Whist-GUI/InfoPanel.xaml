@@ -43,7 +43,7 @@
                 <TextBlock Text="{Binding TricksLeft, StringFormat=Tricks Left: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="17" />
                 <TextBlock Text="{Binding TricksWon, StringFormat=Tricks Won: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="17" />
                 <TextBlock Text="{Binding GameCase, StringFormat=Game Mode: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"  />
-                <TextBlock Text="{Binding Teams, StringFormat=Teams: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"  />
+                <TextBlock Text="{Binding Teams}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"  />
                 <TextBlock Text="{Binding ActionLog}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"  />
             </StackPanel>
         </StackPanel>

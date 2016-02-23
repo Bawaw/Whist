@@ -80,6 +80,7 @@ namespace Whist_GUI
                 Team[] teams = Round?.Teams;
                 if (teams == null)
                 {
+                    str += "Players:";
                     foreach (Player p in Round.Players)
                     {
                         str += "\n-" + p.name + " (" + p.score + ") ";
@@ -87,6 +88,7 @@ namespace Whist_GUI
                 }
                 else
                 {
+                    str += "Teams:";
                     foreach (Team team in teams)
                     {
                         str += "\n-";
