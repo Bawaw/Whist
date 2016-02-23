@@ -462,8 +462,8 @@
         </StackPanel>
 
         <!-- =========================================== TRICK END UI =========================================== -->
-        <DockPanel  VerticalAlignment="Top" HorizontalAlignment="Right"  Panel.ZIndex="120">
-            <Popup x:Name="trickEndPopup" IsOpen="False" PlacementTarget="{Binding ElementName=trickEndDock}" Width="250">
+        <DockPanel  VerticalAlignment="Top" HorizontalAlignment="Right"  Panel.ZIndex="120" Background="Transparent">
+            <Popup x:Name="trickEndPopup" IsOpen="False" PlacementTarget="{Binding ElementName=trickEndDock}" Width="250" >
                 <StackPanel Orientation="Vertical" Background="Transparent">
                     <Image Source="Textures/DAGGER.png"  Width="160" Panel.ZIndex="121" Margin="0,-50" />
                     <Grid Height="130">
