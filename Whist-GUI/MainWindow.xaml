@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Whist_GUI"
         mc:Ignorable="d" Closed="Window_Closed"
-        Title="MainWindow" Height="auto" Width="auto" WindowState="Maximized">
+        Title="Whist" Height="auto" Width="auto" WindowState="Maximized" Icon="Textures/red_back.png">
     <Window.Resources>
         <local:CardImageConverter x:Key="CardConverter" />
         <local:TrumpImageConverter x:Key="TrumpConverter" />
@@ -18,13 +18,13 @@
             <AmbientLight Color="Bisque"/>
             <SpotLight Color="Yellow" Direction="0 -0.1 -0.3" InnerConeAngle="17" OuterConeAngle="17" Position="0 3 9" />
         </Model3DGroup>
-        <PerspectiveCamera x:Key="MainCamera" Position="0, 0, 3" />
-        
+        <PerspectiveCamera x:Key="MainCamera" Position="0, -0.5, 2.8" LookDirection="0 0.1 -0.5" />
+
         <LinearGradientBrush x:Key="UI_Brush" EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FFE7E381" Offset="0"/>
             <GradientStop Color="#FFB79D64" Offset="1"/>
         </LinearGradientBrush>
-        
+
         <LinearGradientBrush x:Key="ButtonBackGround_Brush" EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FF7F6036" Offset="0.503"/>
             <GradientStop Color="#FFA88556" Offset="0.112"/>
@@ -115,17 +115,17 @@
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="125.2"/>
-                                        <RowDefinition Height="80"/>
-                                        <RowDefinition Height="125.2"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="125.2"/>
+                                    <RowDefinition Height="80"/>
+                                    <RowDefinition Height="125.2"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="125.2"/>
                                     <ColumnDefinition Width="80"/>
                                     <ColumnDefinition Width="125.2"/>
-                                    </Grid.ColumnDefinitions>
-                                </Grid>
+                                </Grid.ColumnDefinitions>
+                            </Grid>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemContainerStyle>
@@ -137,7 +137,7 @@
                                         <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}"/>
                                     </MultiBinding>
                                 </Setter.Value>
-                             </Setter>
+                            </Setter>
                             <Setter Property="Grid.Row" >
                                 <Setter.Value>
                                     <MultiBinding Converter="{StaticResource RowConverter}">
@@ -150,7 +150,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Viewport3D Camera="{StaticResource MainCamera}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="145.2" Width="145.2" >
+                            <Viewport3D Camera="{StaticResource MainCamera}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="120" Width="120" Opacity="0" >
                                 <Viewport2DVisual3D >
                                     <Viewport2DVisual3D.Geometry>
                                         <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0" TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
@@ -162,8 +162,8 @@
                                                 <ImageBrush Stretch="Uniform" ImageSource = "{Binding Converter={StaticResource CardConverter}}">
                                                     <ImageBrush.RelativeTransform>
                                                         <MultiBinding Converter="{StaticResource AngleConverter}">
-                                                                    <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Grid}"/>
-                                                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Viewport3D}"/>
+                                                            <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Grid}"/>
+                                                            <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Viewport3D}"/>
                                                         </MultiBinding>
                                                     </ImageBrush.RelativeTransform>
                                                 </ImageBrush>
@@ -181,37 +181,37 @@
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <ItemsControl x:Name="Comp1SingleCard" ItemsSource="{Binding Comp1Cards}" HorizontalAlignment="Left">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
                                 <Viewport3D Height="60" Width="80" Margin="0, -30, 0, 0" Camera="{StaticResource MainCamera}">
-                                <Viewport2DVisual3D>
-                                    <Viewport2DVisual3D.Geometry>
-                                        <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0"
+                                    <Viewport2DVisual3D>
+                                        <Viewport2DVisual3D.Geometry>
+                                            <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0"
                             TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
-                                    </Viewport2DVisual3D.Geometry>
+                                        </Viewport2DVisual3D.Geometry>
 
-                                    <Viewport2DVisual3D.Material>
-                                        <DiffuseMaterial>
-                                            <DiffuseMaterial.Brush>
+                                        <Viewport2DVisual3D.Material>
+                                            <DiffuseMaterial>
+                                                <DiffuseMaterial.Brush>
                                                     <ImageBrush ImageSource = "Textures\red_back.png"  >
                                                         <ImageBrush.RelativeTransform>
                                                             <RotateTransform Angle="90" CenterX="0.5" CenterY="0.5"/>
                                                         </ImageBrush.RelativeTransform>
                                                     </ImageBrush>
-                                            </DiffuseMaterial.Brush>
-                                        </DiffuseMaterial>
-                                    </Viewport2DVisual3D.Material>
-                                </Viewport2DVisual3D>
-                                <ModelVisual3D Content="{StaticResource GeneralLighting}" />
-                            </Viewport3D>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                                                </DiffuseMaterial.Brush>
+                                            </DiffuseMaterial>
+                                        </Viewport2DVisual3D.Material>
+                                    </Viewport2DVisual3D>
+                                    <ModelVisual3D Content="{StaticResource GeneralLighting}" />
+                                </Viewport3D>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150" />
@@ -269,36 +269,36 @@
 
                 <!-- =========================================== COMPUTER 2 =========================================== -->
                 <StackPanel Orientation="Vertical" VerticalAlignment="Top">
-                <ItemsControl ItemsSource="{Binding Comp2Cards}" VerticalAlignment="Top">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Viewport3D Height="80" Width="60" Margin="-30, 0, 0, 0" Camera="{StaticResource MainCamera}">
-                                <Viewport2DVisual3D>
-                                    <Viewport2DVisual3D.Geometry>
-                                        <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0"
+                    <ItemsControl ItemsSource="{Binding Comp2Cards}" VerticalAlignment="Top" Margin ="0 50 ">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Viewport3D Height="80" Width="60" Margin="-30, 0, 0, 0" Camera="{StaticResource MainCamera}">
+                                    <Viewport2DVisual3D>
+                                        <Viewport2DVisual3D.Geometry>
+                                            <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0"
                             TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
-                                    </Viewport2DVisual3D.Geometry>
+                                        </Viewport2DVisual3D.Geometry>
 
-                                    <Viewport2DVisual3D.Material>
-                                        <DiffuseMaterial>
-                                            <DiffuseMaterial.Brush>
-                                                <ImageBrush ImageSource = "Textures\red_back.png"  />
-                                            </DiffuseMaterial.Brush>
-                                        </DiffuseMaterial>
-                                    </Viewport2DVisual3D.Material>
-                                </Viewport2DVisual3D>
+                                        <Viewport2DVisual3D.Material>
+                                            <DiffuseMaterial>
+                                                <DiffuseMaterial.Brush>
+                                                    <ImageBrush ImageSource = "Textures\red_back.png"  />
+                                                </DiffuseMaterial.Brush>
+                                            </DiffuseMaterial>
+                                        </Viewport2DVisual3D.Material>
+                                    </Viewport2DVisual3D>
 
-                                <ModelVisual3D Content="{StaticResource GeneralLighting}" />
-                            </Viewport3D>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 0">
+                                    <ModelVisual3D Content="{StaticResource GeneralLighting}" />
+                                </Viewport3D>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 -60 0 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150" />
                             <ColumnDefinition Width="*" />
@@ -351,7 +351,7 @@
                         </Viewport3D>
                     </Grid>
                 </StackPanel>
-                
+
                 <!-- =========================================== COMPUTER 3 =========================================== -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment ="Right" >
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 0">
@@ -407,37 +407,37 @@
                         </Viewport3D>
                     </Grid>
                     <ItemsControl ItemsSource="{Binding Comp3Cards}" HorizontalAlignment="Right" >
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
                                 <Viewport3D Height="60" Width="80" Margin="0, -30, 0, 0" Camera="{StaticResource MainCamera}">
-                                <Viewport2DVisual3D>
-                                    <Viewport2DVisual3D.Geometry>
-                                        <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0"
+                                    <Viewport2DVisual3D>
+                                        <Viewport2DVisual3D.Geometry>
+                                            <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0"
                             TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
-                                    </Viewport2DVisual3D.Geometry>
+                                        </Viewport2DVisual3D.Geometry>
 
-                                    <Viewport2DVisual3D.Material>
-                                        <DiffuseMaterial>
-                                            <DiffuseMaterial.Brush>
+                                        <Viewport2DVisual3D.Material>
+                                            <DiffuseMaterial>
+                                                <DiffuseMaterial.Brush>
                                                     <ImageBrush ImageSource = "Textures\red_back.png"  >
                                                         <ImageBrush.RelativeTransform>
                                                             <RotateTransform Angle="90" CenterX="0.5" CenterY="0.5" />
                                                         </ImageBrush.RelativeTransform>
                                                     </ImageBrush>
-                                            </DiffuseMaterial.Brush>
-                                        </DiffuseMaterial>
-                                    </Viewport2DVisual3D.Material>
-                                </Viewport2DVisual3D>
-                                <ModelVisual3D Content="{StaticResource GeneralLighting}" />
-                            </Viewport3D>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                                                </DiffuseMaterial.Brush>
+                                            </DiffuseMaterial>
+                                        </Viewport2DVisual3D.Material>
+                                    </Viewport2DVisual3D>
+                                    <ModelVisual3D Content="{StaticResource GeneralLighting}" />
+                                </Viewport3D>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </StackPanel>
                 <!-- =========================================== BIDDING UI =========================================== -->
                 <DockPanel x:Name="PopupAnchor" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -461,11 +461,11 @@
             </Grid>
         </StackPanel>
 
-                <!-- =========================================== TRICK END UI =========================================== -->
-        <DockPanel  VerticalAlignment="Top" HorizontalAlignment="Right"  Panel.ZIndex="120">
-            <Popup x:Name="trickEndPopup" IsOpen="False" PlacementTarget="{Binding ElementName=trickEndDock}" Width="250">
+        <!-- =========================================== TRICK END UI =========================================== -->
+        <DockPanel  VerticalAlignment="Top" HorizontalAlignment="Right" >
+            <Popup x:Name="trickEndPopup" IsOpen="False" PlacementTarget="{Binding ElementName=trickEndDock}" Width="250" AllowsTransparency="True" >
                 <StackPanel Orientation="Vertical" Background="Transparent">
-                    <Image Source="Textures/DAGGER.png"  Width="160" Panel.ZIndex="121" Margin="0,-50" />
+                    <Image Source="Textures/DAGGER.png"  Width="160" Margin="0 -50" Panel.ZIndex="121" />
                     <Grid Height="130">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" x:Name="TrickWinner" TextWrapping="Wrap" Text="Player won the trick" FontFamily="Carnivalee Freakshow" MaxWidth="200" />
                             <Grid.Background>
@@ -477,11 +477,11 @@
                             </Grid.Background>
                         </Grid>
                         <Button x:Name="StartTrickButton" Content="Next Trick! (Enter)" FontSize="17" Click="Button_Click" Foreground="{StaticResource UI_Brush}" Background="{StaticResource ButtonBackGround_Brush}" VerticalAlignment="Bottom" />
-                        </StackPanel>
-                    </Popup>
-                </DockPanel>
+                    </StackPanel>
+            </Popup>
+        </DockPanel>
 
-        <!-- =========================================== PLEYER CARDS =========================================== -->
+        <!-- =========================================== PLAYER CARDS =========================================== -->
         <ItemsControl ItemsSource="{Binding HandVM.PlayerCards}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
