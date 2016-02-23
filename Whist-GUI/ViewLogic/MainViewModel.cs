@@ -84,7 +84,7 @@ namespace Whist_GUI.ViewLogic
         {
             return Task.Run(() =>
             {
-                AIBid();
+                App.Current.Dispatcher.Invoke(() => AIBid());
             });
         }
 
