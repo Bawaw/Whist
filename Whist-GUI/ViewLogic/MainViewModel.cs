@@ -18,15 +18,19 @@ namespace Whist_GUI.ViewLogic
     public class BaseGameViewModel : INotifyPropertyChanged
     {
         private GameState currentGameState;
-        public GameState CurrentGameState { get { return currentGameState; }
-            private set {
+        public GameState CurrentGameState
+        {
+            get { return currentGameState; }
+            private set
+            {
                 if (value != currentGameState)
                 {
                     currentGameState = value;
-                    if(GameStateChanged != null)
+                    if (GameStateChanged != null)
                         GameStateChanged(value);
                 }
-        } }
+            }
+        }
 
         private GameManager gameManager;
         private Round Round
@@ -68,18 +72,20 @@ namespace Whist_GUI.ViewLogic
             while (Round.InBiddingPhase && Round.CurrentPlayer != gameManager.HumanPlayer)
                 await AsyncBidAI();
 
-            if (!Round.InBiddingPhase) {
+            if (!Round.InBiddingPhase)
+            {
                 EndBiddingRound();
-                    CurrentGameState = GameState.PLAYING;
-                }
+                CurrentGameState = GameState.PLAYING;
+            }
             NotifyUI();
         }
 
         Task AsyncBidAI()
         {
-            return Task.Run(() => {
+            return Task.Run(() =>
+            {
                 AIBid();
-            }); 
+            });
         }
 
         private void AIBid()
@@ -113,26 +119,23 @@ namespace Whist_GUI.ViewLogic
         public async void AI_PlaysCards()
         {
             var AI = new SimpleGameAI();
-            while (Round.CurrentPlayer != null && Round.CurrentPlayer != gameManager.HumanPlayer)
+            while (Round.TrickInProgress && Round.CurrentPlayer != null && Round.CurrentPlayer != gameManager.HumanPlayer)
             {
-                while (Round.TrickInProgress && Round.CurrentPlayer != null && Round.CurrentPlayer != gameManager.HumanPlayer)
-                {
-                    await AsyncPlayCardAI();
-                }
-                if (!Round.TrickInProgress)
-                {
-                    //MessageBoxResult result = MessageBox.Show(Round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
-                    //trickEndVM.Winner = Round.PileOwner.name + " won the trick";
-                    //trickEndVM.Visibility = "Visible";
-                    //Round.EndTrick();
-                    CurrentGameState = GameState.ENDTRICK;
-                    break;
-                }
+                await AsyncPlayCardAI();
+            }
+            if (!Round.TrickInProgress)
+            {
+                //MessageBoxResult result = MessageBox.Show(Round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
+                //trickEndVM.Winner = Round.PileOwner.name + " won the trick";
+                //trickEndVM.Visibility = "Visible";
+                //Round.EndTrick();
+                CurrentGameState = GameState.ENDTRICK;
             }
             NotifyUI();
         }
 
-        public void PlayCard(Card card) {
+        public void PlayCard(Card card)
+        {
             CurrentPlayer = Round.CurrentPlayer;
             whistController.PlayCard(card);
             if (!Round.TrickInProgress)
@@ -142,7 +145,8 @@ namespace Whist_GUI.ViewLogic
             AI_PlaysCards();
         }
 
-        public void StartNewTrick() {
+        public void StartNewTrick()
+        {
             Round.EndTrick();
             CurrentGameState = GameState.PLAYING;
             if (!Round.InTrickPhase)
@@ -151,7 +155,7 @@ namespace Whist_GUI.ViewLogic
                 string str = "";
                 foreach (var player in Round.Players)
                     str += player.name + " (" + player.Tricks + ") - " + player.score + "\n";
-                
+
                 MessageBoxResult result = MessageBox.Show(str, "Round End", MessageBoxButton.OK, MessageBoxImage.None);
                 StartNewRound();
             }
@@ -159,7 +163,8 @@ namespace Whist_GUI.ViewLogic
 
         Task AsyncPlayCardAI()
         {
-            return Task.Run(() => {
+            return Task.Run(() =>
+            {
                 Thread.Sleep(300);
                 CurrentPlayer = Round.CurrentPlayer;
                 var aiCard = AIPlay();
@@ -178,15 +183,17 @@ namespace Whist_GUI.ViewLogic
             return aiCard;
         }
 
-        public bool IsValidPlay(Card card) {
+        public bool IsValidPlay(Card card)
+        {
             if (Round.CurrentPlayer != gameManager.HumanPlayer)
                 return false;
-            if (!Round.InTrickPhase)
+            if (!Round.InTrickPhase || !Round.TrickInProgress)
                 return false;
             return whistController.IsValidPlay(card);
         }
 
-        public ObservableCollection<Card> GetCurrentPlayerCards() {
+        public ObservableCollection<Card> GetCurrentPlayerCards()
+        {
             return gameManager.HumanPlayer.hand.Cards;
         }
 
@@ -216,7 +223,7 @@ namespace Whist_GUI.ViewLogic
                 PropertyChanged(this, new PropertyChangedEventArgs("Round"));
                 PropertyChanged(this, new PropertyChangedEventArgs("infoPanelVM"));
                 PropertyChanged(this, new PropertyChangedEventArgs("trickEndVM"));
-                
+
             }
             infoPanelVM.PropChanged();
             //trickEndVM.PropChanged();
@@ -238,7 +245,8 @@ namespace Whist_GUI.ViewLogic
             this.playCmd = new PlayCommand(this);
         }
 
-        public void playCard(Card card) {
+        public void playCard(Card card)
+        {
             mainViewModel.PlayCard(card);
         }
 
