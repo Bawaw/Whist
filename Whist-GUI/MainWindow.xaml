@@ -150,7 +150,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Viewport3D Camera="{StaticResource MainCamera}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="145.2" Width="145.2" >
+                            <Viewport3D Camera="{StaticResource MainCamera}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="145.2" Width="145.2" Opacity="0" >
                                 <Viewport2DVisual3D >
                                     <Viewport2DVisual3D.Geometry>
                                         <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0" TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>

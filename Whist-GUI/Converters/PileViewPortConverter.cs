@@ -90,6 +90,9 @@ namespace Whist_GUI
             var viewport = values[1] as Viewport3D;
             if (gvm == null || viewport == null) return null;
 
+            //Only make visible after rotation
+            viewport.Opacity = 1;
+
             switch (gvm.CurrentPlayer.Number)
             {
                 case 1:
