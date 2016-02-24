@@ -149,6 +149,7 @@ namespace Whist_GUI.ViewLogic
 
         public void PlayCard(Card card)
         {
+            infoPanelVM.AddLineToActionLog(Round.CurrentPlayer.name + ": " + card.ToString());
             CurrentPlayer = Round.CurrentPlayer;
             whistController.PlayCard(card);
             if (!Round.TrickInProgress)
