@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Whist_GUI"
         mc:Ignorable="d" Closed="Window_Closed"
-        Title="MainWindow" Height="auto" Width="auto" WindowState="Maximized">
+        Title="Whist" Height="auto" Width="auto" WindowState="Maximized" Icon="Textures/red_back.png">
     <Window.Resources>
         <local:CardImageConverter x:Key="CardConverter" />
         <local:TrumpImageConverter x:Key="TrumpConverter" />
@@ -18,7 +18,7 @@
             <AmbientLight Color="Bisque"/>
             <SpotLight Color="Yellow" Direction="0 -0.1 -0.3" InnerConeAngle="17" OuterConeAngle="17" Position="0 3 9" />
         </Model3DGroup>
-        <PerspectiveCamera x:Key="MainCamera" Position="0, 0, 3" />
+        <PerspectiveCamera x:Key="MainCamera" Position="0, -0.5, 2.8" LookDirection="0 0.1 -0.5" />
         
         <LinearGradientBrush x:Key="UI_Brush" EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FFE7E381" Offset="0"/>
@@ -150,7 +150,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Viewport3D Camera="{StaticResource MainCamera}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="145.2" Width="145.2" >
+                            <Viewport3D Camera="{StaticResource MainCamera}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="145.2" Width="145.2" Opacity="0" >
                                 <Viewport2DVisual3D >
                                     <Viewport2DVisual3D.Geometry>
                                         <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0" TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
@@ -250,7 +250,20 @@
                                         <DiffuseMaterial.Brush>
                                             <VisualBrush Stretch="None" >
                                                 <VisualBrush.Visual>
-                                                    <Label Content="Computer 1" FontSize="0.18" Foreground="#FFD9D9D9" FontFamily="Monotype Corsiva" />
+                                                    <Label x:Name="labelC1" Content="Computer 1" FontSize="0.18" FontFamily="Monotype Corsiva">
+                                                        <Label.Style>
+                                                            <Style TargetType="{x:Type Label}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding Comp1InPlayerTeam}" Value="True">
+                                                                        <Setter Property="Label.Foreground" Value="Blue" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Comp1InPlayerTeam}" Value="False">
+                                                                        <Setter Property="Label.Foreground" Value="#FFD9D9D9" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Label.Style>
+                                                    </Label>
                                                 </VisualBrush.Visual>
                                                 <VisualBrush.RelativeTransform>
                                                     <RotateTransform Angle="90" CenterX="0.5" CenterY ="0.5"/>
@@ -269,7 +282,7 @@
 
                 <!-- =========================================== COMPUTER 2 =========================================== -->
                 <StackPanel Orientation="Vertical" VerticalAlignment="Top">
-                <ItemsControl ItemsSource="{Binding Comp2Cards}" VerticalAlignment="Top">
+                    <ItemsControl ItemsSource="{Binding Comp2Cards}" VerticalAlignment="Top" Margin ="0 50 ">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -298,7 +311,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 0">
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 -60 0 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150" />
                             <ColumnDefinition Width="*" />
@@ -336,7 +349,20 @@
                                         <DiffuseMaterial.Brush>
                                             <VisualBrush Stretch="None" >
                                                 <VisualBrush.Visual>
-                                                    <Label Content="Computer 2" FontSize="0.18" Foreground="#FFD9D9D9" FontFamily="Monotype Corsiva" />
+                                                    <Label x:Name="labelC2" Content="Computer 2" FontSize="0.18" FontFamily="Monotype Corsiva">
+                                                        <Label.Style>
+                                                            <Style TargetType="{x:Type Label}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding Comp2InPlayerTeam}" Value="True">
+                                                                        <Setter Property="Label.Foreground" Value="Blue" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Comp2InPlayerTeam}" Value="False">
+                                                                        <Setter Property="Label.Foreground" Value="#FFD9D9D9" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Label.Style>
+                                                    </Label>
                                                 </VisualBrush.Visual>
                                                 <VisualBrush.RelativeTransform>
                                                     <RotateTransform Angle="180" CenterX="0.5" CenterY ="0.5"/>
@@ -392,7 +418,21 @@
                                         <DiffuseMaterial.Brush>
                                             <VisualBrush Stretch="None" >
                                                 <VisualBrush.Visual>
-                                                    <Label Content="Computer 2" FontSize="0.18" Foreground="#FFD9D9D9" FontFamily="Monotype Corsiva" />
+
+                                                    <Label x:Name="labelC3" Content="Computer 3" FontSize="0.18" FontFamily="Monotype Corsiva">
+                                                        <Label.Style>
+                                                            <Style TargetType="{x:Type Label}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding Comp3InPlayerTeam}" Value="True">
+                                                                        <Setter Property="Label.Foreground" Value="Blue" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Comp3InPlayerTeam}" Value="False">
+                                                                        <Setter Property="Label.Foreground" Value="#FFD9D9D9" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Label.Style>
+                                                    </Label>
                                                 </VisualBrush.Visual>
                                                 <VisualBrush.RelativeTransform>
                                                     <RotateTransform Angle="270" CenterX="0.5" CenterY ="0.5"/>
@@ -462,10 +502,10 @@
         </StackPanel>
 
                 <!-- =========================================== TRICK END UI =========================================== -->
-        <DockPanel  VerticalAlignment="Top" HorizontalAlignment="Right"  Panel.ZIndex="120">
-            <Popup x:Name="trickEndPopup" IsOpen="False" PlacementTarget="{Binding ElementName=trickEndDock}" Width="250">
+        <DockPanel  VerticalAlignment="Top" HorizontalAlignment="Right" >
+            <Popup x:Name="trickEndPopup" IsOpen="False" PlacementTarget="{Binding ElementName=trickEndDock}" Width="250" AllowsTransparency="True" >
                 <StackPanel Orientation="Vertical" Background="Transparent">
-                    <Image Source="Textures/DAGGER.png"  Width="160" Panel.ZIndex="121" Margin="0,-50" />
+                    <Image Source="Textures/DAGGER.png"  Width="160" Margin="0 -50" Panel.ZIndex="121" />
                     <Grid Height="130">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" x:Name="TrickWinner" TextWrapping="Wrap" Text="Player won the trick" FontFamily="Carnivalee Freakshow" MaxWidth="200" />
                             <Grid.Background>
@@ -481,7 +521,7 @@
                     </Popup>
                 </DockPanel>
 
-        <!-- =========================================== PLEYER CARDS =========================================== -->
+        <!-- =========================================== PLAYER CARDS =========================================== -->
         <ItemsControl ItemsSource="{Binding HandVM.PlayerCards}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

@@ -80,6 +80,7 @@ namespace Whist_GUI
                 Team[] teams = Round?.Teams;
                 if (teams == null)
                 {
+                    str += "Players:";
                     foreach (Player p in Round.Players)
                     {
                         str += "\n-" + p.name + " (" + p.score + ") ";
@@ -87,14 +88,16 @@ namespace Whist_GUI
                 }
                 else
                 {
+                    str += "Teams:";
                     foreach (Team team in teams)
                     {
                         str += "\n-";
-                        foreach (Player p in team.Players)
+                        for (int i=0; i<team.Players.Length-1; i++)
                         {
-                            str += "[" + p.name + "(" + p.score + ")] ";
+                            str += team.Players[i].name + "(" + team.Players[i].score + ") + ";
                         }
-                        str += "(" + team.Tricks + "/" + team.objective + ")";
+                        str += team.Players[team.Players.Length-1].name + "(" + team.Players[team.Players.Length - 1].score + ")";
+                        str += " - (" + team.Tricks + "/" + team.objective + ")";
                     }
                 }
                 return str;

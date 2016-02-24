@@ -41,6 +41,9 @@ namespace Whist_GUI
 
             Whist.DataContext = model;
             BiddingView.DataContext = new BiddingViewModel(model);
+            labelC1.DataContext = model;
+            labelC2.DataContext = model;
+            labelC3.DataContext = model;
         }
 
         private void OnGameStateChanged(GameState gameState) {
