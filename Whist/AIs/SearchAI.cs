@@ -61,7 +61,7 @@ namespace Whist.AIs
         {
             IList<Player> playersToGo = round.PlayersLeft;
             int[] HeuristicScores = new int[4];
-
+            
             Suits suit = card.Suit;
             if (round.Pile.Count > 0)
                 suit = round.Pile[0].Suit;
