@@ -21,17 +21,17 @@ namespace Whist.AIs
             this.game = game;
         }
 
-        public void ProcessOtherPlayerAction(Player otherPlayer, Action action)
+        public virtual void ProcessOtherPlayerAction(Player otherPlayer, Action action)
         {
 
         }
 
-        public void ProcessOtherPlayerCard(Player otherPlayer, Card card)
+        public virtual void ProcessOtherPlayerCard(Player otherPlayer, Card card)
         {
 
         }
 
-        public Action GetAction()
+        public virtual Action GetAction()
         {
             var possibleActions = Round.BiddingGetPossibleActions();
 
@@ -141,7 +141,7 @@ namespace Whist.AIs
             return handStrength;
         }
 
-        public Card GetMove()
+        public virtual Card GetMove()
         {
             var cards = Round.CurrentPlayer.hand.Cards;
             var pile = Round.Pile;

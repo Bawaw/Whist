@@ -15,6 +15,8 @@ namespace Whist.AIs
             {
                 case AIType.Basic:
                     return new BaseAI(player, game);
+                case AIType.Memory:
+                    return new MemoryAI(player, game);
             }
             throw new ApplicationException();
         }
@@ -22,6 +24,7 @@ namespace Whist.AIs
 
     public enum AIType
     {
-        Basic
+        Basic,
+        Memory
     }
 }
