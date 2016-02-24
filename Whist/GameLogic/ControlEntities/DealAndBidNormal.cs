@@ -56,7 +56,7 @@ namespace Whist.GameLogic.ControlEntities
                 passedPlayers.Add(player, false);
                 player.hand.Cards.Clear();
             }
-
+ 
             DealCards();
         }
 

@@ -34,44 +34,37 @@ namespace Whist_GUI
             var infoPanelVM = new InfoPanelViewModel(gameManager);
             InfoPanel.DataContext = infoPanelVM;
 
-            var trickEndVM = new TrickEndViewModel();
-            trickEndPopup.DataContext = trickEndVM;
-            KeyDown += new KeyEventHandler(HandleEnter); 
- 
+
             //round
-            model = new BaseGameViewModel(gameManager, infoPanelVM, trickEndVM);
-            model.GameStateChanged += start_end_InitialBiddingPhase;
+            model = new BaseGameViewModel(gameManager, infoPanelVM);
+            model.GameStateChanged += OnGameStateChanged;
 
             Whist.DataContext = model;
             BiddingView.DataContext = new BiddingViewModel(model);
         }
 
-        private void HandleEnter(object sender, KeyEventArgs e)
-        {
-            if(ContinueText.Visibility == Visibility.Visible && e.Key == Key.Enter)
-            {
-                ContinueText.Visibility = Visibility.Hidden;
-                model.EndTrick();
-            }
-        }
-
-        private void start_end_InitialBiddingPhase(GameState gameState) {
+        private void OnGameStateChanged(GameState gameState) {
             if (gameState == GameState.BIDDING)
                 popup.IsOpen = true;
             else
                 popup.IsOpen = false;
-
-            //TransformGroup transformGroup = new TransformGroup();
-            //RotateTransform rotate1 = new RotateTransform();
-            //rotate1.Angle = 90;
-            //transformGroup.Children.Add(rotate1);
-            //Comp1SingleCard.i
-            //ImageBrush brush = new ImageBrush("Textures\red_back.png");
+            if (gameState == GameState.ENDTRICK) {
+                TrickWinner.Text = model.LatestTrickWinner + " won the trick!";
+                trickEndPopup.IsOpen = true;
+                StartTrickButton.Focus();
+            }
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            trickEndPopup.IsOpen = false;
+            model.StartNewTrick();
+            model.AI_PlaysCards();
         }
     }
 }

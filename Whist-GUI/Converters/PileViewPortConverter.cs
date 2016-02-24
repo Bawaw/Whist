@@ -7,14 +7,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 using Whist.GameLogic;
 using Whist.GameLogic.ControlEntities;
 using Whist_GUI.ViewLogic;
 
 namespace Whist_GUI
 {
-    public class ViewPortConverter : IMultiValueConverter
+    public class ColumnConverter : IMultiValueConverter
     {
+
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {    
             var gvm = values[0] as BaseGameViewModel;
@@ -22,6 +24,7 @@ namespace Whist_GUI
 
             if (gvm == null || itemsControl == null) return null;
 
+            if (gvm.CurrentPlayer.Number == 0) return null;
             switch (gvm.CurrentPlayer.Number)
             {
                 case 1:
@@ -45,7 +48,7 @@ namespace Whist_GUI
         }
     }
 
-    public class ViewPortConverter2 : IMultiValueConverter
+    public class RowConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
@@ -64,6 +67,39 @@ namespace Whist_GUI
                     return 0;
                 case 4:
                     return 1;
+                default:
+                    break;
+            }
+
+            return null;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+    public class AngleConverter : IMultiValueConverter
+    {
+
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            var gvm = values[0] as BaseGameViewModel;
+            var viewport = values[1] as Viewport3D;
+            if (gvm == null || viewport == null) return null;
+
+            switch (gvm.CurrentPlayer.Number)
+            {
+                case 1:
+                    return new RotateTransform(0,0.5,0.5);
+                case 2:
+                    return new RotateTransform(90, 0.5, 0.5);
+                case 3:
+                    return new RotateTransform(0,0.5, 0.5);
+                case 4:
+                    return new RotateTransform(90, 0.5, 0.5);
                 default:
                     break;
             }
