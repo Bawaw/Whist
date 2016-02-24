@@ -8,13 +8,13 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist.AIs
 {
-    class OmniscentSearchAI
+    class OmniscentSearchAI : IGameAI
     {
-        private Round round;
+        private GameManager gameManager;
 
-        public OmniscentSearchAI(Round round)
+        public OmniscentSearchAI(Player player, GameManager gameManager)
         {
-            this.round = round;
+            this.gameManager = gameManager;
         }
 
         //how far is player from winning all tricks
@@ -29,55 +29,58 @@ namespace Whist.AIs
 
             var highestCard = hand[0];
             foreach (var card in hand)
-                if (highestCard.Suit == card.Suit || highestCard.Suit == round.Trump && (int)card.Number > (int)highestCard.Number)
+                if (highestCard.Suit == card.Suit || highestCard.Suit == gameManager.Round.Trump && (int)card.Number > (int)highestCard.Number)
                 {
                     highestCard = card;
                     heuristicScore = (int)card.Number;
                 }
 
-            if (highestCard.Suit == round.Trump)
+            if (highestCard.Suit == gameManager.Round.Trump)
                 heuristicScore += 10;
 
             //trump 2 is value 15, ace lead is value 14, not of type lead = 0;
-            return (highestCard.Suit == round.Trump) ? (int)highestCard.Number : (int)highestCard.Number + 13;
+            return (highestCard.Suit == gameManager.Round.Trump) ? (int)highestCard.Number : (int)highestCard.Number + 13;
         }
 
         private Team CurrentTeam()
         {
-            return round.Teams.Where(t => t.Players.Any(p => p == round.CurrentPlayer)).Single();
+            return gameManager.Round.Teams.Where(t => t.Players.Any(p => p == gameManager.Round.CurrentPlayer)).Single();
         }
 
         public Card GetMove(IReferee referee)
         {
-            var playableCards = round.CurrentPlayer.hand.Cards.Where(x => referee.ValidateMove(x, round.Pile[0], round.CurrentPlayer.hand.Cards.ToList())).ToList();
+            var playableCards = (gameManager.Round.Pile.Count > 0) ? gameManager.Round.CurrentPlayer.hand.Cards.Where(x => referee.ValidateMove(x, gameManager.Round.Pile[0], gameManager.Round.CurrentPlayer.hand.Cards.ToList())).ToList() : gameManager.Round.CurrentPlayer.hand.Cards.ToList();
+            if (playableCards.Count <= 0)
+                return GetLowestCard(gameManager.Round.CurrentPlayer.hand.Cards);
             foreach (var card in playableCards)
-                if (TestMove(card, referee) == round.CurrentPlayer.Number)
+                if (TestMove(card, referee) == gameManager.Round.CurrentPlayer.Number)
                     return card;
-            return GetLowestCard(round.CurrentPlayer.hand.Cards);
+            return GetLowestCard(playableCards);
         }
 
         //returns the player that will win if this card is played
         public int TestMove(Card card, IReferee referee)
         {
-            IList<Player> playersToGo = round.PlayersLeft;
+            IList<Player> playersToGo = gameManager.Round.PlayersLeft;
             int[] HeuristicScores = new int[4];
             
             Suits suit = card.Suit;
-            if (round.Pile.Count > 0)
-                suit = round.Pile[0].Suit;
+            if (gameManager.Round.Pile.Count > 0)
+                suit = gameManager.Round.Pile[0].Suit;
 
+            Card compCard = (gameManager.Round.Pile.Count > 0) ? gameManager.Round.Pile[0] : card;
             foreach (var player in playersToGo) {
-                var playableCards = player.hand.Cards.Where(x => referee.ValidateMove(x, round.Pile[0], player.hand.Cards.ToList())).ToList();
-                HeuristicScores[player.Number] = GetHeuristicalHandChances(playableCards, suit);
+                var playableCards = player.hand.Cards.Where(x => referee.ValidateMove(x, compCard, player.hand.Cards.ToList())).ToList();
+                HeuristicScores[player.Number-1] = GetHeuristicalHandChances(playableCards, suit);
             }
 
-            if (round.Pile.Count > 0)
-                HeuristicScores[round.PileOwner.Number] = GetHeuristicalHandChances(round.Pile, suit);
+            if (gameManager.Round.Pile.Count > 0)
+                HeuristicScores[gameManager.Round.PileOwner.Number-1] = GetHeuristicalHandChances(gameManager.Round.Pile, suit);
 
-            HeuristicScores[round.CurrentPlayer.Number] = GetHeuristicalHandChances(new List<Card>() { card }, suit);
+            HeuristicScores[gameManager.Round.CurrentPlayer.Number-1] = GetHeuristicalHandChances(new List<Card>() { card }, suit);
 
 
-            return HeuristicScores.ToList().IndexOf(HeuristicScores.Max());
+            return HeuristicScores.ToList().IndexOf(HeuristicScores.Max()) + 1;
         }
 
         private Card GetLowestCard(IEnumerable<Card> cards)
@@ -91,8 +94,6 @@ namespace Whist.AIs
                     minCard = card;
             }
             return minCard;
-        }
-        
-
+        } 
     }
 }

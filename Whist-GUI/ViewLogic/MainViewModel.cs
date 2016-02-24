@@ -105,9 +105,10 @@ namespace Whist_GUI.ViewLogic
         {
             if (Round.CurrentPlayer == gameManager.HumanPlayer)
                 return;
-            var action = gameManager.GetAI(Round.CurrentPlayer).GetAction();
-            foreach (Player otherAI in gameManager.NonHumanPlayers.Except(new Player[] { Round.CurrentPlayer }))
-                gameManager.GetAI(otherAI).ProcessOtherPlayerAction(Round.CurrentPlayer, action);
+            var action = gameManager.GetBidAI(Round.CurrentPlayer).GetAction();
+            //not a place to do this
+            //foreach (Player otherAI in gameManager.NonHumanPlayers.Except(new Player[] { Round.CurrentPlayer }))
+                //gameManager.GetBidAI(otherAI).ProcessOtherPlayerAction(Round.CurrentPlayer, action);
             infoPanelVM.AddLineToActionLog(Round.CurrentPlayer.name + ": " + action.ToString());
             Round.BiddingDoAction(action);
         }
@@ -184,14 +185,14 @@ namespace Whist_GUI.ViewLogic
                 App.Current.Dispatcher.Invoke(() => Round.PlayCard(aiCard));
             });
         }
-
+        //TODO: use referee
         private Card AIPlay()
         {
             if (Round.CurrentPlayer == gameManager.HumanPlayer)
                 return null;
-            var aiCard = gameManager.GetAI(Round.CurrentPlayer).GetMove();
-            foreach (Player otherAI in gameManager.NonHumanPlayers.Except(new Player[] { Round.CurrentPlayer }))
-                gameManager.GetAI(otherAI).ProcessOtherPlayerCard(Round.CurrentPlayer, aiCard);
+            var aiCard = gameManager.GetGameAI(Round.CurrentPlayer).GetMove(new StandardReferee());
+            //foreach (Player otherAI in gameManager.NonHumanPlayers.Except(new Player[] { Round.CurrentPlayer }))
+                //gameManager.GetAI(otherAI).ProcessOtherPlayerCard(Round.CurrentPlayer, aiCard);
             infoPanelVM.AddLineToActionLog(CurrentPlayer.name + ": " + aiCard.ToString());
             return aiCard;
         }
