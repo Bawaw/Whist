@@ -21,24 +21,44 @@ namespace Whist.AIs
             this.game = game;
         }
 
-        public void ProcessOtherPlayerAction(Player otherPlayer, Action action)
+        public virtual void ProcessOtherPlayerAction(Player otherPlayer, Action action)
         {
 
         }
 
-        public void ProcessOtherPlayerCard(Player otherPlayer, Card card)
+        public virtual void ProcessOtherPlayerCard(Player otherPlayer, Card card)
         {
 
         }
 
-        public Action GetAction()
+        public virtual Action GetAction()
         {
             var possibleActions = Round.BiddingGetPossibleActions();
-            int handStrength = GetHandStrength();
+
+            int handStrength = GetHandStrength(Round.Trump);
+
+            int alternateHandStrength = 0;
+            Suits alternateSuit = Round.Trump;
+            foreach (Suits suit in System.Enum.GetValues(typeof(Suits)))
+            {
+                if (suit != Round.Trump)
+                {
+                    int temp = GetHandStrength(suit);
+                    if (temp > alternateHandStrength)
+                    {
+                        alternateHandStrength = temp;
+                        alternateSuit = suit;
+                    }
+                }
+            }
 
             if (!possibleActions.Contains(Action.PASS))
             {
-                switch (Round.Trump)
+                Suits preferredSuit = Round.Trump;
+                if (alternateHandStrength > handStrength)
+                    preferredSuit = alternateSuit;
+
+                switch (preferredSuit)
                 {
                     case Suits.HEARTS:
                         return Action.HEARTS;
@@ -52,6 +72,10 @@ namespace Whist.AIs
                         return 0;
                 }
             }
+
+            if (alternateHandStrength > 9)
+                if (possibleActions.Contains(Action.ABONDANCE))
+                    return Action.ABONDANCE;
 
             if (handStrength >= 9)
             {
@@ -75,20 +99,49 @@ namespace Whist.AIs
         }
 
 
-        private int GetHandStrength()
+        private int GetHandStrength(Suits trump)
         {
             int handStrength = 0;
 
             var cards = player.hand.Cards;
             var kingsAndAces = cards.Where(c => c.Number == Numbers.ACE || c.Number == Numbers.KING);
             handStrength += kingsAndAces.Count();
-            var trumps = cards.Where(c => c.Suit == Round.Trump && c.Number > Numbers.FIVE);
-            handStrength += trumps.Except(kingsAndAces).Count();
+
+            foreach (Suits suit in System.Enum.GetValues(typeof(Suits)))
+            {
+                if (suit != trump)
+                {
+                    var cardsOfSuit = cards.Where(c => c.Suit == suit);
+                    Numbers i = Numbers.ACE;
+                    while (i >= Numbers.TEN)
+                    {
+                        if (cardsOfSuit.Any(c => c.Number == i))
+                            handStrength++;
+                        else
+                            break;
+                        i--;
+                    }
+                }
+            }
+
+            var cardsOfTrump = cards.Where(c => c.Suit == trump);
+            int holeCount = 2;
+            Numbers n = Numbers.ACE;
+            while (n >= Numbers.FIVE)
+            {
+                if (cardsOfTrump.Any(c => c.Number == n))
+                    handStrength++;
+                else
+                    if (holeCount-- <= 0)
+                    break;
+                n--;
+            }
+
 
             return handStrength;
         }
 
-        public Card GetMove()
+        public virtual Card GetMove()
         {
             var cards = Round.CurrentPlayer.hand.Cards;
             var pile = Round.Pile;

@@ -266,7 +266,7 @@ namespace Whist.GameLogic.ControlEntities
                 {
                     case 4:
                         {
-                            if (GameCase == Case.FFA)
+                            if (GameCase == Case.UNDECIDED)
                             {
                                 init();
                                 return;
@@ -279,7 +279,7 @@ namespace Whist.GameLogic.ControlEntities
                         }
                     case 3:
                         {
-                            if (GameCase == Case.FFA && playerA != null)//No one did anything special, one player Asked, no one responded.
+                            if (GameCase == Case.UNDECIDED && playerA != null)//No one did anything special, one player Asked, no one responded.
                                 CurrentPlayer = playerA;//Ask player if he wants to go alone or FFA.
                             else
                                 CurrentPlayer = null;
@@ -347,7 +347,7 @@ namespace Whist.GameLogic.ControlEntities
             {
                 if (!passedPlayers.ContainsValue(false))//Everyone passed => FFA
                 {
-                    GameCase = Case.FFA;
+                    GameCase = Case.UNDECIDED;
                     throw new ApplicationException();
                 }
             }
@@ -370,15 +370,6 @@ namespace Whist.GameLogic.ControlEntities
                         Player[] others = players.Except(teamA.Players).ToArray();
                         Team teamB = new Team(others, 9);
                         teams = new Team[] { teamA, teamB };
-                        break;
-                    }
-                case Case.FFA:
-                    {
-                        Team teamA = new Team(new Player[] { players[0] }, 4);
-                        Team teamB = new Team(new Player[] { players[1] }, 4);
-                        Team teamC = new Team(new Player[] { players[2] }, 4);
-                        Team teamD = new Team(new Player[] { players[3] }, 4);
-                        teams = new Team[] { teamA, teamB, teamC, teamD };
                         break;
                     }
                 case Case.TROEL:
@@ -453,7 +444,7 @@ namespace Whist.GameLogic.ControlEntities
 
     public enum Case
     {
-        FFA,
+        UNDECIDED,
         TEAM,
         ALONE,
         TROEL,

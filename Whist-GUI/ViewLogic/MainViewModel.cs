@@ -52,6 +52,19 @@ namespace Whist_GUI.ViewLogic
         public ObservableCollection<Card> Comp2Cards { get { return Round.Players.Where(p => p.name == "Comp 2").Single().hand.Cards; } }
         public ObservableCollection<Card> Comp3Cards { get { return Round.Players.Where(p => p.name == "Comp 3").Single().hand.Cards; } }
 
+        public bool Comp1InPlayerTeam
+        {
+            get { if (!Round.InTrickPhase) return false; return Round.Teams.Where(t => t.Players.Any(p => p == gameManager.HumanPlayer)).Single().Players.Contains(Round.Players.Where(p => p.name == "Comp 1").Single()); }
+        }
+        public bool Comp2InPlayerTeam
+        {
+            get { if (!Round.InTrickPhase) return false; return Round.Teams.Where(t => t.Players.Any(p => p == gameManager.HumanPlayer)).Single().Players.Contains(Round.Players.Where(p => p.name == "Comp 2").Single()); }
+        }
+        public bool Comp3InPlayerTeam
+        {
+            get { if (!Round.InTrickPhase) return false; return Round.Teams.Where(t => t.Players.Any(p => p == gameManager.HumanPlayer)).Single().Players.Contains(Round.Players.Where(p => p.name == "Comp 3").Single()); }
+        }
+
         public delegate void IsInMode(GameState gameState);
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -84,7 +97,7 @@ namespace Whist_GUI.ViewLogic
         {
             return Task.Run(() =>
             {
-                AIBid();
+                App.Current.Dispatcher.Invoke(() => AIBid());
             });
         }
 
@@ -222,11 +235,12 @@ namespace Whist_GUI.ViewLogic
                 PropertyChanged(this, new PropertyChangedEventArgs("Trump"));
                 PropertyChanged(this, new PropertyChangedEventArgs("Round"));
                 PropertyChanged(this, new PropertyChangedEventArgs("infoPanelVM"));
-                PropertyChanged(this, new PropertyChangedEventArgs("trickEndVM"));
+                PropertyChanged(this, new PropertyChangedEventArgs("Comp1InPlayerTeam"));
+                PropertyChanged(this, new PropertyChangedEventArgs("Comp2InPlayerTeam"));
+                PropertyChanged(this, new PropertyChangedEventArgs("Comp3InPlayerTeam"));
 
             }
             infoPanelVM.PropChanged();
-            //trickEndVM.PropChanged();
         }
     }
 
