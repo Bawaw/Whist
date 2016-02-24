@@ -73,6 +73,8 @@ namespace Whist.AIs
                 }
             }
 
+            System.Console.WriteLine(player.name + " handstrength " + handStrength + ", alt: " + alternateHandStrength);
+
             if (alternateHandStrength > 9)
                 if (possibleActions.Contains(Action.ABONDANCE))
                     return Action.ABONDANCE;
@@ -104,8 +106,6 @@ namespace Whist.AIs
             int handStrength = 0;
 
             var cards = player.hand.Cards;
-            var kingsAndAces = cards.Where(c => c.Number == Numbers.ACE || c.Number == Numbers.KING);
-            handStrength += kingsAndAces.Count();
 
             foreach (Suits suit in System.Enum.GetValues(typeof(Suits)))
             {
