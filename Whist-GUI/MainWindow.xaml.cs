@@ -68,5 +68,6 @@ namespace Whist_GUI
             model.StartNewTrick();
             model.AI_PlaysCards();
         }
+        
     }
 }
