@@ -18,11 +18,14 @@ namespace Whist.GameLogic.ControlEntities
         protected int currentPlayer;
 
         public Player CurrentPlayer { get { return players[currentPlayer]; } }
+        public IList<Player> PlayersLeft { get; protected set; }
+
         public ObservableCollection<Card> Pile { get { return pile; } }
 
         public GameController(Player[] players, IReferee referee)
         {
             this.players = players;
+            this.PlayersLeft = players.ToList();
             this.referee = referee;
             pile = new ObservableCollection<Card>();
         }
@@ -106,6 +109,7 @@ namespace Whist.GameLogic.ControlEntities
         //play a card for current player, returns true if valid play
         public override bool PlayCard(Card card)
         {
+            PlayersLeft.Remove(CurrentPlayer);
             if (pile.Count <= 0)
             {
                 pileOwner = currentPlayer;
@@ -158,6 +162,7 @@ namespace Whist.GameLogic.ControlEntities
         //Call if turn ends to clean up, returns trick winner
         public Player EndTrick()
         {
+            PlayersLeft = players.ToList();
             players[pileOwner].addTrick();
             pile.Clear();
             foreach (Player player in players)
@@ -168,6 +173,5 @@ namespace Whist.GameLogic.ControlEntities
         }
 
         public Dictionary<Player, Card> CardPlayedByPlayer { get; private set; }
-
     }
 }

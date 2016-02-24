@@ -10,7 +10,7 @@ namespace Whist.AIs
 {
     class OmniscentSearchAI
     {
-        /*private Round round;
+        private Round round;
 
         public OmniscentSearchAI(Round round)
         {
@@ -61,7 +61,7 @@ namespace Whist.AIs
         {
             IList<Player> playersToGo = round.PlayersLeft;
             int[] HeuristicScores = new int[4];
-
+            
             Suits suit = card.Suit;
             if (round.Pile.Count > 0)
                 suit = round.Pile[0].Suit;
@@ -92,7 +92,7 @@ namespace Whist.AIs
             }
             return minCard;
         }
-        */
+        
 
     }
 }

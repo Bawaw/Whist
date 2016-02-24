@@ -150,7 +150,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Viewport3D Camera="{StaticResource MainCamera}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="145.2" Width="145.2" Opacity="0" >
+                            <Viewport3D Camera="{StaticResource MainCamera}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="120" Width="120" Opacity="0" >
                                 <Viewport2DVisual3D >
                                     <Viewport2DVisual3D.Geometry>
                                         <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0" TextureCoordinates="0,0 0,1 1,1 1,0" TriangleIndices="0 1 2 0 2 3"/>
@@ -507,7 +507,7 @@
                 <StackPanel Orientation="Vertical" Background="Transparent">
                     <Image Source="Textures/DAGGER.png"  Width="160" Margin="0 -50" Panel.ZIndex="121" />
                     <Grid Height="130">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" x:Name="TrickWinner" TextWrapping="Wrap" Text="Player won the trick" FontFamily="Carnivalee Freakshow" MaxWidth="200" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="35" x:Name="TrickWinner" TextWrapping="Wrap" Text="Player won the trick" FontFamily="Carnivalee Freakshow" MaxWidth="200" />
                             <Grid.Background>
                                 <ImageBrush ImageSource = "Textures\red_back.png"  >
                                     <ImageBrush.RelativeTransform>
