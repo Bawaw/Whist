@@ -9,24 +9,27 @@ namespace Whist.GameLogic.ControlEntities
 {
     public class GameManager
     {
-        Player[] players;
+        public Player[] Players
+        {
+            get; private set;
+        }
         Dictionary<Player, AI> aiPlayers;
 
         public GameManager()
         {
-            players = new Player[]
+            Players = new Player[]
             {
                 new Player("Player",1),
                 new Player("Comp 1",2),
                 new Player("Comp 2",3),
                 new Player("Comp 3",4)
             };
-            HumanPlayer = players[0];
+            HumanPlayer = Players[0];
             RoundNumber = 1;
-            Round = new Round(players);
+            Round = new Round(Players);
             aiPlayers = new Dictionary<Player, AI>();
             foreach(Player player in NonHumanPlayers)
-                aiPlayers.Add(player, AIFactory.CreateAI(player, this, AIType.Basic));
+                aiPlayers.Add(player, AIFactory.CreateAI(player, this, AIType.Memory));
         }
 
         public Player HumanPlayer
@@ -47,7 +50,7 @@ namespace Whist.GameLogic.ControlEntities
 
         public IEnumerable<Player> NonHumanPlayers
         {
-            get { return players.Except(new Player[] { HumanPlayer }); }
+            get { return Players.Except(new Player[] { HumanPlayer }); }
         }
 
         public AI GetAI(Player player)
@@ -66,18 +69,18 @@ namespace Whist.GameLogic.ControlEntities
             {
                 CyclePlayers();
                 RoundNumber++;
-                Round = new Round(players);
+                Round = new Round(Players);
             }
         }
 
         private void CyclePlayers()
         {
-            var temp = players[0];
-            for (int i=1; i<players.Length; i++)
+            var temp = Players[0];
+            for (int i=1; i<Players.Length; i++)
             {
-                players[i - 1] = players[i];
+                Players[i - 1] = Players[i];
             }
-            players[players.Length - 1] = temp;
+            Players[Players.Length - 1] = temp;
         }
     }
 }
