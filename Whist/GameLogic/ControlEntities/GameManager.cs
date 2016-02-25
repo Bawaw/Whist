@@ -78,10 +78,12 @@ namespace Whist.GameLogic.ControlEntities
         {
             if (!IsRoundInProgress && IsGameInProgress)
             {
-                CyclePlayers();
-                RoundNumber++;
-                if (RoundNumber <= RoundsToPlay)
+                if (RoundNumber < RoundsToPlay)
+                {
+                    CyclePlayers();
+                    RoundNumber++;
                     Round = new Round(players);
+                }
                 else
                 {
                     IsGameInProgress = false;

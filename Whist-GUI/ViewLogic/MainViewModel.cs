@@ -166,9 +166,9 @@ namespace Whist_GUI.ViewLogic
             if (!Round.InTrickPhase)
             {
                 Round.EndTricksRound();
-                string str = "";
+                string str = "End of round " + gameManager.RoundNumber + "\n\n";
                 foreach (var player in Round.Players)
-                    str += player.name + " (" + player.Tricks + ") - " + player.score + "\n";
+                    str += player.name + " (" + player.Tricks + "): " + player.score + "\n";
 
                 MessageBoxResult result = MessageBox.Show(str, "Round End", MessageBoxButton.OK, MessageBoxImage.None);
                 StartNewRound();
@@ -235,14 +235,17 @@ namespace Whist_GUI.ViewLogic
         private void EndGame()
         {
             infoPanelVM.AddLineToActionLog("GAME OVER!");
-            var winners = Round.Players.Where(p => p.score >= Round.Players.Max(pp => pp.score));
+            var winners = Round.Players.Where(p => p.score >= Round.Players.Max(pp => pp.score)).ToList();
             var winnersString = "The winner";
             if (winners.Count() == 1)
                 winnersString += " is:";
             else
                 winnersString += "s are:";
-            foreach (Player p in winners)
-                winnersString += " " + p.name;
+            for (int i = 0; i < winners.Count - 1; i++)
+            {
+                winnersString += " " + winners[i].name + " + ";
+            }
+            winnersString += " " + winners[winners.Count-1].name;
             infoPanelVM.AddLineToActionLog(winnersString);
             CurrentGameState = GameState.ENDGAME;
         }
