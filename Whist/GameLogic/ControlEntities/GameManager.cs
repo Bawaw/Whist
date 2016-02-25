@@ -13,6 +13,7 @@ namespace Whist.GameLogic.ControlEntities
         Dictionary<Player, IGameAI> gameAIPlayers;
         Dictionary<Player, IBidAI> bidAIPlayers;
 
+
         public GameManager()
         {
             players = new Player[]
@@ -23,7 +24,11 @@ namespace Whist.GameLogic.ControlEntities
                 new Player("Comp 3",4)
             };
             HumanPlayer = players[0];
+
+            RoundsToPlay = 1;
             RoundNumber = 1;
+            IsGameInProgress = true;
+
             Round = new Round(players);
             gameAIPlayers = new Dictionary<Player, IGameAI>();
             bidAIPlayers = new Dictionary<Player, IBidAI>();
@@ -46,10 +51,8 @@ namespace Whist.GameLogic.ControlEntities
             get; private set;
         }
 
-        public int RoundNumber
-        {
-            get; private set;
-        }
+        public int RoundsToPlay { get; private set; }
+        public int RoundNumber { get; private set; }
 
         public IEnumerable<Player> NonHumanPlayers
         {
@@ -73,13 +76,20 @@ namespace Whist.GameLogic.ControlEntities
 
         public void StartNewRound()
         {
-            if (!IsRoundInProgress)
+            if (!IsRoundInProgress && IsGameInProgress)
             {
                 CyclePlayers();
                 RoundNumber++;
-                Round = new Round(players);
+                if (RoundNumber <= RoundsToPlay)
+                    Round = new Round(players);
+                else
+                {
+                    IsGameInProgress = false;
+                }
             }
         }
+
+        public bool IsGameInProgress { get; private set; }
 
         private void CyclePlayers()
         {

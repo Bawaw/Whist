@@ -23,7 +23,7 @@ namespace Whist.AIs
         {
 
         }
-
+        /*
         public override Action GetAction()
         {
             return base.GetAction();
@@ -32,6 +32,6 @@ namespace Whist.AIs
         public override Card GetMove()
         {
             return base.GetMove();
-        }
+        }*/
     }
 }

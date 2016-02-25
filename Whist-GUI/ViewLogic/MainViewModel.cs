@@ -14,7 +14,7 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist_GUI.ViewLogic
 {
-    public enum GameState { BIDDING, PLAYING, ENDTRICK }
+    public enum GameState { BIDDING, PLAYING, ENDTRICK, ENDGAME }
     public class BaseGameViewModel : INotifyPropertyChanged
     {
         private GameState currentGameState;
@@ -215,8 +215,13 @@ namespace Whist_GUI.ViewLogic
         {
             gameManager.StartNewRound();
             infoPanelVM.ClearActionLog();
-            CurrentGameState = GameState.BIDDING;
             whistController = null;
+            if (!gameManager.IsGameInProgress)
+            {
+                EndGame();
+                NotifyUI();
+                return;
+            }
             CurrentGameState = GameState.BIDDING;
             NotifyUI();
 
@@ -225,6 +230,21 @@ namespace Whist_GUI.ViewLogic
                 AIBid();
             }
             NotifyUI();
+        }
+
+        private void EndGame()
+        {
+            infoPanelVM.AddLineToActionLog("GAME OVER!");
+            var winners = Round.Players.Where(p => p.score >= Round.Players.Max(pp => pp.score));
+            var winnersString = "The winner";
+            if (winners.Count() == 1)
+                winnersString += " is:";
+            else
+                winnersString += "s are:";
+            foreach (Player p in winners)
+                winnersString += " " + p.name;
+            infoPanelVM.AddLineToActionLog(winnersString);
+            CurrentGameState = GameState.ENDGAME;
         }
 
         public void NotifyUI()
