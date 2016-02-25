@@ -35,16 +35,16 @@ namespace Whist.GameLogic.ControlEntities
                         if (teamA.Tricks >= teamA.objective)
                         {
                             int overslagen = teamA.Tricks - teamA.objective;
+                            int scorePP = (2 + overslagen);
                             if (teamA.Tricks == 13)
-                                overslagen += 2;
-                            int scorePP = (3 + overslagen);
+                                scorePP *= 2;
                             teamA.applyScore(scorePP);
                             teamB.applyScore(-scorePP);
                         }
                         else
                         {
                             int onderslagen = teamA.objective - teamA.Tricks;
-                            int scorePP = 3 + onderslagen;
+                            int scorePP = 2 + onderslagen;
                             teamA.applyScore(-scorePP);
                             teamB.applyScore(scorePP);
                         }
@@ -57,9 +57,9 @@ namespace Whist.GameLogic.ControlEntities
                         if (aloneTeam.Tricks >= aloneTeam.objective)
                         {
                             int overslagen = aloneTeam.Tricks - aloneTeam.objective;
+                            int scorePP = (2 + overslagen);
                             if (aloneTeam.Tricks == 13)
-                                overslagen += 2;
-                            int scorePP = (3 + overslagen);
+                                scorePP *= 2;
                             aloneTeam.applyScore(scorePP * 3);
                             otherTeam.applyScore(-scorePP);
                         }

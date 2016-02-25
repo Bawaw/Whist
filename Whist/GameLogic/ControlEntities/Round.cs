@@ -17,7 +17,7 @@ namespace Whist.GameLogic.ControlEntities
 
 
         public Player[] Players { get; private set; }
-        public Suits Trump { get; private set; }
+        public Suits Trump { get { return phase1.Trump; } }
         public bool RoundInProgress { get; private set; }
         public Team[] Teams { get { return teams; } }
 
@@ -27,7 +27,6 @@ namespace Whist.GameLogic.ControlEntities
             foreach (Player player in Players)
                 player.clearTricks();
             phase1 = new DealAndBidNormal(Players);
-            Trump = phase1.Trump;
             RoundInProgress = true;
 
             //LetAIHandleFirstPhase();
@@ -39,7 +38,6 @@ namespace Whist.GameLogic.ControlEntities
             {
                 var result = phase1.FinalizeBidding();
                 teams = result.teams;
-                Trump = result.trump;
                 phase2 = new WhistController(Players, result.firstPlayer, Trump, new StandardReferee());
             }
         }
@@ -69,6 +67,7 @@ namespace Whist.GameLogic.ControlEntities
             get
             {
                 if (phase1.InBiddingPhase) return phase1.CurrentPlayer;
+                if (phase2 == null) return null;
                 if (phase2.InTrickPhase) return phase2.CurrentPlayer;
                 return null;
             }

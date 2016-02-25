@@ -69,11 +69,7 @@ namespace Whist.GameLogic.ControlEntities
                 player.hand.sort();
             CheckForTroel();
         }
-
-        /*
-        Check if any of the player has three aces.
-        If so, troel.
-        */
+        
         private bool CheckForTroel()
         {
             Troel troel = new Troel();
@@ -112,20 +108,19 @@ namespace Whist.GameLogic.ControlEntities
                 else
                 {
                     if (playerB == null)
-                        possibleActions.Add(Action.JOIN);
+                    {
+                        if (playerA != CurrentPlayer)
+                            possibleActions.Add(Action.JOIN);
+                        else
+                            possibleActions.Add(Action.ALONE);
+                    }
                 }
 
-                if (playerA == CurrentPlayer && playerB == null)
-                {
-                    possibleActions.Add(Action.ALONE);
-                }
-                else
-                {
+                if (playerA != CurrentPlayer)
                     for (int i = lowestSpecial; i < Enum.GetValues(typeof(Action)).Length; i++)
                     {
                         possibleActions.Add((Action)i);
                     }
-                }
 
             }
             else
@@ -377,6 +372,7 @@ namespace Whist.GameLogic.ControlEntities
                         Troel troel = new Troel();
                         teams = troel.Teams(players);
                         Trump = troel.GetTrump(players);
+                        firstPlayer = teams.Where(t => t.objective == 8).Single().Players.Where(p => p.hand.Cards.Where(c => c.Number == Numbers.ACE).Count() <= 1).Single();
                         break;
                     }
                 case Case.ABONDANCE:
