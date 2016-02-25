@@ -72,7 +72,12 @@ namespace Whist.GameLogic.ControlEntities
                         }
                         break;
                     }
-                case Case.ABONDANCE:
+                default:
+                    {
+                        SpecialGameCaseFactory.GetDictionary()[gameCase].ApplyScores(teams);
+                        break;
+                    }
+                /*case Case.ABONDANCE:
                     {
                         var abondance = new Abondance();
                         abondance.ApplyScores(teams);
@@ -101,7 +106,7 @@ namespace Whist.GameLogic.ControlEntities
                         var soloslim = new Soloslim();
                         soloslim.ApplyScores(teams);
                         break;
-                    }
+                    }*/
             }
         }
     }
