@@ -111,33 +111,31 @@ namespace Whist.GameLogic.GameCases
 
             return new Team[]
             {
-                new Team(selectedPlayers.ToArray(), 9),
-                new Team(players.Except(selectedPlayers).ToArray(), 5)
+                new Team(selectedPlayers.ToArray(), 8),
+                new Team(players.Except(selectedPlayers).ToArray(), 6)
             };
         }
 
         public override void ApplyScores(Team[] teams)
         {
-            var teamA = teams.Where(t => t.objective == 9).Single();
-            var teamB = teams.Where(t => t.objective == 5).Single();
+            var teamA = teams.Where(t => t.objective == 8).Single();
+            var teamB = teams.Where(t => t.objective == 6).Single();
 
-            if (teamA.Tricks >= 9)
+            if (teamA.Tricks >= teamA.objective)
             {
-                if (teamA.Tricks < 13)
-                {
-                    teamA.applyScore(8);
-                    teamB.applyScore(-8);
-                }
-                else
-                {
-                    teamA.applyScore(15);
-                    teamB.applyScore(-15);
-                }
+                int overslagen = teamA.Tricks - teamA.objective;
+                int scorePP = (4 + 2*overslagen);
+                if (teamA.Tricks == 13)
+                    scorePP *= 2;
+                teamA.applyScore(scorePP);
+                teamB.applyScore(-scorePP);
             }
             else
             {
-                teamA.applyScore(-8);
-                teamB.applyScore(8);
+                int onderslagen = teamA.objective - teamA.Tricks;
+                int scorePP = 4 + 4*onderslagen;
+                teamA.applyScore(-scorePP);
+                teamB.applyScore(scorePP);
             }
         }
         
@@ -180,13 +178,13 @@ namespace Whist.GameLogic.GameCases
 
             if (teamA.Tricks >= 9)
             {
-                teamA.applyScore(24);
-                teamB.applyScore(-8);
+                teamA.applyScore(15);
+                teamB.applyScore(-5);
             }
             else
             {
-                teamA.applyScore(-24);
-                teamB.applyScore(8);
+                teamA.applyScore(-15);
+                teamB.applyScore(5);
             }
         }
     }
@@ -215,15 +213,15 @@ namespace Whist.GameLogic.GameCases
             foreach (Team misTeam in miserieTeams)
                 if (misTeam.Tricks == 0)
                 {
-                    misTeam.applyScore(33);
+                    misTeam.applyScore(21);
                     foreach (Team losingTeam in teams.Except(new Team[] { misTeam }))
-                        losingTeam.applyScore(-11);
+                        losingTeam.applyScore(-7);
                 }
                 else
                 {
-                    misTeam.applyScore(-33);
+                    misTeam.applyScore(-21);
                     foreach (Team winingTeam in teams.Except(new Team[] { misTeam }))
-                        winingTeam.applyScore(11);
+                        winingTeam.applyScore(7);
                 }
         }
     }
@@ -242,13 +240,13 @@ namespace Whist.GameLogic.GameCases
 
             if (teamA.Tricks == 13)
             {
-                teamA.applyScore(150);
-                teamB.applyScore(-50);
+                teamA.applyScore(30);
+                teamB.applyScore(-10);
             }
             else
             {
-                teamA.applyScore(-150);
-                teamB.applyScore(50);
+                teamA.applyScore(-30);
+                teamB.applyScore(10);
             }
         }
     }
@@ -273,13 +271,13 @@ namespace Whist.GameLogic.GameCases
 
             if (teamA.Tricks == 13)
             {
-                teamA.applyScore(300);
-                teamB.applyScore(-100);
+                teamA.applyScore(90);
+                teamB.applyScore(-30);
             }
             else
             {
-                teamA.applyScore(-300);
-                teamB.applyScore(100);
+                teamA.applyScore(-90);
+                teamB.applyScore(30);
             }
         }
     }

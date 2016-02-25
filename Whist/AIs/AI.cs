@@ -196,7 +196,7 @@ namespace Whist.AIs
                 if (IsTeamCurrentLeader())//If the team is winning, see if an opponent could possible outplay team.
                 {
                     bool possibleHigherCard = false;
-                    for (int i = (int)leadCard.Number; i <= (int)Numbers.ACE; i++)
+                    for (int i = (int)leadCard.Number+1; i <= (int)Numbers.ACE; i++)
                     {
                         if (cardsOfSuit.All(c => c.Number != (Numbers)i))//If all cards have a different number, the higher card is in another player's hand.
                         {

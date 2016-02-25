@@ -372,6 +372,7 @@ namespace Whist.GameLogic.ControlEntities
                         Troel troel = new Troel();
                         teams = troel.Teams(players);
                         Trump = troel.GetTrump(players);
+                        firstPlayer = teams.Where(t => t.objective == 8).Single().Players.Where(p => p.hand.Cards.Where(c => c.Number == Numbers.ACE).Count() <= 1).Single();
                         break;
                     }
                 case Case.ABONDANCE:
