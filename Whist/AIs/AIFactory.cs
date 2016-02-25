@@ -9,22 +9,42 @@ namespace Whist.AIs
 {
     public class AIFactory
     {
-        public static AI CreateAI(Player player, GameManager game, AIType type)
+        public enum AIBidType
+        {
+            BASIC,
+            MEMORY
+        }
+
+        public enum AIGameType
+        {
+            BASIC, 
+            OMNISCIENT
+        }
+
+        public static IBidAI CreateBidAI(Player player, GameManager game, AIBidType type)
         {
             switch (type)
             {
-                case AIType.Basic:
-                    return new BaseAI(player, game);
-                case AIType.Memory:
-                    return new MemoryAI(player, game);
+                case AIBidType.BASIC:
+                    return new BidAI(player, game);
+                    //case AIType.Memory:
+                    //  return new MemoryAI(player, game);
             }
             throw new ApplicationException();
         }
-    }
 
-    public enum AIType
-    {
-        Basic,
-        Memory
+        public static IGameAI CreateGameAI(Player player, GameManager game, AIGameType type)
+        {
+            switch (type)
+            {
+                case AIGameType.BASIC:
+                    return new GameAI(player, game);
+                case AIGameType.OMNISCIENT:
+                    return new OmniscentSearchAI(player, game);
+                    //case AIType.Memory:
+                    //  return new MemoryAI(player, game);
+            }
+            throw new ApplicationException();
+        }
     }
 }
