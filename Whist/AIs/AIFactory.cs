@@ -12,7 +12,8 @@ namespace Whist.AIs
         public enum AIBidType
         {
             BASIC,
-            MEMORY
+            MEMORY,
+            OMNISCIENT
         }
 
         public enum AIGameType
@@ -27,6 +28,8 @@ namespace Whist.AIs
             {
                 case AIBidType.BASIC:
                     return new BidAI(player, game);
+                case AIBidType.OMNISCIENT:
+                    return new BidSearchAI(player, game);
                     //case AIType.Memory:
                     //  return new MemoryAI(player, game);
             }
