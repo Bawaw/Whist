@@ -109,7 +109,7 @@ namespace Whist_GUI
         {
             get
             {
-                string result = "\n";
+                string result = "";
                 foreach (string str in actionLog)
                 {
                     result += str + "\n";

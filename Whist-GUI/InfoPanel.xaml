@@ -52,7 +52,6 @@
                 <TextBlock Text="{Binding TricksWon, StringFormat=Tricks Won: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"  TextWrapping="Wrap"/>
                 <TextBlock Text="{Binding GameCase, StringFormat=Game Mode: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"   TextWrapping="Wrap"/>
                 <TextBlock Text="{Binding Teams}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"  TextWrapping="Wrap" />
-                <TextBlock Text="{Binding ActionLog}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"  TextWrapping="Wrap" />
             </StackPanel>
         </StackPanel>
     </StackPanel>
