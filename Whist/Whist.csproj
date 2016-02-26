@@ -46,6 +46,7 @@
     <Compile Include="AIs\AI.cs" />
     <Compile Include="AIs\AIFactory.cs" />
     <Compile Include="AIs\BaseAI.cs" />
+	<Compile Include="AIs\BidSearchAI.cs" />
     <Compile Include="AIs\MemoryAI.cs" />
     <Compile Include="AIs\IBidAI.cs" />
     <Compile Include="AIs\IGameAI.cs" />

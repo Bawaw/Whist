@@ -7,21 +7,26 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist.AIs
 {
-    class BidSearchAI : AI, IBidAI
+    class BidSearchAI : IBidAI
     {
-        public BidSearchAI(Player player, GameManager gameManager): base(player, gameManager) { }
+        private GameManager gameManager;
+
+        public BidSearchAI(GameManager gameManager)
+        {
+            this.gameManager = gameManager;
+        }
 
         public Action GetAction()
         {
-            var possibleActions = game.Round.BiddingGetPossibleActions();
-            int heuristicHandStrength = GetHeuristicHandStrength(game.Round.CurrentPlayer, game.Round.Trump);
+            var possibleActions = gameManager.Round.BiddingGetPossibleActions();
+            int heuristicHandStrength = GetHeuristicHandStrength(gameManager.Round.CurrentPlayer, gameManager.Round.Trump);
             int alternateHandStrength = heuristicHandStrength;
-            Suits alternateSuit = game.Round.Trump;
+            Suits alternateSuit = gameManager.Round.Trump;
             foreach(Suits suit in System.Enum.GetValues(typeof(Suits)))
             {
-                if(suit != game.Round.Trump)
+                if(suit != gameManager.Round.Trump)
                 {
-                    int betterAlternateHandStrength = GetHeuristicHandStrength(game.Round.CurrentPlayer, suit);
+                    int betterAlternateHandStrength = GetHeuristicHandStrength(gameManager.Round.CurrentPlayer, suit);
                     if(betterAlternateHandStrength > alternateHandStrength)
                     {
                         alternateHandStrength = betterAlternateHandStrength;

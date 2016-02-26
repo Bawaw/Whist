@@ -13,7 +13,7 @@ namespace Whist.AIs
         private GameManager gameManager;
         private IReferee referee;
 
-        public OmniscentSearchAI(Player player, GameManager gameManager, IReferee referee)
+        public OmniscentSearchAI(GameManager gameManager, IReferee referee)
         {
             this.gameManager = gameManager;
             this.referee = referee;
