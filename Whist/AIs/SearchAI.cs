@@ -104,15 +104,31 @@ namespace Whist.AIs
             return HeuristicScores.ToList().IndexOf(HeuristicScores.Max()) + 1;
         }
 
-        private Card GetLowestCard(IEnumerable<Card> cards) //this should also work according to the heuristic values of the cards, otherwise you could potentionally throw away a lower trump than a higher non-value other suit card
+        private Card GetLowestCard(IEnumerable<Card> cards)
         {
             if (cards.Count() == 0)
                 return null;
-            Card minCard = cards.First();
-            foreach (Card card in cards)
+            Card minCard;
+            IEnumerable<Card> trumps = cards.Where(c => c.Suit == gameManager.Round.Trump);
+            if(trumps.Count() == cards.Count())
             {
-                if (card.Number < minCard.Number)
-                    minCard = card;
+                //if you only have trumps, you don't have to exlude the trumps
+                minCard = cards.First();
+                foreach (Card card in cards)
+                {
+                    if (card.Number < minCard.Number)
+                        minCard = card;
+                }
+            }
+            else
+            {
+                //else you have to exclude the trumps
+                minCard = cards.Where(c => c.Suit != gameManager.Round.Trump).First();
+                foreach (Card card in cards.Except(trumps))
+                {
+                    if (card.Number < minCard.Number)
+                        minCard = card;
+                }
             }
             return minCard;
         }
