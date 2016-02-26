@@ -29,7 +29,7 @@ namespace Whist.AIs
 
             var highestCard = hand[0];
             foreach (var card in hand)
-                if (highestCard.Suit == card.Suit || highestCard.Suit == gameManager.Round.Trump && (int)card.Number > (int)highestCard.Number)
+                if (highestCard.Suit == card.Suit || card.Suit == gameManager.Round.Trump && (int)card.Number > (int)highestCard.Number)
                 {
                     highestCard = card;
                     heuristicScore = (int)card.Number;

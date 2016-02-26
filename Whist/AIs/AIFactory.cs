@@ -16,7 +16,7 @@ namespace Whist.AIs
 
         public enum AIGameType
         {
-            BASIC,
+            BASIC, 
             MEMORY,
             OMNISCIENT
         }
