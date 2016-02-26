@@ -56,6 +56,12 @@ namespace Whist_GUI
                 trickEndPopup.IsOpen = true;
                 StartTrickButton.Focus();
             }
+
+            if (gameState == GameState.ENDGAME)
+            {
+                popup.IsOpen = false;
+                trickEndPopup.IsOpen = false;
+            }
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -67,7 +73,9 @@ namespace Whist_GUI
         {
             trickEndPopup.IsOpen = false;
             model.StartNewTrick();
+            if (model.CurrentGameState != GameState.ENDGAME)
             model.AI_PlaysCards();
         }
+        
     }
 }

@@ -7,8 +7,9 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist.AIs
 {
-    public class MemoryAI : AI
+    public class MemoryAI : BaseGameAI
     {
+        protected Dictionary<Player, AIMemory> memory;
         protected int trumpsPlayed;
 
         public MemoryAI(Player player, GameManager game) : base(player, game)
@@ -67,11 +68,7 @@ namespace Whist.AIs
             if (card.Suit == Round.Trump)
                 trumpsPlayed++;
         }
-
-        public override Action GetAction()
-        {
-            return base.GetAction();
-        }
+        
 
         public override Card GetMove()
         {
@@ -204,6 +201,31 @@ namespace Whist.AIs
                     return true;
             }
             return false;
+        }
+        }
+
+
+    public class AIMemory
+        {
+        private Dictionary<Suits, bool> hasCardsOfSuitLeft;
+        public int minInitialHandStrength;
+        public int maxInitialHandStrength;
+
+        public AIMemory()
+        {
+            hasCardsOfSuitLeft = new Dictionary<Suits, bool>();
+            foreach (Suits suit in System.Enum.GetValues(typeof(Suits)))
+                hasCardsOfSuitLeft.Add(suit, true);
+        }
+
+        public bool HasCardsOfSuitLeft(Suits suit)
+        {
+            return hasCardsOfSuitLeft[suit];
+        }
+
+        public void NoCardsOfSuitLeft(Suits suit)
+        {
+            hasCardsOfSuitLeft[suit] = false;
         }
     }
 }

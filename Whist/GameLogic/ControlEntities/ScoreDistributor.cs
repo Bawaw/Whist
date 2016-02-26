@@ -44,7 +44,7 @@ namespace Whist.GameLogic.ControlEntities
                         else
                         {
                             int onderslagen = teamA.objective - teamA.Tricks;
-                            int scorePP = 2 + onderslagen;
+                            int scorePP = 2 + 2* onderslagen;
                             teamA.applyScore(-scorePP);
                             teamB.applyScore(scorePP);
                         }
@@ -66,13 +66,18 @@ namespace Whist.GameLogic.ControlEntities
                         else
                         {
                             int onderslagen = aloneTeam.objective - aloneTeam.Tricks;
-                            int scorePP = 3 + onderslagen;
+                            int scorePP = 3 + 2* onderslagen;
                             aloneTeam.applyScore(-scorePP * 3);
                             otherTeam.applyScore(scorePP);
                         }
                         break;
                     }
-                case Case.ABONDANCE:
+                default:
+                    {
+                        SpecialGameCaseFactory.GetDictionary()[gameCase].ApplyScores(teams);
+                        break;
+                    }
+                /*case Case.ABONDANCE:
                     {
                         var abondance = new Abondance();
                         abondance.ApplyScores(teams);
@@ -101,7 +106,7 @@ namespace Whist.GameLogic.ControlEntities
                         var soloslim = new Soloslim();
                         soloslim.ApplyScores(teams);
                         break;
-                    }
+                    }*/
             }
         }
     }

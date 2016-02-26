@@ -14,7 +14,7 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist_GUI.ViewLogic
 {
-    public enum GameState { BIDDING, PLAYING, ENDTRICK }
+    public enum GameState { BIDDING, PLAYING, ENDTRICK, ENDGAME }
     public class BaseGameViewModel : INotifyPropertyChanged
     {
         private GameState currentGameState;
@@ -105,7 +105,7 @@ namespace Whist_GUI.ViewLogic
         {
             if (Round.CurrentPlayer == gameManager.HumanPlayer)
                 return;
-            var action = gameManager.GetBidAI(Round.CurrentPlayer).GetAction();
+            var action = gameManager.GetAI(Round.CurrentPlayer).GetAction();
             //not a place to do this
             //foreach (Player otherAI in gameManager.NonHumanPlayers.Except(new Player[] { Round.CurrentPlayer }))
                 //gameManager.GetBidAI(otherAI).ProcessOtherPlayerAction(Round.CurrentPlayer, action);
@@ -167,9 +167,9 @@ namespace Whist_GUI.ViewLogic
             if (!Round.InTrickPhase)
             {
                 Round.EndTricksRound();
-                string str = "";
+                string str = "End of round " + gameManager.RoundNumber + "\n\n";
                 foreach (var player in Round.Players)
-                    str += player.name + " (" + player.Tricks + ") - " + player.score + "\n";
+                    str += player.name + " (" + player.Tricks + "): " + player.score + "\n";
 
                 MessageBoxResult result = MessageBox.Show(str, "Round End", MessageBoxButton.OK, MessageBoxImage.None);
                 StartNewRound();
@@ -191,7 +191,7 @@ namespace Whist_GUI.ViewLogic
         {
             if (Round.CurrentPlayer == gameManager.HumanPlayer)
                 return null;
-            var aiCard = gameManager.GetGameAI(Round.CurrentPlayer).GetMove(new StandardReferee());
+            var aiCard = gameManager.GetAI(Round.CurrentPlayer).GetMove();
             //foreach (Player otherAI in gameManager.NonHumanPlayers.Except(new Player[] { Round.CurrentPlayer }))
                 //gameManager.GetAI(otherAI).ProcessOtherPlayerCard(Round.CurrentPlayer, aiCard);
             infoPanelVM.AddLineToActionLog(CurrentPlayer.name + ": " + aiCard.ToString());
@@ -216,8 +216,13 @@ namespace Whist_GUI.ViewLogic
         {
             gameManager.StartNewRound();
             infoPanelVM.ClearActionLog();
-            CurrentGameState = GameState.BIDDING;
             whistController = null;
+            if (!gameManager.IsGameInProgress)
+            {
+                EndGame();
+                NotifyUI();
+                return;
+            }
             CurrentGameState = GameState.BIDDING;
             NotifyUI();
 
@@ -226,6 +231,24 @@ namespace Whist_GUI.ViewLogic
                 AIBid();
             }
             NotifyUI();
+        }
+
+        private void EndGame()
+        {
+            infoPanelVM.AddLineToActionLog("GAME OVER!");
+            var winners = Round.Players.Where(p => p.score >= Round.Players.Max(pp => pp.score)).ToList();
+            var winnersString = "The winner";
+            if (winners.Count() == 1)
+                winnersString += " is:";
+            else
+                winnersString += "s are:";
+            for (int i = 0; i < winners.Count - 1; i++)
+            {
+                winnersString += " " + winners[i].name + " + ";
+            }
+            winnersString += " " + winners[winners.Count-1].name;
+            infoPanelVM.AddLineToActionLog(winnersString);
+            CurrentGameState = GameState.ENDGAME;
         }
 
         public void NotifyUI()

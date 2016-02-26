@@ -11,10 +11,12 @@ namespace Whist.AIs
     class OmniscentSearchAI : IGameAI
     {
         private GameManager gameManager;
+        private IReferee referee;
 
-        public OmniscentSearchAI(Player player, GameManager gameManager)
+        public OmniscentSearchAI(Player player, GameManager gameManager, IReferee referee)
         {
             this.gameManager = gameManager;
+            this.referee = referee;
         }
 
         //how far is player from winning all tricks
@@ -47,7 +49,7 @@ namespace Whist.AIs
             return gameManager.Round.Teams.Where(t => t.Players.Any(p => p == gameManager.Round.CurrentPlayer)).Single();
         }
 
-        public Card GetMove(IReferee referee)
+        public Card GetMove()
         {
             var playableCards = (gameManager.Round.Pile.Count > 0) ? gameManager.Round.CurrentPlayer.hand.Cards.Where(x => referee.ValidateMove(x, gameManager.Round.Pile[0], gameManager.Round.CurrentPlayer.hand.Cards.ToList())).ToList() : gameManager.Round.CurrentPlayer.hand.Cards.ToList();
             if (playableCards.Count <= 0)
@@ -94,6 +96,16 @@ namespace Whist.AIs
                     minCard = card;
             }
             return minCard;
-        } 
+        }
+
+        public void ProcessOtherPlayerAction(Player otherPlayer, GameLogic.ControlEntities.Action action)
+        {
+
+        }
+
+        public void ProcessOtherPlayerCard(Player otherPlayer, Card card)
+        {
+
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace Whist.GameLogic.ControlEntities
         }
         Dictionary<Player, AI> aiPlayers;
 
+
         public GameManager()
         {
             Players = new Player[]
@@ -25,11 +26,30 @@ namespace Whist.GameLogic.ControlEntities
                 new Player("Comp 3",4)
             };
             HumanPlayer = Players[0];
+
+            RoundsToPlay = 13;
             RoundNumber = 1;
+            IsGameInProgress = true;
             Round = new Round(Players);
             aiPlayers = new Dictionary<Player, AI>();
-            foreach(Player player in NonHumanPlayers)
-                aiPlayers.Add(player, AIFactory.CreateAI(player, this, AIType.Memory));
+            foreach (Player player in NonHumanPlayers)
+                aiPlayers.Add(player, AIFactory.CreateAI(player, this, AIBidType.BASIC, AIGameType.MEMORY));
+        }
+
+
+        public GameManager(Player[] players, AIBidType[] bidAITypes, AIGameType[] gameAITypes)
+        {
+            Players = players;
+
+            aiPlayers = new Dictionary<Player, AI>();
+            for (int i = 0; i < 4; i++)
+            {
+                aiPlayers.Add(players[i], AIFactory.CreateAI(players[i], this, bidAITypes[i], gameAITypes[i]));
+            }
+            RoundsToPlay = 13;
+            RoundNumber = 1;
+            IsGameInProgress = true;
+            Round = new Round(players);
         }
 
         public Player HumanPlayer
@@ -43,10 +63,8 @@ namespace Whist.GameLogic.ControlEntities
             get; private set;
         }
 
-        public int RoundNumber
-        {
-            get; private set;
-        }
+        public int RoundsToPlay { get; private set; }
+        public int RoundNumber { get; private set; }
 
         public IEnumerable<Player> NonHumanPlayers
         {
@@ -65,18 +83,27 @@ namespace Whist.GameLogic.ControlEntities
 
         public void StartNewRound()
         {
-            if (!IsRoundInProgress)
+            if (!IsRoundInProgress && IsGameInProgress)
             {
-                CyclePlayers();
-                RoundNumber++;
-                Round = new Round(Players);
+                if (RoundNumber < RoundsToPlay)
+                {
+                    CyclePlayers();
+                    RoundNumber++;
+                    Round = new Round(Players);
+                }
+                else
+                {
+                    IsGameInProgress = false;
+                }
             }
         }
+
+        public bool IsGameInProgress { get; private set; }
 
         private void CyclePlayers()
         {
             var temp = Players[0];
-            for (int i=1; i<Players.Length; i++)
+            for (int i = 1; i < Players.Length; i++)
             {
                 Players[i - 1] = Players[i];
             }

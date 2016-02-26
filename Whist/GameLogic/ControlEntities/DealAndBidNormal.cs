@@ -127,8 +127,10 @@ namespace Whist.GameLogic.ControlEntities
             {
                 if (GameCase == Case.TROEL)
                 {
-                    possibleActions.Add(Action.SOLO);
-                    possibleActions.Add(Action.SOLOSLIM);
+                    for (int i = (int)Action.SOLO; i < Enum.GetValues(typeof(Action)).Length; i++)
+                    {
+                        possibleActions.Add((Action)i);
+                    }
                 }
                 else
                 {

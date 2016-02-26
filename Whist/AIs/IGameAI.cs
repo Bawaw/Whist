@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +9,9 @@ namespace Whist.AIs
 {
     public interface IGameAI
     {
-        Card GetMove(IReferee referee);
+        Card GetMove();
+
+        void ProcessOtherPlayerAction(Player otherPlayer, Action action);
+        void ProcessOtherPlayerCard(Player otherPlayer, Card card);
     }
 }
