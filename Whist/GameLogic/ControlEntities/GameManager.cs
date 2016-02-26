@@ -25,28 +25,28 @@ namespace Whist.GameLogic.ControlEntities
                 new Player("Comp 2",3),
                 new Player("Comp 3",4)
             };
-            HumanPlayer = players[0];
+            HumanPlayer = Players[0];
 
             RoundsToPlay = 13;
             RoundNumber = 1;
             IsGameInProgress = true;
             Round = new Round(Players);
             aiPlayers = new Dictionary<Player, AI>();
-            foreach(Player player in NonHumanPlayers)
+            foreach (Player player in NonHumanPlayers)
                 aiPlayers.Add(player, AIFactory.CreateAI(player, this, AIBidType.BASIC, AIGameType.MEMORY));
-            }
-
         }
+
 
         public GameManager(Player[] players, AIBidType[] bidAITypes, AIGameType[] gameAITypes)
         {
-            this.players = players;
+            Players = players;
 
-        aiPlayers = new Dictionary<Player, AI>();
-        for (int i=0; i<4; i++)
-            aiPlayers.Add(players[i], AIFactory.CreateAI(players[i], this, bidAITypes[i], gameAITypes[i]));
-    }
-    RoundsToPlay = 13;
+            aiPlayers = new Dictionary<Player, AI>();
+            for (int i = 0; i < 4; i++)
+            {
+                aiPlayers.Add(players[i], AIFactory.CreateAI(players[i], this, bidAITypes[i], gameAITypes[i]));
+            }
+            RoundsToPlay = 13;
             RoundNumber = 1;
             IsGameInProgress = true;
             Round = new Round(players);
@@ -86,11 +86,11 @@ namespace Whist.GameLogic.ControlEntities
             if (!IsRoundInProgress && IsGameInProgress)
             {
                 if (RoundNumber < RoundsToPlay)
-            {
-                CyclePlayers();
-                RoundNumber++;
-                Round = new Round(Players);
-            }
+                {
+                    CyclePlayers();
+                    RoundNumber++;
+                    Round = new Round(Players);
+                }
                 else
                 {
                     IsGameInProgress = false;
@@ -102,8 +102,8 @@ namespace Whist.GameLogic.ControlEntities
 
         private void CyclePlayers()
         {
-            var temp = players[0];
-            for (int i = 1; i < players.Length; i++)
+            var temp = Players[0];
+            for (int i = 1; i < Players.Length; i++)
             {
                 Players[i - 1] = Players[i];
             }

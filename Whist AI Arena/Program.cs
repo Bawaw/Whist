@@ -102,9 +102,9 @@ namespace Whist_AI_Arena
             Round.BiddingDoAction(action);
         }
 
-        public IBidAI GetCurrentBidAI()
+        public AI GetCurrentBidAI()
         {
-            return gameManager.GetBidAI(Round.CurrentPlayer);
+            return gameManager.GetAI(Round.CurrentPlayer);
         }
 
         public void DoGamePhase()
@@ -122,14 +122,14 @@ namespace Whist_AI_Arena
 
         public void PlayCard()
         {
-            var card = GetCurrentGameAI().GetMove(new StandardReferee());
+            var card = GetCurrentGameAI().GetMove();
             Round.PlayCard(card);
         }
 
 
-        public IGameAI GetCurrentGameAI()
+        public AI GetCurrentGameAI()
         {
-            return gameManager.GetGameAI(Round.CurrentPlayer);
+            return gameManager.GetAI(Round.CurrentPlayer);
         }
 
         int ChoosePlayerIndex()
