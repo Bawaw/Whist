@@ -11,13 +11,13 @@ namespace Whist.AIs
     {
         public enum AIBidType
         {
-            BASIC,
-            MEMORY
+            BASIC
         }
 
         public enum AIGameType
         {
-            BASIC, 
+            BASIC,
+            MEMORY,
             OMNISCIENT
         }
 
@@ -26,9 +26,7 @@ namespace Whist.AIs
             switch (type)
             {
                 case AIBidType.BASIC:
-                    return new BidAI(player, game);
-                    //case AIType.Memory:
-                    //  return new MemoryAI(player, game);
+                    return new BaseBidAI(player, game);
             }
             throw new ApplicationException();
         }
@@ -38,11 +36,11 @@ namespace Whist.AIs
             switch (type)
             {
                 case AIGameType.BASIC:
-                    return new GameAI(player, game);
+                    return new BaseGameAI(player, game);
+                case AIGameType.MEMORY:
+                    return new MemoryAI(player, game);
                 case AIGameType.OMNISCIENT:
                     return new OmniscentSearchAI(player, game);
-                    //case AIType.Memory:
-                    //  return new MemoryAI(player, game);
             }
             throw new ApplicationException();
         }
