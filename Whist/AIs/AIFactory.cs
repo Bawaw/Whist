@@ -7,17 +7,17 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist.AIs
 {
-    public enum AIBidType
-    {
+        public enum AIBidType
+        {
         BASIC
-    }
+        }
 
-    public enum AIGameType
-    {
-        BASIC,
+        public enum AIGameType
+        {
+            BASIC, 
         MEMORY,
-        OMNISCIENT
-    }
+            OMNISCIENT
+        }
 
     public class AIFactory
     {

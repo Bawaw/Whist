@@ -122,7 +122,7 @@ namespace Whist.AIs
                 else
                 {
                     if (holeCount-- <= 0)
-                        break;
+                    break;
                 }
                 n--;
             }

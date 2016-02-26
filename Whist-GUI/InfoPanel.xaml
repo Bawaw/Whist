@@ -40,11 +40,19 @@
             </StackPanel.Background>
             <StackPanel VerticalAlignment="Center" Margin ="20">
                 <!--TextBlock Text="{Binding CurrentPlayer, StringFormat=Current: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="20"  /-->
-                <TextBlock Text="{Binding TricksLeft, StringFormat=Tricks Left: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="17" />
-                <TextBlock Text="{Binding TricksWon, StringFormat=Tricks Won: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="17" />
-                <TextBlock Text="{Binding GameCase, StringFormat=Game Mode: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"  />
+                <TextBlock Foreground = "{StaticResource UI_Brush}" FontSize="17" TextWrapping="Wrap">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="Current Round: {0}/{1}">
+                            <Binding Path="RoundNumber" />
+                            <Binding Path="RoundsToPlay" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock Text="{Binding TricksLeft, StringFormat=Tricks Left: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"  TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding TricksWon, StringFormat=Tricks Won: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"  TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding GameCase, StringFormat=Game Mode: {0}}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"   TextWrapping="Wrap"/>
                 <TextBlock Text="{Binding Teams}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"  TextWrapping="Wrap" />
-                <TextBlock Text="{Binding ActionLog}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"  />
+                <TextBlock Text="{Binding ActionLog}"  Foreground = "{StaticResource UI_Brush}" FontSize="17"  TextWrapping="Wrap" />
             </StackPanel>
         </StackPanel>
     </StackPanel>

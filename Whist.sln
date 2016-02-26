@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Whist-GUI", "Whist-GUI\Whist-GUI.csproj", "{E7D0BA1C-96BE-4161-A719-FFC9C0DDE5EC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Whist", "Whist\Whist.csproj", "{615956B7-6C61-4935-8CEC-F0C45521C8AB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhistTest", "WhistTest\WhistTest.csproj", "{939D0057-0444-44D7-9239-5632D83AAFA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Whist AI Arena", "Whist AI Arena\Whist AI Arena.csproj", "{25BB8CA5-39FB-45B7-B861-23076D37FA69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{939D0057-0444-44D7-9239-5632D83AAFA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{939D0057-0444-44D7-9239-5632D83AAFA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{939D0057-0444-44D7-9239-5632D83AAFA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25BB8CA5-39FB-45B7-B861-23076D37FA69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25BB8CA5-39FB-45B7-B861-23076D37FA69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25BB8CA5-39FB-45B7-B861-23076D37FA69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25BB8CA5-39FB-45B7-B861-23076D37FA69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

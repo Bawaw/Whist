@@ -202,11 +202,11 @@ namespace Whist.AIs
             }
             return false;
         }
-    }
+        }
 
 
     public class AIMemory
-    {
+        {
         private Dictionary<Suits, bool> hasCardsOfSuitLeft;
         public int minInitialHandStrength;
         public int maxInitialHandStrength;

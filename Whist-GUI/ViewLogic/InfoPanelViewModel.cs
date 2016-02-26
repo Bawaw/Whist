@@ -34,6 +34,8 @@ namespace Whist_GUI
                 PropertyChanged(this, new PropertyChangedEventArgs("Trump"));
                 PropertyChanged(this, new PropertyChangedEventArgs("Round"));
                 PropertyChanged(this, new PropertyChangedEventArgs("ActionLog"));
+                PropertyChanged(this, new PropertyChangedEventArgs("RoundsToPlay"));
+                PropertyChanged(this, new PropertyChangedEventArgs("RoundNumber"));
             }
         }
 
@@ -78,7 +80,7 @@ namespace Whist_GUI
             {
                 string str = "";
                 Team[] teams = Round?.Teams;
-                if (teams == null)
+                if (teams == null || !gameManager.IsGameInProgress)
                 {
                     str += "Players:";
                     foreach (Player p in Round.Players)
@@ -115,5 +117,7 @@ namespace Whist_GUI
                 return result;
             }
         }
+        public int RoundsToPlay { get { return gameManager.RoundsToPlay; } }
+        public int RoundNumber { get { return gameManager.RoundNumber; } }
     }
 }
