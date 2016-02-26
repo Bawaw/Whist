@@ -7,20 +7,20 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist.AIs
 {
+    public enum AIBidType
+    {
+        BASIC,
+        MEMORY
+    }
+
+    public enum AIGameType
+    {
+        BASIC,
+        OMNISCIENT
+    }
+
     public class AIFactory
     {
-        public enum AIBidType
-        {
-            BASIC,
-            MEMORY
-        }
-
-        public enum AIGameType
-        {
-            BASIC, 
-            OMNISCIENT
-        }
-
         public static IBidAI CreateBidAI(Player player, GameManager game, AIBidType type)
         {
             switch (type)

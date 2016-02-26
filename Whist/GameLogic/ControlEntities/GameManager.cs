@@ -25,7 +25,7 @@ namespace Whist.GameLogic.ControlEntities
             };
             HumanPlayer = players[0];
 
-            RoundsToPlay = 1;
+            RoundsToPlay = 13;
             RoundNumber = 1;
             IsGameInProgress = true;
 
@@ -34,10 +34,26 @@ namespace Whist.GameLogic.ControlEntities
             bidAIPlayers = new Dictionary<Player, IBidAI>();
             foreach (Player player in NonHumanPlayers)
             {
-                gameAIPlayers.Add(player, AIFactory.CreateGameAI(player, this, AIFactory.AIGameType.OMNISCIENT));
-                bidAIPlayers.Add(player, AIFactory.CreateBidAI(player, this, AIFactory.AIBidType.BASIC));
+                gameAIPlayers.Add(player, AIFactory.CreateGameAI(player, this, AIGameType.OMNISCIENT));
+                bidAIPlayers.Add(player, AIFactory.CreateBidAI(player, this, AIBidType.BASIC));
             }
 
+        }
+
+        public GameManager(Player[] players, AIBidType[] bidAITypes, AIGameType[] gameAITypes)
+        {
+            this.players = players;
+            bidAIPlayers = new Dictionary<Player, IBidAI>();
+            gameAIPlayers = new Dictionary<Player, IGameAI>();
+            for (int i = 0; i < 4; i++)
+            {
+                bidAIPlayers.Add(players[i], AIFactory.CreateBidAI(players[i], this, bidAITypes[i]));
+                gameAIPlayers.Add(players[i], AIFactory.CreateGameAI(players[i], this, gameAITypes[i]));
+            }
+            RoundsToPlay = 13;
+            RoundNumber = 1;
+            IsGameInProgress = true;
+            Round = new Round(players);
         }
 
         public Player HumanPlayer
@@ -96,7 +112,7 @@ namespace Whist.GameLogic.ControlEntities
         private void CyclePlayers()
         {
             var temp = players[0];
-            for (int i=1; i<players.Length; i++)
+            for (int i = 1; i < players.Length; i++)
             {
                 players[i - 1] = players[i];
             }
