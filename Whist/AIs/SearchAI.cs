@@ -31,17 +31,32 @@ namespace Whist.AIs
 
             var highestCard = hand[0];
             foreach (var card in hand)
-                if (highestCard.Suit == card.Suit || card.Suit == gameManager.Round.Trump && (int)card.Number > (int)highestCard.Number)
+            {
+                if (card.Suit == lead || card.Suit == gameManager.Round.Trump)
                 {
-                    highestCard = card;
-                    heuristicScore = (int)card.Number;
+                    if (card.Suit == lead && highestCard.Suit != gameManager.Round.Trump && (int)card.Number > (int)highestCard.Number)
+                    {
+                        highestCard = card;
+                        heuristicScore = (int)card.Number;
+                    }
+                    else if (card.Suit == gameManager.Round.Trump)
+                    {
+                        if (highestCard.Suit != gameManager.Round.Trump)
+                        {
+                            highestCard = card;
+                            heuristicScore = (int)card.Number + 13;
+                        }
+                        else if (card.Number > highestCard.Number)
+                        {
+                            highestCard = card;
+                            heuristicScore = (int)card.Number + 13;
+                        }
+                    }
                 }
-
-            if (highestCard.Suit == gameManager.Round.Trump)
-                heuristicScore += 10;
+            }
 
             //trump 2 is value 15, ace lead is value 14, not of type lead = 0;
-            return (highestCard.Suit == gameManager.Round.Trump) ? (int)highestCard.Number : (int)highestCard.Number + 13;
+            return heuristicScore;
         }
 
         private Team CurrentTeam()
@@ -52,8 +67,12 @@ namespace Whist.AIs
         public Card GetMove()
         {
             var playableCards = (gameManager.Round.Pile.Count > 0) ? gameManager.Round.CurrentPlayer.hand.Cards.Where(x => referee.ValidateMove(x, gameManager.Round.Pile[0], gameManager.Round.CurrentPlayer.hand.Cards.ToList())).ToList() : gameManager.Round.CurrentPlayer.hand.Cards.ToList();
-            if (playableCards.Count <= 0)
-                return GetLowestCard(gameManager.Round.CurrentPlayer.hand.Cards);
+            if(gameManager.Round.Pile.Count > 0 && playableCards.Where(c => c.Suit == gameManager.Round.Pile[0].Suit || c.Suit == gameManager.Round.Trump).Count() == 0)
+            {
+                //if you don't have cards that can follow the lead and you don't have trumps
+                return GetLowestCard(playableCards);
+                //return immediately the lowestCard without checking whether you can win with the TestMove method(because you can't win)
+            }
             foreach (var card in playableCards)
                 if (TestMove(card, referee) == gameManager.Round.CurrentPlayer.Number)
                     return card;
@@ -85,7 +104,7 @@ namespace Whist.AIs
             return HeuristicScores.ToList().IndexOf(HeuristicScores.Max()) + 1;
         }
 
-        private Card GetLowestCard(IEnumerable<Card> cards)
+        private Card GetLowestCard(IEnumerable<Card> cards) //this should also work according to the heuristic values of the cards, otherwise you could potentionally throw away a lower trump than a higher non-value other suit card
         {
             if (cards.Count() == 0)
                 return null;
