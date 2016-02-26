@@ -44,7 +44,4 @@ namespace Whist.AIs
             return GameAI.GetMove();
         }
     }
-
-    
-    }
 }

@@ -7,18 +7,24 @@ using Whist.GameLogic.ControlEntities;
 
 namespace Whist.AIs
 {
+    public enum AIBidType
+    {
+        BASIC
+    }
+
+    public enum AIGameType
+    {
+        BASIC,
+        MEMORY,
+        OMNISCIENT
+    }
+
     public class AIFactory
     {
-        public enum AIBidType
-        {
-            BASIC
-        }
 
-        public enum AIGameType
+        public static AI CreateAI(Player player, GameManager game, AIBidType bidType, AIGameType gameType)
         {
-            BASIC, 
-            MEMORY,
-            OMNISCIENT
+            return new AI(player, CreateBidAI(player, game, bidType), CreateGameAI(player, game, gameType));
         }
 
         public static IBidAI CreateBidAI(Player player, GameManager game, AIBidType type)
@@ -40,7 +46,7 @@ namespace Whist.AIs
                 case AIGameType.MEMORY:
                     return new MemoryAI(player, game);
                 case AIGameType.OMNISCIENT:
-                    return new OmniscentSearchAI(player, game);
+                    return new OmniscentSearchAI(player, game, new StandardReferee());
             }
             throw new ApplicationException();
         }
