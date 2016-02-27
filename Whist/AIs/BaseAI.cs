@@ -60,7 +60,7 @@ namespace Whist.AIs
                         return 0;
                 }
             }
-            
+
 
             if (alternateHandStrength > 9)
                 if (possibleActions.Contains(Action.ABONDANCE))
@@ -121,7 +121,7 @@ namespace Whist.AIs
                 else
                 {
                     if (holeCount-- <= 0)
-                    break;
+                        break;
                 }
                 n--;
             }
@@ -163,6 +163,8 @@ namespace Whist.AIs
 
         public virtual Card GetMove()
         {
+            if (Round.GameCase == Case.MISERIE)
+                return MisserieMove();
             if (Round.Pile.Count > 0)
             {
                 if (OpposingPlayersLeftInTrick()) //There will still be opposing players after current player's turn.
@@ -454,6 +456,133 @@ namespace Whist.AIs
                 return null;
             int middle = cards.Count() / 2;
             return cards.OrderBy(c => c.Number).Skip(middle).Take(1).Single();
+        }
+
+
+
+        protected virtual Card MisserieMove()
+        {
+            var cards = Round.CurrentPlayer.hand.Cards;
+            var pile = Round.Pile;
+            if (pile.Count == 0)
+            {
+                return GetLowestCard(cards);
+            }
+            else
+            {
+                var pileSuit = pile[0].Suit;
+                Team ownteam = CurrentTeam();
+                var leadCard = LeadingCard();
+
+                if (ownteam.objective == 0) //Is Miserie player
+                {
+                    if (cards.Any(c => c.Suit == pileSuit))
+                    {
+                        if (leadCard.Suit == Round.Trump)
+                        {
+                            return GetHighestCard(cards.Where(c => c.Suit == pileSuit));
+                        }
+                        else
+                        {
+                            return GetHighestCard(cards.Where(c => c.Suit == pileSuit && c.Number < leadCard.Number));//highest of pilesuit below lead.
+                        }
+                    }
+                    else
+                    {
+                        if (leadCard.Suit == Round.Trump)
+                        {
+                            if (cards.All(c => c.Suit != Round.Trump))
+                                return GetHighestCard(cards);
+                            if (cards.All(c => c.Suit == Round.Trump))
+                            {
+                                if (cards.Any(c => c.Number < leadCard.Number))
+                                    return GetHighestCard(cards.Where(c => c.Suit == Round.Trump && c.Number < leadCard.Number));
+                                else
+                                    return GetLowestCardStrategic(cards, pileSuit);
+                            }
+
+                            var HighestCard = GetHighestCard(cards);
+                            var HighestTrumpBelowLead = GetHighestCard(cards.Where(c => c.Suit == Round.Trump && c.Number < leadCard.Number));
+                            if (HighestCard == HighestTrumpBelowLead)
+                                return HighestTrumpBelowLead;
+                            if (HighestCard.Number > Numbers.TEN && HighestTrumpBelowLead.Number < HighestCard.Number)
+                                return HighestCard;
+                            else
+                                return
+                                    HighestTrumpBelowLead;
+                        }
+                        else
+                        {
+                            if (cards.Any(c => c.Suit != Round.Trump))
+                            {
+                                return GetHighestCard(cards.Where(c => c.Suit != Round.Trump));
+                            }
+                            else
+                                return GetLowestCardStrategic(cards, pileSuit);
+                        }
+                    }
+                }
+                else // Plays against miserie.
+                {
+                    if (IsTeamCurrentLeader())
+                    {
+                        if (OpposingPlayersLeftInTrick())
+                        {
+                            return MiserieGetLowOrHighest();
+                        }
+                        else//Team is the current leader and no miserieplayers still need to play => Play a high card
+                        {
+                            if (cards.Any(c => c.Suit == pileSuit))
+                                return GetHighestCard(cards.Where(c => c.Suit == pileSuit));
+                            else if (cards.Any(c => c.Suit == Round.Trump))
+                                return GetHighestCard(cards.Where(c => c.Suit == Round.Trump));
+                            else
+                                return GetHighestCard(cards);
+                        }
+                    }
+                    else//One of the miserie players is the current leader.
+                    {
+                        return MiserieGetLowOrHighest();
+                    }
+                }
+            }
+        }
+
+        //Either play a low card if possible, or play a highcard if not.
+        private Card MiserieGetLowOrHighest()
+        {
+            var cards = Round.CurrentPlayer.hand.Cards;
+            var pile = Round.Pile;
+            var pileSuit = pile[0].Suit;
+            var leadCard = LeadingCard();
+
+            var lowest = GetLowestCardStrategic(cards, pileSuit);
+            bool canStayOutOfLead = true;
+            if (lowest.Suit == pileSuit)
+            {
+                if (!(leadCard.Suit == Round.Trump || (leadCard.Suit == pileSuit && lowest.Number < leadCard.Number)))
+                    canStayOutOfLead = false;
+            }
+            else if (lowest.Suit == Round.Trump)//implies trump != pilesuit
+            {
+                if (!(leadCard.Suit == Round.Trump && lowest.Number < leadCard.Number))
+                    canStayOutOfLead = false;
+            }
+
+            if (canStayOutOfLead)
+            {
+                return lowest;
+            }
+            else
+            {
+                if (lowest.Suit == pileSuit && lowest.Number <= Numbers.FOUR)
+                    return lowest;//In case the lead is two or three, and the player is able to keep it similary low despite raising it.
+
+                if (cards.Any(c => c.Suit == pileSuit))
+                    return GetHighestCard(cards.Where(c => c.Suit == pileSuit));
+                else
+                    return GetHighestCard(cards.Where(c => c.Suit == Round.Trump));
+            }
         }
     }
 

@@ -52,7 +52,7 @@ namespace Whist_AI_Arena
                 AIBidType.BASIC
             }, new AIGameType[]
             {
-                AIGameType.MEMORY,
+                AIGameType.PERFECTMEMORY,
                 AIGameType.MEMORY,
                 AIGameType.MEMORY,
                 AIGameType.MEMORY,
