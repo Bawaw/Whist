@@ -11,6 +11,7 @@ namespace Whist.AIs
     {
         Card GetMove();
 
+        void ResetMemory();
         void ProcessOtherPlayerAction(Player otherPlayer, Action action);
         void ProcessOtherPlayerCard(Player otherPlayer, Card card);
     }

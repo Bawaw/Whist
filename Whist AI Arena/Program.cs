@@ -18,6 +18,7 @@ namespace Whist_AI_Arena
             foreach (Player p in arena.players)
                 Console.WriteLine(p.name + " scored " + p.score);
 
+            Console.ReadKey();
         }
         
 
@@ -42,10 +43,8 @@ namespace Whist_AI_Arena
                 new Player("C3", 2),
                 new Player("C4", 3)
             };
-
-            var bidAIPlayers = new Dictionary<Player, IBidAI>();
-            var gameAIPlayers = new Dictionary<Player, IGameAI>();
-            gameManager = new GameManager(players, new AIBidType[]
+            
+            gameManager = new GameManager(players, 10001, new AIBidType[]
             {
                 AIBidType.BASIC,
                 AIBidType.BASIC,
@@ -53,10 +52,10 @@ namespace Whist_AI_Arena
                 AIBidType.BASIC
             }, new AIGameType[]
             {
-                AIGameType.OMNISCIENT,
-                AIGameType.BASIC,
-                AIGameType.BASIC,
-                AIGameType.BASIC,
+                AIGameType.MEMORY,
+                AIGameType.MEMORY,
+                AIGameType.MEMORY,
+                AIGameType.MEMORY,
             });
         }
         
@@ -69,22 +68,14 @@ namespace Whist_AI_Arena
                 DoBidPhase();
                 DoGamePhase();
                 StartNewRound();
+                if (gameManager.RoundNumber % 1000 == 0)
+                    Console.WriteLine("Round " + gameManager.RoundNumber + " of " + gameManager.RoundsToPlay);
             }
         }
 
         public void StartNewRound()
         {
             gameManager.StartNewRound();
-        }
-
-        private void CyclePlayers()
-        {
-            var temp = players[0];
-            for (int i = 1; i < players.Length; i++)
-            {
-                players[i - 1] = players[i];
-            }
-            players[players.Length - 1] = temp;
         }
 
         public void DoBidPhase()
@@ -123,6 +114,8 @@ namespace Whist_AI_Arena
         public void PlayCard()
         {
             var card = GetCurrentGameAI().GetMove();
+            foreach (Player p in gameManager.NonHumanPlayers)
+                gameManager.GetAI(p).ProcessOtherPlayerCard(Round.CurrentPlayer, card);
             Round.PlayCard(card);
         }
 

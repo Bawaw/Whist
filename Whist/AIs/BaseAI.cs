@@ -60,8 +60,7 @@ namespace Whist.AIs
                         return 0;
                 }
             }
-
-            System.Console.WriteLine(player.name + " handstrength " + handStrength + ", alt: " + alternateHandStrength);
+            
 
             if (alternateHandStrength > 9)
                 if (possibleActions.Contains(Action.ABONDANCE))
@@ -144,6 +143,11 @@ namespace Whist.AIs
         {
             this.player = player;
             this.game = game;
+        }
+
+        public virtual void ResetMemory()
+        {
+
         }
 
 

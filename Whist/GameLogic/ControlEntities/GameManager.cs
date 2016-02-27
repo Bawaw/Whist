@@ -32,12 +32,12 @@ namespace Whist.GameLogic.ControlEntities
             IsGameInProgress = true;
             Round = new Round(Players);
             aiPlayers = new Dictionary<Player, AI>();
-            foreach (Player player in NonHumanPlayers)
+            foreach (Player player in Players.Except(new Player[] { HumanPlayer }))
                 aiPlayers.Add(player, AIFactory.CreateAI(player, this, AIBidType.BASIC, AIGameType.MEMORY));
         }
 
 
-        public GameManager(Player[] players, AIBidType[] bidAITypes, AIGameType[] gameAITypes)
+        public GameManager(Player[] players, int roundsToPlay, AIBidType[] bidAITypes, AIGameType[] gameAITypes)
         {
             Players = players;
 
@@ -46,7 +46,7 @@ namespace Whist.GameLogic.ControlEntities
             {
                 aiPlayers.Add(players[i], AIFactory.CreateAI(players[i], this, bidAITypes[i], gameAITypes[i]));
             }
-            RoundsToPlay = 13;
+            RoundsToPlay = roundsToPlay;
             RoundNumber = 1;
             IsGameInProgress = true;
             Round = new Round(players);
@@ -68,7 +68,7 @@ namespace Whist.GameLogic.ControlEntities
 
         public IEnumerable<Player> NonHumanPlayers
         {
-            get { return Players.Except(new Player[] { HumanPlayer }); }
+            get { return aiPlayers.Keys; }
         }
 
         public AI GetAI(Player player)
@@ -89,6 +89,8 @@ namespace Whist.GameLogic.ControlEntities
                 {
                     CyclePlayers();
                     RoundNumber++;
+                    foreach (AI ai in aiPlayers.Values)
+                        ai.ResetMemory();
                     Round = new Round(Players);
                 }
                 else

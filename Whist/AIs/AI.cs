@@ -23,6 +23,11 @@ namespace Whist.AIs
             GameAI = gameAI;
         }
 
+        public void ResetMemory()
+        {
+            GameAI.ResetMemory();
+        }
+
         public void ProcessOtherPlayerAction(Player otherPlayer, Action action)
         {
 

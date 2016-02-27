@@ -142,5 +142,10 @@ namespace Whist.AIs
         {
 
         }
+
+        public void ResetMemory()
+        {
+
+        }
     }
 }
