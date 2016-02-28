@@ -19,6 +19,7 @@ namespace Whist.AIs
         BASIC,
         MEMORY,
         PERFECTMEMORY,
+        BRUTEFORCE,
         OMNISCIENT
     }
 
@@ -54,6 +55,8 @@ namespace Whist.AIs
                     return new MemoryAI(player, game);
                 case AIGameType.PERFECTMEMORY:
                     return new PerfectMemoryAI(player, game);
+                case AIGameType.BRUTEFORCE:
+                    return new BruteForceAI(player, game);
                 case AIGameType.OMNISCIENT:
                     return new OmniscentSearchAI(game, new StandardReferee());
             }

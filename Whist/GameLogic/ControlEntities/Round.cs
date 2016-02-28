@@ -81,9 +81,12 @@ namespace Whist.GameLogic.ControlEntities
         public IList<Player> PlayersLeft { get { return phase2.PlayersLeft; } }
 
         public Player EndTrick() { return phase2?.EndTrick(); }
+        public bool IsValidPlay(Card card) { if (phase2 == null) return false; return phase2.IsValidPlay(card); }
         public bool PlayCard(Card card) { if (phase2 == null) return false; else return phase2.PlayCard(card); }
         public IList<Card> GetPlayerCards(Player player) { return phase2?.GetPlayerCards(player); }
         public IList<Card> GetPlayerCards() { return phase2?.GetPlayerCards(); }
+        public Card CardPlayedByPlayer(Player player) { return phase2?.CardPlayedByPlayer[player]; }
+        public Player PlayerWhoPlayedCard(Card card) { foreach (var i in phase2.CardPlayedByPlayer) { if (i.Value == card) return i.Key; } return null; }
 
     }
 

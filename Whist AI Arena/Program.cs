@@ -45,18 +45,18 @@ namespace Whist_AI_Arena
                 new Player("C4", 3)
             };
 
-            gameManager = new GameManager(players, 5001, new AIBidType[]
+            gameManager = new GameManager(players, 401, new AIBidType[]
             {
-                AIBidType.CAUTIOUS,
-                AIBidType.CAUTIOUS,
+                AIBidType.BASIC,
+                AIBidType.BASIC,
                 AIBidType.BASIC,
                 AIBidType.BASIC
             }, new AIGameType[]
             {
                 AIGameType.PERFECTMEMORY,
-                AIGameType.PERFECTMEMORY,
-                AIGameType.PERFECTMEMORY,
-                AIGameType.PERFECTMEMORY,
+                AIGameType.BASIC,
+                AIGameType.BASIC,
+                AIGameType.BASIC,
             });
         }
 

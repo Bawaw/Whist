@@ -20,10 +20,10 @@ namespace Whist.GameLogic.ControlEntities
         {
             Players = new Player[]
             {
-                new Player("Player",1),
-                new Player("Comp 1",2),
-                new Player("Comp 2",3),
-                new Player("Comp 3",4)
+                new Player("Player",0),
+                new Player("Comp 1",1),
+                new Player("Comp 2",2),
+                new Player("Comp 3",3)
             };
             HumanPlayer = Players[0];
 
@@ -32,8 +32,10 @@ namespace Whist.GameLogic.ControlEntities
             IsGameInProgress = true;
             Round = new Round(Players);
             aiPlayers = new Dictionary<Player, AI>();
-            foreach (Player player in Players.Except(new Player[] { HumanPlayer }))
-                aiPlayers.Add(player, AIFactory.CreateAI(player, this, AIBidType.BASIC, AIGameType.PERFECTMEMORY));
+            //foreach (Player player in Players.Except(new Player[] { HumanPlayer }))
+            aiPlayers.Add(Players[1], AIFactory.CreateAI(Players[1], this, AIBidType.BASIC, AIGameType.BRUTEFORCE));
+            aiPlayers.Add(Players[2], AIFactory.CreateAI(Players[2], this, AIBidType.BASIC, AIGameType.MEMORY));
+            aiPlayers.Add(Players[3], AIFactory.CreateAI(Players[3], this, AIBidType.BASIC, AIGameType.MEMORY));
         }
 
 
