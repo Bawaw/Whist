@@ -10,6 +10,7 @@ namespace Whist.AIs
     public enum AIBidType
     {
         BASIC,
+        CAUTIOUS,
         OMNISCIENT
     }
 
@@ -35,6 +36,8 @@ namespace Whist.AIs
             {
                 case AIBidType.BASIC:
                     return new BaseBidAI(player, game);
+                case AIBidType.CAUTIOUS:
+                    return new CautiousBidAI(player, game);
                 case AIBidType.OMNISCIENT:
                     return new BidSearchAI(game);
             }

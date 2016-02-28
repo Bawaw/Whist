@@ -19,7 +19,7 @@ namespace Whist.AIs
             this.game = game;
         }
 
-        public Action GetAction()
+        public virtual Action GetAction()
         {
             var possibleActions = Round.BiddingGetPossibleActions();
 
@@ -62,23 +62,22 @@ namespace Whist.AIs
             }
 
 
-            if (alternateHandStrength > 9)
-                if (possibleActions.Contains(Action.ABONDANCE))
-                    return Action.ABONDANCE;
-
-            if (handStrength > 9)
+            if (handStrength > 10 || alternateHandStrength > 10)
             {
                 if (possibleActions.Contains(Action.ABONDANCE))
                     return Action.ABONDANCE;
+            }
+            if (handStrength >= 6)
+            {
+                if (possibleActions.Contains(Action.ALONE))
+                    return Action.ALONE;
             }
             if (handStrength >= 5)
             {
                 if (possibleActions.Contains(Action.ASK))
                     return Action.ASK;
-                if (possibleActions.Contains(Action.ALONE))
-                    return Action.ALONE;
             }
-            if (handStrength >= 3)
+            if (handStrength >= 4)
             {
                 if (possibleActions.Contains(Action.JOIN))
                     return Action.JOIN;
