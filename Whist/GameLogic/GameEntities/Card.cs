@@ -15,6 +15,7 @@ namespace Whist.GameLogic
         HEARTS=1, CLUBS, DIAMONDS, SPADES
     }
 
+    [Serializable]
     public class Card : IComparer<Card>, IComparable
     {
         private Numbers number;

@@ -40,7 +40,10 @@ namespace Whist.Datastructures
     public class SearchTreeNode<T>
     {
         private T data;
+        public T Data { get { return data; } }
+
         private LinkedList<SearchTreeNode<T>> children;
+        public LinkedList<SearchTreeNode<T>> Children { get { return children; } }
 
         public SearchTreeNode(T data)
         {
@@ -72,6 +75,10 @@ namespace Whist.Datastructures
             visitor(node.data);
             foreach (SearchTreeNode<T> kid in node.children)
                 Traverse(kid, visitor);
+        }
+
+        public override string ToString() {
+            return data.ToString();
         }
     }
 }

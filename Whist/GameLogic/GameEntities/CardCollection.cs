@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Whist.GameLogic
 {
+    [Serializable]
     public abstract class CardCollection{
         public static Random rng;
         protected ObservableCollection<Card> deck;
@@ -85,6 +86,7 @@ namespace Whist.GameLogic
         }
     }
         
+    [Serializable]
     public class HandCollection : CardCollection
     {
         public ObservableCollection<Card> Cards { get { return deck; } }
