@@ -20,10 +20,10 @@ namespace Whist.GameLogic.ControlEntities
         {
             Players = new Player[]
             {
-                new Player("Player",1),
-                new Player("Comp 1",2),
-                new Player("Comp 2",3),
-                new Player("Comp 3",4)
+                new Player("Player",0),
+                new Player("Comp 1",1),
+                new Player("Comp 2",2),
+                new Player("Comp 3",3)
             };
             HumanPlayer = Players[0];
 
@@ -32,12 +32,16 @@ namespace Whist.GameLogic.ControlEntities
             IsGameInProgress = true;
             Round = new Round(Players);
             aiPlayers = new Dictionary<Player, AI>();
-            foreach (Player player in NonHumanPlayers)
-                aiPlayers.Add(player, AIFactory.CreateAI(player, this, AIBidType.OMNISCIENT, AIGameType.OMNISCIENT));
+            foreach (Player player in Players.Except(new Player[] { HumanPlayer }))
+                aiPlayers.Add(player, AIFactory.CreateAI(player, this, AIBidType.SIMGAME, AIGameType.PERFECTMEMORY));
+            /*
+            aiPlayers.Add(Players[1], AIFactory.CreateAI(Players[1], this, AIBidType.BASIC, AIGameType.BRUTEFORCE));
+            aiPlayers.Add(Players[2], AIFactory.CreateAI(Players[2], this, AIBidType.BASIC, AIGameType.MEMORY));
+            aiPlayers.Add(Players[3], AIFactory.CreateAI(Players[3], this, AIBidType.BASIC, AIGameType.MEMORY));*/
         }
 
 
-        public GameManager(Player[] players, AIBidType[] bidAITypes, AIGameType[] gameAITypes)
+        public GameManager(Player[] players, int roundsToPlay, AIBidType[] bidAITypes, AIGameType[] gameAITypes)
         {
             Players = players;
 
@@ -46,7 +50,7 @@ namespace Whist.GameLogic.ControlEntities
             {
                 aiPlayers.Add(players[i], AIFactory.CreateAI(players[i], this, bidAITypes[i], gameAITypes[i]));
             }
-            RoundsToPlay = 13;
+            RoundsToPlay = roundsToPlay;
             RoundNumber = 1;
             IsGameInProgress = true;
             Round = new Round(players);
@@ -68,19 +72,30 @@ namespace Whist.GameLogic.ControlEntities
 
         public IEnumerable<Player> NonHumanPlayers
         {
-            get { return Players.Except(new Player[] { HumanPlayer }); }
+            get { return aiPlayers.Keys; }
         }
 
+        /// <summary>
+        /// Returns the AI corresponding to the given Player.
+        /// </summary>
         public AI GetAI(Player player)
         {
             return aiPlayers[player];
         }
 
+        /// <summary>
+        /// Shows whether the current round is in progress. 
+        /// Not to be confused with <seealso cref="IsGameInProgress"/>, which is about the entire game.
+        /// </summary>
         public bool IsRoundInProgress
         {
             get { if (Round == null) return false; else return Round.RoundInProgress; }
         }
 
+        /// <summary>
+        /// To be called after ending a round, to start the next one.
+        /// When initialized the GameManager starts a first round automatically and this function shouldn't be called.
+        /// </summary>
         public void StartNewRound()
         {
             if (!IsRoundInProgress && IsGameInProgress)
@@ -89,6 +104,8 @@ namespace Whist.GameLogic.ControlEntities
                 {
                     CyclePlayers();
                     RoundNumber++;
+                    foreach (AI ai in aiPlayers.Values)
+                        ai.ResetMemory();
                     Round = new Round(Players);
                 }
                 else
@@ -98,6 +115,10 @@ namespace Whist.GameLogic.ControlEntities
             }
         }
 
+        /// <summary>
+        /// Shows whether the game (consisting of multiple rounds) is in progress. 
+        /// Not to be confused with <seealso cref="IsRoundInProgress"/>, which is about a single round.
+        /// </summary>
         public bool IsGameInProgress { get; private set; }
 
         private void CyclePlayers()

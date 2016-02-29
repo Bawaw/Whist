@@ -27,13 +27,13 @@ namespace Whist_GUI
             if (gvm.CurrentPlayer.Number == 0) return null;
             switch (gvm.CurrentPlayer.Number)
             {
+                case 0:
+                    return 1;
                 case 1:
-                    return 1;
-                case 2:
                     return 0;
-                case 3:
+                case 2:
                     return 1;
-                case 4:
+                case 3:
                     return 2;
                 default:
                     break;
@@ -59,13 +59,13 @@ namespace Whist_GUI
 
             switch (gvm.CurrentPlayer.Number)
             {
-                case 1:
+                case 0:
                     return 2;
-                case 2:
+                case 1:
                     return 1;
-                case 3:
+                case 2:
                     return 0;
-                case 4:
+                case 3:
                     return 1;
                 default:
                     break;
@@ -95,13 +95,13 @@ namespace Whist_GUI
 
             switch (gvm.CurrentPlayer.Number)
             {
-                case 1:
+                case 0:
                     return new RotateTransform(0,0.5,0.5);
-                case 2:
+                case 1:
                     return new RotateTransform(90, 0.5, 0.5);
-                case 3:
+                case 2:
                     return new RotateTransform(0,0.5, 0.5);
-                case 4:
+                case 3:
                     return new RotateTransform(90, 0.5, 0.5);
                 default:
                     break;

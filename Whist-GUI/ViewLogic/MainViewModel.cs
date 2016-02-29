@@ -107,8 +107,9 @@ namespace Whist_GUI.ViewLogic
                 return;
             var action = gameManager.GetAI(Round.CurrentPlayer).GetAction();
             //not a place to do this
-            //foreach (Player otherAI in gameManager.NonHumanPlayers.Except(new Player[] { Round.CurrentPlayer }))
-                //gameManager.GetBidAI(otherAI).ProcessOtherPlayerAction(Round.CurrentPlayer, action);
+            //But needs to be done somewhere.
+            foreach (Player otherAI in gameManager.NonHumanPlayers)
+                gameManager.GetAI(otherAI).ProcessOtherPlayerAction(Round.CurrentPlayer, action);
             infoPanelVM.AddLineToActionLog(Round.CurrentPlayer.name + ": " + action.ToString());
             Round.BiddingDoAction(action);
         }
@@ -139,10 +140,6 @@ namespace Whist_GUI.ViewLogic
             }
             if (!Round.TrickInProgress)
             {
-                //MessageBoxResult result = MessageBox.Show(Round.PileOwner.name + " won the trick", "Trick End", MessageBoxButton.OK, MessageBoxImage.None);
-                //trickEndVM.Winner = Round.PileOwner.name + " won the trick";
-                //trickEndVM.Visibility = "Visible";
-                //Round.EndTrick();
                 CurrentGameState = GameState.ENDTRICK;
             }
             NotifyUI();
@@ -192,8 +189,8 @@ namespace Whist_GUI.ViewLogic
             if (Round.CurrentPlayer == gameManager.HumanPlayer)
                 return null;
             var aiCard = gameManager.GetAI(Round.CurrentPlayer).GetMove();
-            //foreach (Player otherAI in gameManager.NonHumanPlayers.Except(new Player[] { Round.CurrentPlayer }))
-                //gameManager.GetAI(otherAI).ProcessOtherPlayerCard(Round.CurrentPlayer, aiCard);
+            foreach (Player otherAI in gameManager.NonHumanPlayers)
+                gameManager.GetAI(otherAI).ProcessOtherPlayerCard(Round.CurrentPlayer, aiCard);
             infoPanelVM.AddLineToActionLog(CurrentPlayer.name + ": " + aiCard.ToString());
             return aiCard;
         }
@@ -246,7 +243,7 @@ namespace Whist_GUI.ViewLogic
             {
                 winnersString += " " + winners[i].name + " + ";
             }
-            winnersString += " " + winners[winners.Count-1].name;
+            winnersString += " " + winners[winners.Count - 1].name;
             infoPanelVM.AddLineToActionLog(winnersString);
             CurrentGameState = GameState.ENDGAME;
         }

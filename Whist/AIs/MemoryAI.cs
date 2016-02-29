@@ -10,19 +10,23 @@ namespace Whist.AIs
     public class MemoryAI : BaseGameAI
     {
         protected Dictionary<Player, AIMemory> memory;
+        protected HashSet<Card> playedCards;
         protected int trumpsPlayed;
 
         public MemoryAI(Player player, GameManager game) : base(player, game)
         {
+            ResetMemory();
+        }
+
+        public override void ResetMemory()
+        {
             memory = new Dictionary<Player, AIMemory>();
             foreach (Player oplayer in game.Players)
             {
-                if (oplayer != player)
-                {
-                    memory.Add(oplayer, new AIMemory());
-                }
+                memory.Add(oplayer, new AIMemory());
             }
             trumpsPlayed = 0;
+            playedCards = new HashSet<Card>();
         }
 
         public override void ProcessOtherPlayerAction(Player otherPlayer, Action action)
@@ -59,16 +63,21 @@ namespace Whist.AIs
 
         public override void ProcessOtherPlayerCard(Player otherPlayer, Card card)
         {
-            if (Round.Pile.Count > 0)
+            if (otherPlayer != player)
             {
-                var leadCard = Round.Pile[0];
-                if (leadCard.Suit != card.Suit)
-                    memory[otherPlayer].NoCardsOfSuitLeft(leadCard.Suit);
+                if (Round.Pile.Count > 0)
+                {
+                    var leadCard = Round.Pile[0];
+                    if (leadCard.Suit != card.Suit)
+                        memory[otherPlayer].NoCardsOfSuitLeft(leadCard.Suit);
+                }
+                if (card.Suit == Round.Trump)
+                    trumpsPlayed++;
             }
-            if (card.Suit == Round.Trump)
-                trumpsPlayed++;
+            if (card.Number >= Numbers.QUEEN)
+                playedCards.Add(card);
         }
-        
+
 
         public override Card GetMove()
         {
@@ -76,6 +85,46 @@ namespace Whist.AIs
             if (card.Suit == Round.Trump)
                 trumpsPlayed++;
             return card;
+        }
+
+        protected override Card OpponentsRemainingAndHasPilesuit()
+        {
+            var cards = Round.CurrentPlayer.hand.Cards;
+            var pile = Round.Pile;
+            var pileSuit = pile[0].Suit;
+            var leadCard = LeadingCard();
+            var trump = Round.Trump;
+            if (leadCard.Suit != pileSuit)// Leadingcard is trump while pilesuit isn't trump.
+            {
+                return GetLowestCardStrategic(cards, pileSuit);//Can't win, so give the lowest possible card instead.
+            }
+            else //leadingCard is pilesuit (which may or may not be trump)
+            {
+                var cardsOfSuit = cards.Where(c => c.Suit == pileSuit);
+                if (IsTeamCurrentLeader())//If the team is winning, see if an opponent could possible outplay team.
+                {
+                    bool possibleHigherCard = false;
+                    for (int i = (int)leadCard.Number + 1; i <= (int)Numbers.ACE; i++)
+                    {
+                        if (!playedCards.Any(c => c.Suit == pileSuit && c.Number == (Numbers)i) && cardsOfSuit.All(c => c.Number != (Numbers)i))
+                        {//If the card is not already played, and all cards have a different number, the higher card is in another player's hand.
+                            possibleHigherCard = true;
+                        }
+                    }
+                    if (possibleHigherCard)
+                    {
+                        return HighOrLowCardSelection(cardsOfSuit, leadCard);//If an opponent can play a higher card, try winning.
+                    }
+                    else
+                    {
+                        return GetLowestCard(cardsOfSuit);//If an opponent won't be able to play a higher card, play a low card.
+                    }
+                }
+                else//If the team is losing, try to win.
+                {
+                    return HighOrLowCardSelection(cardsOfSuit, leadCard);
+                }
+            }
         }
 
 
@@ -171,6 +220,22 @@ namespace Whist.AIs
                     }
                 }
             }
+
+
+            var htcard = HighestCardOfSuitIfNoHigherCardIsPossible(Round.Trump);
+            if (htcard != null)
+                return htcard;
+
+            foreach (Suits suit in System.Enum.GetValues(typeof(Suits)))
+            {
+                if (suit != Round.Trump)
+                {
+                    var hcard = HighestCardOfSuitIfNoHigherCardIsPossible(suit);
+                    if (hcard != null)
+                        return hcard;
+                }
+            }
+
             return GetHighestCard(Round.CurrentPlayer.hand.Cards);
         }
 
@@ -202,11 +267,34 @@ namespace Whist.AIs
             }
             return false;
         }
+
+
+        protected virtual Card HighestCardOfSuitIfNoHigherCardIsPossible(Suits suit)
+        {
+            var cards = player.hand.Cards;
+            var cardsofsuit = cards.Where(c => c.Suit == suit);
+            if (cardsofsuit.Count() == 0)
+                return null;
+            var highestCardOfSuit = cardsofsuit.Where(c => c.Number == cardsofsuit.Max(n => n.Number)).Single();
+            bool isHigherCardPossible = false;
+            for (Numbers i = highestCardOfSuit.Number + 1; i <= Numbers.ACE; i++)
+            {
+                if (!playedCards.Any(c => c.Suit == suit && c.Number == i))//linq querry similar to contains. if statement true if card has not been played yet.
+                {
+                    isHigherCardPossible = true;
+                }
+            }
+            if (!isHigherCardPossible)
+            {
+                return highestCardOfSuit;
+            }
+            return null;
         }
+    }
 
 
     public class AIMemory
-        {
+    {
         private Dictionary<Suits, bool> hasCardsOfSuitLeft;
         public int minInitialHandStrength;
         public int maxInitialHandStrength;

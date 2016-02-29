@@ -47,6 +47,13 @@ namespace Whist.GameLogic.ControlEntities
 
         private void init()
         {
+            playerA = null;
+            playerB = null;
+            askForTrump = false;
+            GameCase = Case.UNDECIDED;
+            currentSpecial = 0;
+
+
             specialGameCases = SpecialGameCaseFactory.GetDictionary();
             CurrentPlayer = players[0];
             actionsDone = 0;
