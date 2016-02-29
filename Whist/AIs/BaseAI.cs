@@ -86,7 +86,7 @@ namespace Whist.AIs
             return Action.PASS;
         }
 
-        protected int GetHandStrength(Suits trump)
+        protected virtual int GetHandStrength(Suits trump)
         {
             int handStrength = 0;
 

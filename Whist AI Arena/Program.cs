@@ -45,7 +45,7 @@ namespace Whist_AI_Arena
                 new Player("C4", 3)
             };
 
-            gameManager = new GameManager(players, 401, new AIBidType[]
+            gameManager = new GameManager(players, 1001, new AIBidType[]
             {
                 AIBidType.BASIC,
                 AIBidType.BASIC,
@@ -54,9 +54,9 @@ namespace Whist_AI_Arena
             }, new AIGameType[]
             {
                 AIGameType.PERFECTMEMORY,
-                AIGameType.BASIC,
-                AIGameType.BASIC,
-                AIGameType.BASIC,
+                AIGameType.PERFECTMEMORY,
+                AIGameType.PERFECTMEMORY,
+                AIGameType.PERFECTMEMORY,
             });
         }
 
@@ -70,7 +70,7 @@ namespace Whist_AI_Arena
                 DoGamePhase();
                 stats.ProcessRound(Round);
                 StartNewRound();
-                if (gameManager.RoundNumber % 1000 == 0)
+                if (gameManager.RoundNumber % 100 == 0)
                     Console.WriteLine("Round " + gameManager.RoundNumber + " of " + gameManager.RoundsToPlay);
             }
         }

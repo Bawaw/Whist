@@ -23,10 +23,7 @@ namespace Whist.AIs
             memory = new Dictionary<Player, AIMemory>();
             foreach (Player oplayer in game.Players)
             {
-                if (oplayer != player)
-                {
-                    memory.Add(oplayer, new AIMemory());
-                }
+                memory.Add(oplayer, new AIMemory());
             }
             trumpsPlayed = 0;
             playedCards = new HashSet<Card>();
@@ -223,7 +220,7 @@ namespace Whist.AIs
                     }
                 }
             }
-            
+
 
             var htcard = HighestCardOfSuitIfNoHigherCardIsPossible(Round.Trump);
             if (htcard != null)

@@ -11,6 +11,7 @@ namespace Whist.AIs
     {
         BASIC,
         CAUTIOUS,
+        SIMGAME,
         OMNISCIENT
     }
 
@@ -39,6 +40,8 @@ namespace Whist.AIs
                     return new BaseBidAI(player, game);
                 case AIBidType.CAUTIOUS:
                     return new CautiousBidAI(player, game);
+                case AIBidType.SIMGAME:
+                    return new SimulateGameBidAI(player, game);
                 case AIBidType.OMNISCIENT:
                     return new BidSearchAI(game);
             }
