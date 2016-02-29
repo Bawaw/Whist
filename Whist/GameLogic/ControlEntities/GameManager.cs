@@ -75,16 +75,27 @@ namespace Whist.GameLogic.ControlEntities
             get { return aiPlayers.Keys; }
         }
 
+        /// <summary>
+        /// Returns the AI corresponding to the given Player.
+        /// </summary>
         public AI GetAI(Player player)
         {
             return aiPlayers[player];
         }
 
+        /// <summary>
+        /// Shows whether the current round is in progress. 
+        /// Not to be confused with <seealso cref="IsGameInProgress"/>, which is about the entire game.
+        /// </summary>
         public bool IsRoundInProgress
         {
             get { if (Round == null) return false; else return Round.RoundInProgress; }
         }
 
+        /// <summary>
+        /// To be called after ending a round, to start the next one.
+        /// When initialized the GameManager starts a first round automatically and this function shouldn't be called.
+        /// </summary>
         public void StartNewRound()
         {
             if (!IsRoundInProgress && IsGameInProgress)
@@ -104,6 +115,10 @@ namespace Whist.GameLogic.ControlEntities
             }
         }
 
+        /// <summary>
+        /// Shows whether the game (consisting of multiple rounds) is in progress. 
+        /// Not to be confused with <seealso cref="IsRoundInProgress"/>, which is about a single round.
+        /// </summary>
         public bool IsGameInProgress { get; private set; }
 
         private void CyclePlayers()
