@@ -534,5 +534,14 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+
+
+        <!-- =========================================== ACTION LOG =========================================== -->
+        <Border Background="Black" HorizontalAlignment="Right" VerticalAlignment="Center" BorderBrush="Gainsboro" BorderThickness="1">
+            <StackPanel Orientation="Vertical" Opacity="0.4"  Background="Gray">
+                <Label Foreground="BlanchedAlmond" FontSize="17" >Actionlog</Label>
+                <TextBlock x:Name="ActionLog" Text="{Binding ActionLog}"  Foreground = "Wheat" FontSize="17"  TextWrapping="Wrap" Margin="5" Width="250"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

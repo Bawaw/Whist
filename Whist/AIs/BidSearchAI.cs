@@ -19,14 +19,14 @@ namespace Whist.AIs
         public Action GetAction()
         {
             var possibleActions = gameManager.Round.BiddingGetPossibleActions();
-            int heuristicHandStrength = GetHeuristicHandStrength(gameManager.Round.CurrentPlayer, gameManager.Round.Trump);
-            int alternateHandStrength = heuristicHandStrength;
+            double heuristicHandStrength = GetHeuristicHandStrength(gameManager.Round.CurrentPlayer, gameManager.Round.Trump);
+            double alternateHandStrength = heuristicHandStrength;
             Suits alternateSuit = gameManager.Round.Trump;
             foreach(Suits suit in System.Enum.GetValues(typeof(Suits)))
             {
                 if(suit != gameManager.Round.Trump)
                 {
-                    int betterAlternateHandStrength = GetHeuristicHandStrength(gameManager.Round.CurrentPlayer, suit);
+                    double betterAlternateHandStrength = GetHeuristicHandStrength(gameManager.Round.CurrentPlayer, suit);
                     if(betterAlternateHandStrength > alternateHandStrength)
                     {
                         alternateHandStrength = betterAlternateHandStrength;
@@ -79,9 +79,22 @@ namespace Whist.AIs
             return Action.PASS;
         }
 
-        private int GetHeuristicHandStrength(Player currentPlayer, Suits trump)
+        private double GetHeuristicHandStrength(Player currentPlayer, Suits trump)
         {
-            int heuristicHandStrength = 0;
+            double predictionOfTricks = 0;
+
+            foreach(Card card in currentPlayer.hand.Cards)
+            {
+                predictionOfTricks += (int)card.Number - 1;//2 is card rank 1, 3 is card rank 2, ..., king is card rank 12, ace is card rank 13
+                if(card.Suit == trump)
+                {
+                    predictionOfTricks += 39;//trump is stronger than all other suits(13 * 3 = 39)
+                }
+            }
+            //return predictionOfTricks / 52;//divide by total amount of cards(chance of card winning a trick)      this works better for worse cards
+            return predictionOfTricks / 598 * 13;//all trumpvalues added equals 598(max value of cards in hand)     this works better for better cards
+
+            double heuristicHandStrength = 0;
             for (int i = 0; i < 13; i++)
             {
                 heuristicHandStrength += (int)currentPlayer.hand.Cards[i].Number;
@@ -92,7 +105,7 @@ namespace Whist.AIs
             }
             //sum of all cardStrengths = (2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14) * 3 + (15 + 16 + 17 + 18 + 19 + 20 + 21 + 22 + 23 + 24 + 25 + 26 + 27) = 585
             //your handStrength / sum of all cardStrengths * #tricks = statistical average number of tricks you will make in unlimited # games
-            return heuristicHandStrength / 585 * 13;
+            return heuristicHandStrength / 287 * 13;
         }
     }
 }

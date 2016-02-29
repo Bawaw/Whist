@@ -44,6 +44,7 @@ namespace Whist_GUI
             labelC1.DataContext = model;
             labelC2.DataContext = model;
             labelC3.DataContext = model;
+            ActionLog.DataContext = infoPanelVM;
         }
 
         private void OnGameStateChanged(GameState gameState) {
