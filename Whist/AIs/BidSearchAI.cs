@@ -48,11 +48,11 @@ namespace Whist.AIs
                         return Action.SPADES;
                 }
             }
-            if (heuristicHandStrength > 12.5 && possibleActions.Contains(Action.SOLOSLIM))
+            if (heuristicHandStrength > 12 && possibleActions.Contains(Action.SOLOSLIM)) //you only have more than 12.5 if you have all trumps, but with all trumps except the 2 and an ace, you should also make all tricks, so therefore > 12 instead of > 12.5
             {
                 return Action.SOLOSLIM;
             }
-            else if (alternateHandStrength > 12.5 && alternateHandStrength > heuristicHandStrength && possibleActions.Contains(Action.SOLO))
+            else if (alternateHandStrength > 12 && alternateHandStrength > heuristicHandStrength && possibleActions.Contains(Action.SOLO)) //same as above
             {
                 return Action.SOLO;
             }
@@ -72,7 +72,7 @@ namespace Whist.AIs
             {
                 return Action.JOIN;
             }
-            else if (heuristicHandStrength < 0.5 && possibleActions.Contains(Action.MISERIE))
+            else if (heuristicHandStrength < 1 && possibleActions.Contains(Action.MISERIE)) //you can naver have lower than 0.5, even with the worst hand, so therefore < 1 instead of < 0.5
             {
                 return Action.MISERIE;
             }

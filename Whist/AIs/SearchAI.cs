@@ -92,13 +92,13 @@ namespace Whist.AIs
             Card compCard = (gameManager.Round.Pile.Count > 0) ? gameManager.Round.Pile[0] : card;
             foreach (var player in playersToGo) {
                 var playableCards = player.hand.Cards.Where(x => referee.ValidateMove(x, compCard, player.hand.Cards.ToList())).ToList();
-                HeuristicScores[player.Number-1] = GetHeuristicalHandChances(playableCards, suit);
+                HeuristicScores[player.Number] = GetHeuristicalHandChances(playableCards, suit);
             }
 
             if (gameManager.Round.Pile.Count > 0)
-                HeuristicScores[gameManager.Round.PileOwner.Number-1] = GetHeuristicalHandChances(gameManager.Round.Pile, suit);
+                HeuristicScores[gameManager.Round.PileOwner.Number] = GetHeuristicalHandChances(gameManager.Round.Pile, suit);
 
-            HeuristicScores[gameManager.Round.CurrentPlayer.Number-1] = GetHeuristicalHandChances(new List<Card>() { card }, suit);
+            HeuristicScores[gameManager.Round.CurrentPlayer.Number] = GetHeuristicalHandChances(new List<Card>() { card }, suit);
 
 
             return HeuristicScores.ToList().IndexOf(HeuristicScores.Max()) + 1;

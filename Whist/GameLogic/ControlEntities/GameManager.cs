@@ -33,7 +33,7 @@ namespace Whist.GameLogic.ControlEntities
             Round = new Round(Players);
             aiPlayers = new Dictionary<Player, AI>();
             foreach (Player player in Players.Except(new Player[] { HumanPlayer }))
-                aiPlayers.Add(player, AIFactory.CreateAI(player, this, AIBidType.SIMGAME, AIGameType.PERFECTMEMORY));
+                aiPlayers.Add(player, AIFactory.CreateAI(player, this, AIBidType.OMNISCIENT, AIGameType.OMNISCIENT));
             /*
             aiPlayers.Add(Players[1], AIFactory.CreateAI(Players[1], this, AIBidType.BASIC, AIGameType.BRUTEFORCE));
             aiPlayers.Add(Players[2], AIFactory.CreateAI(Players[2], this, AIBidType.BASIC, AIGameType.MEMORY));
