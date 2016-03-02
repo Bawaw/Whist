@@ -48,21 +48,21 @@ namespace Whist_GUI.ViewLogic
 
         private IPlayTricks whistController;
 
-        public ObservableCollection<Card> Comp1Cards { get { return Round.Players.Where(p => p.name == "Comp 1").Single().hand.Cards; } }
-        public ObservableCollection<Card> Comp2Cards { get { return Round.Players.Where(p => p.name == "Comp 2").Single().hand.Cards; } }
-        public ObservableCollection<Card> Comp3Cards { get { return Round.Players.Where(p => p.name == "Comp 3").Single().hand.Cards; } }
+        public ObservableCollection<Card> Comp1Cards { get { return Round.Players.Where(p => p.Number == 1).Single().hand.Cards; } }
+        public ObservableCollection<Card> Comp2Cards { get { return Round.Players.Where(p => p.Number == 2).Single().hand.Cards; } }
+        public ObservableCollection<Card> Comp3Cards { get { return Round.Players.Where(p => p.Number == 3).Single().hand.Cards; } }
 
         public bool Comp1InPlayerTeam
         {
-            get { if (!Round.InTrickPhase) return false; return Round.Teams.Where(t => t.Players.Any(p => p == gameManager.HumanPlayer)).Single().Players.Contains(Round.Players.Where(p => p.name == "Comp 1").Single()); }
+            get { if (!Round.InTrickPhase) return false; return Round.Teams.Where(t => t.Players.Any(p => p == gameManager.HumanPlayer)).Single().Players.Contains(Round.Players.Where(p => p.Number == 1).Single()); }
         }
         public bool Comp2InPlayerTeam
         {
-            get { if (!Round.InTrickPhase) return false; return Round.Teams.Where(t => t.Players.Any(p => p == gameManager.HumanPlayer)).Single().Players.Contains(Round.Players.Where(p => p.name == "Comp 2").Single()); }
+            get { if (!Round.InTrickPhase) return false; return Round.Teams.Where(t => t.Players.Any(p => p == gameManager.HumanPlayer)).Single().Players.Contains(Round.Players.Where(p => p.Number == 2).Single()); }
         }
         public bool Comp3InPlayerTeam
         {
-            get { if (!Round.InTrickPhase) return false; return Round.Teams.Where(t => t.Players.Any(p => p == gameManager.HumanPlayer)).Single().Players.Contains(Round.Players.Where(p => p.name == "Comp 3").Single()); }
+            get { if (!Round.InTrickPhase) return false; return Round.Teams.Where(t => t.Players.Any(p => p == gameManager.HumanPlayer)).Single().Players.Contains(Round.Players.Where(p => p.Number == 3).Single()); }
         }
 
         public delegate void IsInMode(GameState gameState);
@@ -183,7 +183,7 @@ namespace Whist_GUI.ViewLogic
                 App.Current.Dispatcher.Invoke(() => Round.PlayCard(aiCard));
             });
         }
-        //TODO: use referee
+
         private Card AIPlay()
         {
             if (Round.CurrentPlayer == gameManager.HumanPlayer)

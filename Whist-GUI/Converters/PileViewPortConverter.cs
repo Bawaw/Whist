@@ -24,7 +24,7 @@ namespace Whist_GUI
 
             if (gvm == null || itemsControl == null) return null;
 
-            if (gvm.CurrentPlayer.Number == 0) return null;
+            //if (gvm.CurrentPlayer.Number == 0) return null;
             switch (gvm.CurrentPlayer.Number)
             {
                 case 0:

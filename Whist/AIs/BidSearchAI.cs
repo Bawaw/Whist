@@ -72,7 +72,7 @@ namespace Whist.AIs
             {
                 return Action.JOIN;
             }
-            else if (heuristicHandStrength < 1 && possibleActions.Contains(Action.MISERIE)) //you can naver have lower than 0.5, even with the worst hand, so therefore < 1 instead of < 0.5
+            else if (heuristicHandStrength < 1 && possibleActions.Contains(Action.MISERIE)) //you can never have lower than 0.5, even with the worst hand, so therefore < 1 instead of < 0.5
             {
                 return Action.MISERIE;
             }

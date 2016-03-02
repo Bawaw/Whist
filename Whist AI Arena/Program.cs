@@ -56,7 +56,7 @@ namespace Whist_AI_Arena
                 AIGameType.PERFECTMEMORY,
                 AIGameType.PERFECTMEMORY,
                 AIGameType.PERFECTMEMORY,
-                AIGameType.PERFECTMEMORY,
+                AIGameType.PERFECTMEMORY
             });
         }
 
@@ -70,7 +70,7 @@ namespace Whist_AI_Arena
                 DoGamePhase();
                 stats.ProcessRound(Round);
                 StartNewRound();
-                if (gameManager.RoundNumber % 100 == 0)
+                if (gameManager.RoundNumber % (gameManager.RoundsToPlay/10) == 0)
                     Console.WriteLine("Round " + gameManager.RoundNumber + " of " + gameManager.RoundsToPlay);
             }
         }

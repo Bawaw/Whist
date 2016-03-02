@@ -20,7 +20,7 @@ namespace Whist.GameLogic.ControlEntities
         {
             Players = new Player[]
             {
-                new Player("Player",0),
+                new Player("Player",0),//Index 0-3 is very important.
                 new Player("Comp 1",1),
                 new Player("Comp 2",2),
                 new Player("Comp 3",3)
