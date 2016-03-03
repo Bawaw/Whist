@@ -101,7 +101,7 @@ namespace Whist.AIs
             HeuristicScores[gameManager.Round.CurrentPlayer.Number] = GetHeuristicalHandChances(new List<Card>() { card }, suit);
 
 
-            return HeuristicScores.ToList().IndexOf(HeuristicScores.Max()) + 1;
+            return HeuristicScores.ToList().IndexOf(HeuristicScores.Max());
         }
 
         private Card GetLowestCard(IEnumerable<Card> cards)
